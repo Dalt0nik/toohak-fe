@@ -1,7 +1,11 @@
+import Rating from "@mui/material/Rating";
+
 const Test = () => {
   return (
     <>
-      <div>test routing</div>
+      <div>
+        test material UI <Rating />
+      </div>
     </>
   );
 };
