@@ -9,6 +9,7 @@ import { useCookies } from "react-cookie";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Route, Routes } from "react-router-dom";
 import Test from "./Test";
+import LobbyConnection from './components/LobbyConnection';
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -59,6 +60,7 @@ function App() {
       </p>
       <Routes>
         <Route path="/test" element={<Test />} />
+        <Route path="/websockets" element={<LobbyConnection />} />
       </Routes>
     </>
   );
