@@ -7,6 +7,8 @@ import useGetAccessToken from "./components/useGetAccessToken";
 import LogoutButton from "./components/LogoutButton";
 import { useCookies } from "react-cookie";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Route, Routes } from "react-router-dom";
+import Test from "./Test";
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -55,6 +57,9 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <Routes>
+        <Route path="/test" element={<Test />} />
+      </Routes>
     </>
   );
 }
