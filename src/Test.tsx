@@ -8,7 +8,7 @@ type Language = {
 
 const lngs: Record<string, Language> = {
   en: { nativeName: "English" },
-  lt: { nativeName: "Lietuviu" },
+  lt: { nativeName: "Lietuvių" },
 };
 
 const Test = () => {
