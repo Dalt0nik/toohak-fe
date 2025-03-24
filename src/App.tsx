@@ -2,14 +2,41 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import LoginButton from "./components/LoginButton";
+import useGetAccessToken from "./components/useGetAccessToken";
+import LogoutButton from "./components/LogoutButton";
+import { useCookies } from "react-cookie";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Route, Routes } from "react-router-dom";
 import Test from "./Test";
 
 function App() {
+  const { isAuthenticated } = useAuth0();
+  useGetAccessToken();
+  const [cookies] = useCookies();
   const [count, setCount] = useState(0);
+
+  const testAuth = async () => {
+    const res = await fetch("http://localhost:8080/api", {
+      headers: {
+        Authorization: `Bearer ${cookies.jwt}`,
+      },
+    });
+    console.log(await res.text());
+  };
 
   return (
     <>
+      <div>
+        {isAuthenticated ? (
+          <>
+            <button onClick={testAuth}>Fetch</button>
+            <LogoutButton />
+          </>
+        ) : (
+          <LoginButton />
+        )}
+      </div>
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
