@@ -3,7 +3,7 @@ import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
 // import { useCookies } from "react-cookie";
 import SockJS from "sockjs-client";
 
-const WS_URL = "http://localhost:8080/ws"; // WebSocket endpoint defined in BE
+const WS_URL = "http://localhost:8080/api/ws"; // WebSocket endpoint defined in BE
 
 const LobbyConnection: React.FC = () => {
   const [lobbyId, setLobbyId] = useState("");
