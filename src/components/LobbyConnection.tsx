@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
-// import { useCookies } from "react-cookie";
 import SockJS from "sockjs-client";
 
 const WS_URL = "http://localhost:8080/api/ws"; // WebSocket endpoint defined in BE
@@ -10,7 +9,6 @@ const LobbyConnection: React.FC = () => {
   const [subscribedLobby, setSubscribedLobby] = useState("");
   const [answer, setAnswer] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
-  // const [cookies] = useCookies(["jwt"]);
 
   const stompClientRef = useRef<Client | null>(null);
   const subscriptionRef = useRef<StompSubscription | null>(null);
@@ -21,10 +19,6 @@ const LobbyConnection: React.FC = () => {
     const socket = new SockJS(WS_URL);
     const stompClient = new Client({
       webSocketFactory: () => socket,
-      // include after BE ws security is configured
-      // connectHeaders: {
-      //   Authorization: `Bearer ${cookies.jwt}`,
-      // },
       reconnectDelay: 5000,
       onConnect: () => {
         console.log("Connected to WebSocket");
