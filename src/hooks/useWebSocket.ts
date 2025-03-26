@@ -2,7 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-const WS_URL = "http://localhost:8080/api/ws";
+const WS_CONFIG = {
+  url: "http://localhost:8080/api/ws",
+  reconnectDelay: 5000,
+  topics: {
+    lobby: "/topic/lobby/",
+  },
+  destinations: {
+    answer: "/app/answer",
+  },
+};
 
 export const useWebSocket = () => {
   const [messages, setMessages] = useState<string[]>([]);
@@ -15,10 +24,15 @@ export const useWebSocket = () => {
   const subscriptionRef = useRef<StompSubscription | null>(null);
 
   useEffect(() => {
-    const socket = new SockJS(WS_URL);
+    const disconnect = initializeWebSocketClient();
+    return disconnect;
+  }, []);
+
+  const initializeWebSocketClient = () => {
+    const socket = new SockJS(WS_CONFIG.url);
     const stompClient = new Client({
       webSocketFactory: () => socket,
-      reconnectDelay: 5000,
+      reconnectDelay: WS_CONFIG.reconnectDelay,
       onConnect: () => console.log("Connected to WebSocket"),
       onDisconnect: () => console.log("Disconnected from WebSocket"),
     });
@@ -29,7 +43,7 @@ export const useWebSocket = () => {
     return () => {
       stompClient.deactivate();
     };
-  }, []);
+  };
 
   const subscribeToLobby = (id: string) => {
     if (!id || !stompClientRef.current?.connected) return;
@@ -39,7 +53,7 @@ export const useWebSocket = () => {
     }
 
     subscriptionRef.current = stompClientRef.current.subscribe(
-      `/topic/lobby/${id}`,
+      `${WS_CONFIG.topics.lobby}${id}`,
       (message: IMessage) => {
         try {
           const body = JSON.parse(message.body);
@@ -71,7 +85,7 @@ export const useWebSocket = () => {
     };
 
     stompClientRef.current.publish({
-      destination: "/app/answer",
+      destination: WS_CONFIG.destinations.answer,
       body: JSON.stringify(payload),
     });
 
