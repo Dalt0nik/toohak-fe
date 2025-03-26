@@ -9,20 +9,21 @@ export default function useGetAccessToken() {
   useEffect(() => {
     const getAccessToken = async () => {
       try {
-        const accessToken = await getAccessTokenSilently();
         if (cookies.jwt) {
-          removeCookie("jwt");
+          return;
         }
+        const accessToken = await getAccessTokenSilently();
         setCookie("jwt", accessToken);
       } catch (e) {
         console.log(e);
       }
     };
+
     if (user) getAccessToken();
     else {
       if (cookies.jwt) {
         removeCookie("jwt");
       }
     }
-  }, [cookies, getAccessTokenSilently, removeCookie, setCookie, user]);
+  }, [cookies.jwt, getAccessTokenSilently, removeCookie, setCookie, user]);
 }

@@ -21,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
           redirect_uri: window.location.origin,
           audience: import.meta.env.VITE_AUTH0_AUDIENCE,
         }}
+        useRefreshTokens
       >
         <CookiesProvider>
           <BrowserRouter>
