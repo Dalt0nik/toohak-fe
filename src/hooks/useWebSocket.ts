@@ -54,20 +54,21 @@ export const useWebSocket = () => {
 
     subscriptionRef.current = stompClientRef.current.subscribe(
       `${WS_CONFIG.topics.lobby}${id}`,
-      (message: IMessage) => {
-        try {
-          const body = JSON.parse(message.body);
-          setMessages((prev) => [
-            ...prev,
-            `New question: ${body.question} (Lobby: ${body.lobbyId})`,
-          ]);
-        } catch {
-          setMessages((prev) => [...prev, `Message: ${message.body}`]);
-        }
-      },
+      handleWebSocketMessage,
     );
-
     setSubscribedLobby(id);
+  };
+
+  const handleWebSocketMessage = (message: IMessage) => {
+    try {
+      const body = JSON.parse(message.body);
+      setMessages((prev) => [
+        ...prev,
+        `New question: ${body.question} (Lobby: ${body.lobbyId})`,
+      ]);
+    } catch {
+      setMessages((prev) => [...prev, `Message: ${message.body}`]);
+    }
   };
 
   const sendAnswer = () => {
