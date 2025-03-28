@@ -11,6 +11,7 @@ import { Route, Routes } from "react-router-dom";
 import Test from "./Test";
 import LobbyConnection from "./components/LobbyConnection";
 import { WebSocketProvider } from "./contexts/WebSocketContext";
+import CreateQuiz from "./pages/CreateQuiz";
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -69,7 +70,9 @@ function App() {
             </WebSocketProvider>
           }
         />
+        <Route path="/create" element={<CreateQuiz />} />
       </Routes>
+      <CreateQuiz /> {/* Temp */}
     </>
   );
 }
