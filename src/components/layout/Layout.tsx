@@ -25,14 +25,9 @@ const Navbar: React.FC = () => {
           <Toolbar disableGutters>
             <Box sx={{ display: "flex", alignItems: "center", mr: 4 }}>
               <Typography
-                variant="h6"
+                variant="h4"
                 component={RouterLink}
                 to={AppRoutes.HOME}
-                sx={{
-                  fontWeight: 700,
-                  color: "inherit",
-                  textDecoration: "none",
-                }}
               >
                 LOGO
               </Typography>
@@ -43,13 +38,13 @@ const Navbar: React.FC = () => {
                   <Button
                     component={RouterLink}
                     to=""
-                    sx={{ color: "white", mx: 1 }}
+                    sx={{ color: "secondary", mx: 1 }}
                   >
                     Create
                   </Button>
                   <Button
                     component={RouterLink}
-                    to="/browse"
+                    to=""
                     sx={{ color: "white", mx: 1 }}
                   >
                     Browse
