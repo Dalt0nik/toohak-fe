@@ -10,6 +10,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Route, Routes } from "react-router-dom";
 import Test from "./Test";
 import LobbyConnection from "./components/LobbyConnection";
+import QuizList from "./pages/QuizList";
 import { WebSocketProvider } from "./contexts/WebSocketContext";
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
             </WebSocketProvider>
           }
         />
+        <Route path="/my-quizes" element={<QuizList />} />
       </Routes>
     </>
   );
