@@ -5,7 +5,7 @@ import LobbyConnection from "./components/LobbyConnection";
 import { WebSocketProvider } from "./contexts/WebSocketContext";
 import Home from "./pages/Home.tsx";
 import { AppRoutes } from "./types/routes.ts";
-import Navbar from "./components/layout/Layout.tsx";
+import Navbar from "./components/Navbar.tsx";
 
 function App() {
   return (

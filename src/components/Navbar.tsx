@@ -6,13 +6,13 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { AppRoutes } from "../../types/routes.ts";
+import { AppRoutes } from "../types/routes.ts";
 import { Link as RouterLink } from "react-router-dom";
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import useGetAccessToken from "../useGetAccessToken.tsx";
-import LogoutButton from "../LogoutButton.tsx";
-import LoginButton from "../LoginButton.tsx";
+import useGetAccessToken from "./useGetAccessToken.tsx";
+import LogoutButton from "./LogoutButton.tsx";
+import LoginButton from "./LoginButton.tsx";
 
 const Navbar: React.FC = () => {
   const { isAuthenticated } = useAuth0();
