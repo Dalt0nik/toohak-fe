@@ -1,19 +1,18 @@
 import React from "react";
 import { Typography, Box, Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
-        position: "absolute", // Positions the text absolutely
-        top: "10rem", // Distance from the top
-        left: "5rem", // Distance from the left
         textAlign: "left",
       }}
     >
-      <Typography variant="h1">Untitled Kahoot game</Typography>
+      <Typography variant="h1">{t("homepage_title")}</Typography>
       <Typography variant="h3" gutterBottom>
-        Test if your audience were listening...
+        {t("homepage_description")}
       </Typography>
       <Button
         variant="outlined"
@@ -21,7 +20,7 @@ const Home: React.FC = () => {
           marginTop: "1rem",
         }}
       >
-        JOIN A GAME
+        {t("homepage_joingame")}
       </Button>
     </Box>
   );

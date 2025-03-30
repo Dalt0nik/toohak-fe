@@ -13,10 +13,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 import useGetAccessToken from "./useGetAccessToken.tsx";
 import LogoutButton from "./LogoutButton.tsx";
 import LoginButton from "./LoginButton.tsx";
+import { useTranslation } from "react-i18next";
 
 const Navbar: React.FC = () => {
   const { isAuthenticated } = useAuth0();
   useGetAccessToken();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -35,26 +37,14 @@ const Navbar: React.FC = () => {
             <Box sx={{ flexGrow: 1, display: "flex" }}>
               {isAuthenticated && (
                 <>
-                  <Button
-                    component={RouterLink}
-                    to=""
-                    sx={{ color: "secondary", mx: 1 }}
-                  >
-                    Create
+                  <Button component={RouterLink} to="">
+                    {t("navbar_create")}
                   </Button>
-                  <Button
-                    component={RouterLink}
-                    to=""
-                    sx={{ color: "white", mx: 1 }}
-                  >
-                    Browse
+                  <Button component={RouterLink} to="">
+                    {t("navbar_browse")}
                   </Button>
-                  <Button
-                    component={RouterLink}
-                    to=""
-                    sx={{ color: "white", mx: 1 }}
-                  >
-                    Your Quizzes
+                  <Button component={RouterLink} to="">
+                    {t("navbar_yourquizzes")}
                   </Button>
                 </>
               )}
