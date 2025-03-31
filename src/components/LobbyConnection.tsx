@@ -1,4 +1,4 @@
-import { useWebSocketContext } from "../contexts/WebSocketContext";
+import { useWebSocketContext } from "@contexts/WebSocketContext";
 
 const LobbyConnection: React.FC = () => {
   const {

@@ -1,22 +1,19 @@
-import "./App.css";
+import "@assets/styles/App.css";
 import { Route, Routes } from "react-router-dom";
-import Test from "./Test";
-import LobbyConnection from "./components/LobbyConnection";
-import { WebSocketProvider } from "./contexts/WebSocketContext";
-
-import CreateQuiz from "./pages/CreateQuiz";
-
-import Home from "./pages/Home.tsx";
-import { AppRoutes } from "./types/routes.ts";
-import Navbar from "./components/Navbar.tsx";
+import CreateQuiz from "@pages/CreateQuiz";
+import Home from "@pages/Home.tsx";
+import LobbyConnection from "@components/LobbyConnection";
+import Navbar from "@components/layout/Navbar.tsx";
+import { WebSocketProvider } from "@contexts/WebSocketContext";
+import { PrivateAppRoutes } from "@apptypes/PrivateRoutes";
+import { PublicAppRoutes } from "@apptypes/PublicRoutes.ts";
 
 function App() {
   return (
     <>
       <Navbar />
       <Routes>
-        <Route path="/test" element={<Test />} />
-        <Route path={AppRoutes.HOME} element={<Home />} />
+        <Route path={PublicAppRoutes.HOME} element={<Home />} />
         <Route
           path="/websockets"
           element={
@@ -25,7 +22,7 @@ function App() {
             </WebSocketProvider>
           }
         />
-        <Route path="/create" element={<CreateQuiz />} />
+        <Route path={PrivateAppRoutes.CREATE_QUIZ} element={<CreateQuiz />} />
       </Routes>
     </>
   );

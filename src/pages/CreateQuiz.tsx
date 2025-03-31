@@ -6,14 +6,12 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { useCallback, useState } from "react";
 
-import { Quiz } from "../models/QuizModel";
-import { createNewQuiz } from "../api/QuizApi";
-import { useCookies } from "react-cookie";
+import { Quiz } from "@models/QuizModel";
+import { createNewQuiz } from "@api/QuizApi";
 
 const CreateQuiz = () => {
-  const [cookies] = useCookies(); // Is this the best way to do this? Feels weird having to feed the header jwt this way
   const [quizData, setQuizData] = useState<Quiz>({
-    createdBy: "d8621080-a2d0-4011-a0d3-e6ae5d7a4f72", // temp hardcode until making users is a thing, for test make own user in database with this ID
+    createdBy: "d8621080-a2d0-4011-a0d3-e6ae5d7a4f72",
     title: "",
     description: "",
   });
@@ -22,11 +20,11 @@ const CreateQuiz = () => {
     setQuizData((data) => ({ ...data, [`${key}`]: value }));
   }, []);
 
-  const handleCreateNewQuiz = useCallback((data: Quiz, jwt: string) => {
-    console.log(data); // for testing
-    createNewQuiz(data, jwt).then((status) => {
-      if (status === 201) {
-        console.log(":D"); // for testing, maybe replace with navigation later
+  const handleCreateNewQuiz = useCallback((data: Quiz) => {
+    console.log(data);
+    createNewQuiz(data).then((response) => {
+      if (response.status === 201) {
+        console.log(":D");
       }
     });
   }, []);
@@ -55,14 +53,15 @@ const CreateQuiz = () => {
           columns={10}
           direction="row"
           alignItems="flex-start"
-          sx={{ mb: 5 }} // so it doesn't overlap button
+          sx={{ mb: 5 }}
         >
-          <Grid item xs={4} align="left">
+          <Grid item xs={4}>
             <Typography>
               <h2> Quiz Details </h2>
             </Typography>
           </Grid>
-          <Grid item xs={6} align="left">
+
+          <Grid item xs={6} sx={{ textAlign: "left" }}>
             <Stack spacing={2}>
               <Typography>
                 <h3> Title </h3>
@@ -73,7 +72,7 @@ const CreateQuiz = () => {
                 id="quiz-title"
                 variant="outlined"
                 helperText={quizData.title.length + "/200"}
-                slotProps={{ htmlInput: { maxLength: 200 } }} // Maybe it's better to have a set value somewhere
+                slotProps={{ htmlInput: { maxLength: 200 } }}
                 onChange={(e) => handleChangeValue("title", e.target.value)}
               />
               <Typography>
@@ -85,9 +84,9 @@ const CreateQuiz = () => {
                 variant="outlined"
                 helperText={quizData.description.length + "/500"}
                 slotProps={{ htmlInput: { maxLength: 500 } }}
-                onChange={(e) => {
-                  handleChangeValue("description", e.target.value);
-                }}
+                onChange={(e) =>
+                  handleChangeValue("description", e.target.value)
+                }
               />
             </Stack>
           </Grid>
@@ -98,7 +97,7 @@ const CreateQuiz = () => {
         <Button
           variant="contained"
           disabled={!quizData.title}
-          onClick={() => handleCreateNewQuiz(quizData, cookies.jwt)}
+          onClick={() => handleCreateNewQuiz(quizData)}
         >
           SAVE
         </Button>
