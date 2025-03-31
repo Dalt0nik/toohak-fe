@@ -61,6 +61,7 @@ const Navbar: React.FC = () => {
           </Toolbar>
         </Container>
       </AppBar>
+      <Toolbar />
     </>
   );
 };
