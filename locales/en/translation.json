@@ -1,3 +1,11 @@
 {
-    "textfortesting": "testing Meterial UI"
+    "textfortesting": "testing Meterial UI",
+    "homepage_title": "Untitled Kahoot game",
+    "homepage_description": "Test if your audience were listening...",
+    "homepage_joingame": "JOIN A GAME",
+    "navbar_create": "CREATE",
+    "navbar_browse": "BROWSE",
+    "navbar_yourquizzes": "YOUR QUIZZES",
+    "navbar_login": "LOG IN",
+    "navbar_logout": "LOG OUT"
 }
