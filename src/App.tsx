@@ -3,6 +3,9 @@ import { Route, Routes } from "react-router-dom";
 import Test from "./Test";
 import LobbyConnection from "./components/LobbyConnection";
 import { WebSocketProvider } from "./contexts/WebSocketContext";
+
+import CreateQuiz from "./pages/CreateQuiz";
+
 import Home from "./pages/Home.tsx";
 import { AppRoutes } from "./types/routes.ts";
 import Navbar from "./components/Navbar.tsx";
@@ -22,6 +25,7 @@ function App() {
             </WebSocketProvider>
           }
         />
+        <Route path="/create" element={<CreateQuiz />} />
       </Routes>
     </>
   );
