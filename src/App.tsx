@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Test from "./Test";
 import LobbyConnection from "./components/LobbyConnection";
 import { WebSocketProvider } from "./contexts/WebSocketContext";
+import PageNotFound from "./pages/PageNotFound";
 
 import CreateQuiz from "./pages/CreateQuiz";
 
@@ -15,17 +16,18 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/test" element={<Test />} />
+        <Route path={AppRoutes.TEST} element={<Test />} />
         <Route path={AppRoutes.HOME} element={<Home />} />
         <Route
-          path="/websockets"
+          path={AppRoutes.WS}
           element={
             <WebSocketProvider>
               <LobbyConnection />
             </WebSocketProvider>
           }
         />
-        <Route path="/create" element={<CreateQuiz />} />
+        <Route path={AppRoutes.CREATE} element={<CreateQuiz />} />
+        <Route path={AppRoutes.E404} element={<PageNotFound />} />
       </Routes>
     </>
   );
