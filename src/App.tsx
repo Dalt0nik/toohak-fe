@@ -7,6 +7,7 @@ import Navbar from "@components/layout/Navbar.tsx";
 import { WebSocketProvider } from "@contexts/WebSocketContext";
 import { PrivateAppRoutes } from "@apptypes/PrivateRoutes";
 import { PublicAppRoutes } from "@apptypes/PublicRoutes.ts";
+import PageNotFound from "@pages/PageNotFound";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
         <Route
           path={PrivateAppRoutes.CREATE_QUIZ}
           element={<CreateQuizPage />}
+        />
+        <Route
+          path={PublicAppRoutes.PAGE_NOT_FOUND}
+          element={<PageNotFound />}
         />
       </Route>
     </Routes>
