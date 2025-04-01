@@ -1,7 +1,7 @@
 import "@assets/styles/App.css";
 import { Route, Routes } from "react-router-dom";
-import CreateQuiz from "@pages/CreateQuiz";
-import Home from "@pages/Home.tsx";
+import CreateQuizPage from "@pages/CreateQuizPage";
+import HomePage from "@pages/HomePage.tsx";
 import LobbyConnection from "@components/LobbyConnection";
 import Navbar from "@components/layout/Navbar.tsx";
 import { WebSocketProvider } from "@contexts/WebSocketContext";
@@ -12,7 +12,7 @@ function App() {
   return (
     <Routes>
       <Route element={<Navbar />}>
-        <Route path={PublicAppRoutes.HOME} element={<Home />} />
+        <Route path={PublicAppRoutes.HOME} element={<HomePage />} />
         <Route
           path="/websockets"
           element={
@@ -21,7 +21,10 @@ function App() {
             </WebSocketProvider>
           }
         />
-        <Route path={PrivateAppRoutes.CREATE_QUIZ} element={<CreateQuiz />} />
+        <Route
+          path={PrivateAppRoutes.CREATE_QUIZ}
+          element={<CreateQuizPage />}
+        />
       </Route>
     </Routes>
   );
