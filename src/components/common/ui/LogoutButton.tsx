@@ -8,6 +8,7 @@ const LogoutButton = () => {
 
   return (
     <Button
+      variant="contained"
       onClick={() =>
         logout({ logoutParams: { returnTo: window.location.origin } })
       }

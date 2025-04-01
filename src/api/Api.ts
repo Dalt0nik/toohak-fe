@@ -3,7 +3,7 @@ import { Cookies } from "react-cookie";
 
 // Import from ENV if exists, otherwise use localhost
 export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "https://localhost:7045";
+  import.meta.env.VITE_API_BASE_URL || "https://localhost:7045/api";
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

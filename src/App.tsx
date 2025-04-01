@@ -10,9 +10,8 @@ import { PublicAppRoutes } from "@apptypes/PublicRoutes.ts";
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <Routes>
+    <Routes>
+      <Route element={<Navbar />}>
         <Route path={PublicAppRoutes.HOME} element={<Home />} />
         <Route
           path="/websockets"
@@ -23,8 +22,8 @@ function App() {
           }
         />
         <Route path={PrivateAppRoutes.CREATE_QUIZ} element={<CreateQuiz />} />
-      </Routes>
-    </>
+      </Route>
+    </Routes>
   );
 }
 
