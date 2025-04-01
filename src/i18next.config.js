@@ -15,6 +15,6 @@ i18next
       caches: ["localStorage"], // Cache the detected language
     },
     resources: {
-      en: { translation: enTranslation }
-    }
+      en: { translation: enTranslation },
+    },
   });

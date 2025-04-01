@@ -1,35 +1,32 @@
-import "./App.css";
+import "@assets/styles/App.css";
 import { Route, Routes } from "react-router-dom";
-import Test from "./Test";
-import LobbyConnection from "./components/LobbyConnection";
-import { WebSocketProvider } from "./contexts/WebSocketContext";
-import PageNotFound from "./pages/PageNotFound";
-
-import CreateQuiz from "./pages/CreateQuiz";
-
-import Home from "./pages/Home.tsx";
-import { AppRoutes } from "./types/routes.ts";
-import Navbar from "./components/Navbar.tsx";
+import CreateQuizPage from "@pages/CreateQuizPage";
+import HomePage from "@pages/HomePage.tsx";
+import LobbyConnection from "@components/LobbyConnection";
+import Navbar from "@components/layout/Navbar.tsx";
+import { WebSocketProvider } from "@contexts/WebSocketContext";
+import { PrivateAppRoutes } from "@apptypes/PrivateRoutes";
+import { PublicAppRoutes } from "@apptypes/PublicRoutes.ts";
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <Routes>
-        <Route path={AppRoutes.TEST} element={<Test />} />
-        <Route path={AppRoutes.HOME} element={<Home />} />
+    <Routes>
+      <Route element={<Navbar />}>
+        <Route path={PublicAppRoutes.HOME} element={<HomePage />} />
         <Route
-          path={AppRoutes.WS}
+          path="/websockets"
           element={
             <WebSocketProvider>
               <LobbyConnection />
             </WebSocketProvider>
           }
         />
-        <Route path={AppRoutes.CREATE} element={<CreateQuiz />} />
-        <Route path={AppRoutes.E404} element={<PageNotFound />} />
-      </Routes>
-    </>
+        <Route
+          path={PrivateAppRoutes.CREATE_QUIZ}
+          element={<CreateQuizPage />}
+        />
+      </Route>
+    </Routes>
   );
 }
 
