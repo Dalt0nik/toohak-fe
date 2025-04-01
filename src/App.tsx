@@ -15,7 +15,7 @@ function App() {
       <Route element={<Navbar />}>
         <Route path={PublicAppRoutes.HOME} element={<HomePage />} />
         <Route
-          path="/websockets"
+          path={PrivateAppRoutes.LOBBY}
           element={
             <WebSocketProvider>
               <LobbyConnection />
@@ -26,8 +26,8 @@ function App() {
           path={PrivateAppRoutes.CREATE_QUIZ}
           element={<CreateQuizPage />}
         />
+        <Route path={PrivateAppRoutes.USER_QUIZZES} element={<QuizList />} />
       </Route>
-      <Route path="/my-quizes" element={<QuizList />} />
     </Routes>
   );
 }

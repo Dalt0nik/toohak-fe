@@ -1,8 +1,8 @@
 import { Card, CardContent, Typography, Box } from "@mui/material";
-import { QuizDTO } from "../types/quizDTO";
+import { QuizCardDTO } from "../types/quizCardDTO";
 
 interface QuizCardProps {
-  quiz: QuizDTO;
+  quiz: QuizCardDTO;
 }
 
 const MAIN_PURPLE = "rgb(83, 65, 150)";
@@ -94,9 +94,7 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
           <Typography variant="caption">
             Last modified: {lastModified}
           </Typography>
-          <Typography variant="body2">
-            Q: {quiz.questions?.length ?? 0}
-          </Typography>
+          <Typography variant="body2">Q: {quiz.questionAmount}</Typography>
         </Box>
       </CardContent>
     </Card>

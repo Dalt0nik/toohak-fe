@@ -1,33 +1,29 @@
-import { QuizDTO } from "../types/quizDTO";
-import { useEffect, useState } from "react";
-import { Grid } from "@mui/material";
+import { QuizCardDTO } from "../types/quizCardDTO";
+import { Grid, Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import QuizCard from "../components/QuizCard";
-import { fetchQuizList } from "../api/quizListAPI";
+import { fetchQuizList } from "../api/quizListApi";
 import { Typography } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
 const QuizList = () => {
   const { t } = useTranslation();
-  const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchQuizzes = async () => {
-      try {
-        const response = await fetchQuizList();
-        setQuizzes(response);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const {
+    data: quizzes,
+    isLoading,
+    isError,
+  } = useQuery<QuizCardDTO[]>({
+    queryKey: ["quizList"],
+    queryFn: fetchQuizList,
+  });
 
-    fetchQuizzes();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <div>{t("loading")}</div>;
+  }
+
+  if (isError) {
+    return <div>{t("user_quiz_list_error")}</div>;
   }
 
   return (
@@ -37,15 +33,32 @@ const QuizList = () => {
         component="h1"
         sx={{ mb: 3, textAlign: "left", fontWeight: 700 }}
       >
-        {t("yourQuizzes")}
+        {t("user_quiz_list_yourQuizzes")}
       </Typography>
-      <Grid container spacing={3}>
-        {quizzes.map((quiz) => (
-          <Grid item xs={12} sm={6} md={3} key={quiz.id}>
-            <QuizCard quiz={quiz} />
-          </Grid>
-        ))}
-      </Grid>
+
+      {quizzes && quizzes.length > 0 ? (
+        <Grid container spacing={3}>
+          {quizzes.map((quiz) => (
+            <Grid item xs={12} sm={6} md={3} key={quiz.id}>
+              <QuizCard quiz={quiz} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "50vh",
+          }}
+        >
+          <Typography variant="h3" component="h3">
+            {t("user_quiz_list_noQuizzes")}
+          </Typography>
+        </Box>
+      )}
     </>
   );
 };

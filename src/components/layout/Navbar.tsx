@@ -23,6 +23,7 @@ const Navbar: React.FC = () => {
   const guestNavItems: NavItem[] = [];
   const userNavItems: NavItem[] = [
     { label: t("navbar_create"), path: PrivateAppRoutes.CREATE_QUIZ },
+    { label: t("navbar_myquizzes"), path: PrivateAppRoutes.USER_QUIZZES },
   ];
   const commonNavItems: NavItem[] = [];
 

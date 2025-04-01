@@ -1,7 +1,9 @@
 {
     "textfortesting": "testing Meterial UI",
     "loading": "Loading...",
-    "yourQuizzes": "Your Quizzes",
+    "user_quiz_list_yourQuizzes": "Your Quizzes",
+    "user_quiz_list_error": "Error loading your quizzes",
+    "user_quiz_list_noQuizzes": "You have no quizzes",
     "homepage_title": "Untitled Kahoot game",
     "homepage_description": "Test if your audience were listening...",
     "homepage_joingame": "JOIN A GAME",
@@ -9,5 +11,6 @@
     "navbar_browse": "BROWSE",
     "navbar_yourquizzes": "YOUR QUIZZES",
     "navbar_login": "LOG IN",
-    "navbar_logout": "LOG OUT"
+    "navbar_logout": "LOG OUT",
+    "navbar_myquizzes": "MY QUIZZES"
 }

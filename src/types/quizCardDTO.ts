@@ -1,6 +1,4 @@
-import { QuestionDTO } from "./questionDTO";
-
-export interface QuizDTO {
+export interface QuizCardDTO {
   id: string;
   title: string;
   description: string;
@@ -8,5 +6,5 @@ export interface QuizDTO {
   createdAt: string;
   updatedAt: string;
   imageUrl?: string;
-  questions?: QuestionDTO[];
+  questionAmount: number;
 }
