@@ -2,7 +2,7 @@ import React from "react";
 import { Typography, Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const Home: React.FC = () => {
+const HomePage: React.FC = () => {
   const { t } = useTranslation();
   return (
     <Box
@@ -26,4 +26,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default HomePage;
