@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import theme from "@assets/styles/theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { AuthProvider } from "@contexts/AuthContext.tsx";
 
 const queryClient = new QueryClient();
 
@@ -27,14 +28,16 @@ createRoot(document.getElementById("root")!).render(
         cacheLocation="localstorage"
       >
         <CookiesProvider>
-          <BrowserRouter>
-            <React.Suspense fallback="loading">
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <App />
-              </ThemeProvider>
-            </React.Suspense>
-          </BrowserRouter>
+          <AuthProvider>
+            <BrowserRouter>
+              <React.Suspense fallback="loading">
+                <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  <App />
+                </ThemeProvider>
+              </React.Suspense>
+            </BrowserRouter>
+          </AuthProvider>
         </CookiesProvider>
       </Auth0Provider>
     </QueryClientProvider>
