@@ -1,4 +1,4 @@
-import useGetAccessToken from "@components/useGetAccessToken";
+import useGetAccessToken from "@hooks/useGetAccessToken";
 import { AuthContext } from "@hooks/context/useAuthContext";
 import React from "react";
 
