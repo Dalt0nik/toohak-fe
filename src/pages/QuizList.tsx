@@ -1,4 +1,4 @@
-import { QuizCardDTO } from "../types/quizCardDTO";
+import { QuizCardResponse } from "../models/Response/quizCardResponse";
 import { Grid, Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import QuizCard from "../components/QuizCard";
@@ -13,7 +13,7 @@ const QuizList = () => {
     data: quizzes,
     isLoading,
     isError,
-  } = useQuery<QuizCardDTO[]>({
+  } = useQuery<QuizCardResponse[]>({
     queryKey: ["quizList"],
     queryFn: fetchQuizList,
   });

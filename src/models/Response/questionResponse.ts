@@ -1,4 +1,4 @@
-export interface QuestionDTO {
+export interface QuestionResponse {
   id: string;
   quizId: string;
   imageId: string;

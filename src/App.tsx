@@ -6,8 +6,8 @@ import LobbyConnection from "@components/LobbyConnection";
 import Navbar from "@components/layout/Navbar.tsx";
 import QuizList from "./pages/QuizList";
 import { WebSocketProvider } from "@contexts/WebSocketContext";
-import { PrivateAppRoutes } from "@apptypes/PrivateRoutes";
-import { PublicAppRoutes } from "@apptypes/PublicRoutes.ts";
+import { PrivateAppRoutes } from "@models/PrivateRoutes";
+import { PublicAppRoutes } from "@models/PublicRoutes";
 
 function App() {
   return (

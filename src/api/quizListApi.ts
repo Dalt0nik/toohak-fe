@@ -1,7 +1,7 @@
-import { QuizCardDTO } from "../types/quizCardDTO";
+import { QuizCardResponse } from "../models/Response/quizCardResponse";
 import { api } from "./Api";
 
-export async function fetchQuizList(): Promise<QuizCardDTO[]> {
-  const response = await api.get<QuizCardDTO[]>("/quizzes");
+export async function fetchQuizList(): Promise<QuizCardResponse[]> {
+  const response = await api.get<QuizCardResponse[]>("/quizzes");
   return response.data;
 }

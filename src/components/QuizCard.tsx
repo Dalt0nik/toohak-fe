@@ -1,16 +1,19 @@
 import { Card, CardContent, Typography, Box } from "@mui/material";
-import { QuizCardDTO } from "../types/quizCardDTO";
+import { QuizCardResponse } from "../models/Response/quizCardResponse";
+
+import {
+  CARD_BACKGROUND_PURPLE,
+  IMAGE_BACKGROUND_LIGHT_PURPLE,
+  TEXT_LIGHT_BLUE,
+  NO_IMAGE_IMG_URL,
+} from "../assets/styles/constants";
 
 interface QuizCardProps {
-  quiz: QuizCardDTO;
+  quiz: QuizCardResponse;
 }
 
-const MAIN_PURPLE = "rgb(83, 65, 150)";
-const LIGHT_PURPLE = "rgb(103, 85, 170)";
-const TEXT_BLUE = "rgb(220, 213, 253)";
-
 export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
-  const quizImage = quiz.imageUrl?.trim() ? quiz.imageUrl : "/no_image.png";
+  const quizImage = quiz.imageUrl ?? NO_IMAGE_IMG_URL;
 
   const lastModified = new Date(quiz.updatedAt).toLocaleDateString();
 
@@ -19,7 +22,7 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
       sx={{
         height: 300,
         borderRadius: 3,
-        backgroundColor: MAIN_PURPLE,
+        backgroundColor: CARD_BACKGROUND_PURPLE,
         boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
         overflow: "hidden",
         display: "flex",
@@ -29,7 +32,7 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
       <Box
         sx={{
           height: 140,
-          backgroundColor: LIGHT_PURPLE,
+          backgroundColor: IMAGE_BACKGROUND_LIGHT_PURPLE,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -54,7 +57,7 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          color: TEXT_BLUE,
+          color: TEXT_LIGHT_BLUE,
           p: 2,
           pt: 1,
         }}

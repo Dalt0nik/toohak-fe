@@ -1,4 +1,4 @@
-export interface QuizCardDTO {
+export interface QuizCardResponse {
   id: string;
   title: string;
   description: string;
