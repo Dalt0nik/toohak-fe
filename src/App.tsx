@@ -4,10 +4,10 @@ import CreateQuizPage from "@pages/CreateQuizPage";
 import HomePage from "@pages/HomePage.tsx";
 import LobbyConnection from "@components/LobbyConnection";
 import Navbar from "@components/layout/Navbar.tsx";
+import QuizList from "./pages/QuizList";
 import { WebSocketProvider } from "@contexts/WebSocketContext";
-import { PrivateAppRoutes } from "@apptypes/PrivateRoutes";
-import { PublicAppRoutes } from "@apptypes/PublicRoutes.ts";
-import PageNotFound from "@pages/PageNotFound";
+import { PrivateAppRoutes } from "@models/PrivateRoutes";
+import { PublicAppRoutes } from "@models/PublicRoutes";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
       <Route element={<Navbar />}>
         <Route path={PublicAppRoutes.HOME} element={<HomePage />} />
         <Route
-          path="/websockets"
+          path={PrivateAppRoutes.LOBBY}
           element={
             <WebSocketProvider>
               <LobbyConnection />
@@ -26,10 +26,7 @@ function App() {
           path={PrivateAppRoutes.CREATE_QUIZ}
           element={<CreateQuizPage />}
         />
-        <Route
-          path={PublicAppRoutes.PAGE_NOT_FOUND}
-          element={<PageNotFound />}
-        />
+        <Route path={PrivateAppRoutes.USER_QUIZZES} element={<QuizList />} />
       </Route>
     </Routes>
   );
