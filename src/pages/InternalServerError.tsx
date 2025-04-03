@@ -1,13 +1,11 @@
-import Typography from "@mui/material/Typography";
+import { Typography, Box } from "@mui/material/";
 
 const InternalServerError = () => {
   return (
-    <>
-      <div>
-        <Typography variant="h1">500</Typography>
-        <Typography variant="h3">Internal Server Error</Typography>
-      </div>
-    </>
+    <Box>
+      <Typography variant="h1">500</Typography>
+      <Typography variant="h3">Internal Server Error</Typography>
+    </Box>
   );
 };
 

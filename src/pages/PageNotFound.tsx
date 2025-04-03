@@ -1,13 +1,11 @@
-import Typography from "@mui/material/Typography";
+import { Typography, Box } from "@mui/material/";
 
 const PageNotFound = () => {
   return (
-    <>
-      <div>
-        <Typography variant="h1">404</Typography>
-        <Typography variant="h3">Page Not Found</Typography>
-      </div>
-    </>
+    <Box>
+      <Typography variant="h1">404</Typography>
+      <Typography variant="h3">Page Not Found</Typography>
+    </Box>
   );
 };
 
