@@ -2,6 +2,9 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
 import { TextField, Button, Stack } from "@mui/material";
+import AddQuestionDialog from "@components/AddQuestionDialog.tsx";
+import { Question } from "@models/Request/NewQuestionRequest.ts";
+import QuestionList from "@components/QuestionList.tsx";
 
 interface QuizFormProps {
   onSubmit: SubmitHandler<NewQuizRequest>;
@@ -20,6 +23,11 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
       description: "",
     },
   });
+  const [questions, setQuestions] = React.useState<Question[]>([]);
+
+  const handleSaveQuestion = (newQuestion: Question) => {
+    setQuestions([...questions, newQuestion]);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -41,6 +49,8 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
           error={!!errors.description}
           helperText={errors.description?.message}
         />
+        <AddQuestionDialog onSave={handleSaveQuestion} />
+        <QuestionList questions={questions} />
         <Button
           type="submit"
           variant="contained"

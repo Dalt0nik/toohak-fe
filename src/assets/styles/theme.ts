@@ -88,6 +88,19 @@ const theme = createTheme({
             backgroundColor: "rgba(41, 128, 215, 0.1)",
           },
         },
+        text: {
+          color: "white",
+          "&:hover": {
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            color: "white",
+          },
+          "&:active": {
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+          },
+          "&:disabled": {
+            color: "rgba(255, 255, 255, 0.5)",
+          },
+        },
       },
     },
     MuiAppBar: {
@@ -95,6 +108,52 @@ const theme = createTheme({
         root: {
           backgroundColor: "#241362",
           padding: "5px ",
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#4A28C6",
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "rgba(255, 255, 255, 0.5)",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "white",
+            },
+          },
+          "& .MuiInputLabel-root": {
+            color: "rgba(255, 255, 255, 0.7)",
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "white",
+          },
+          "& input": {
+            color: "white",
+          },
+        },
+      },
+    },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          color: "rgba(255, 255, 255, 0.5)",
+          "&.Mui-checked": {
+            color: "white",
+          },
+          "&:hover": {
+            color: "white",
+          },
         },
       },
     },

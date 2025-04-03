@@ -12,5 +12,6 @@
     "navbar_yourquizzes": "YOUR QUIZZES",
     "navbar_login": "LOG IN",
     "navbar_logout": "LOG OUT",
-    "navbar_myquizzes": "MY QUIZZES"
+    "navbar_myquizzes": "MY QUIZZES",
+    "add_question": "Add a Question"
 }
