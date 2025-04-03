@@ -6,15 +6,15 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { PublicAppRoutes } from "@apptypes/PublicRoutes.ts";
+import { PublicAppRoutes } from "@models/PublicRoutes";
 import { Outlet, Link as RouterLink } from "react-router-dom";
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "@ui/LogoutButton.tsx";
 import LoginButton from "@ui/LoginButton.tsx";
 import { useTranslation } from "react-i18next";
-import { NavItem } from "@apptypes/NavItem";
-import { PrivateAppRoutes } from "@apptypes/PrivateRoutes";
+import { NavItem } from "@models/NavItem";
+import { PrivateAppRoutes } from "@models/PrivateRoutes";
 
 const Navbar: React.FC = () => {
   const { isAuthenticated } = useAuth0();
@@ -23,6 +23,7 @@ const Navbar: React.FC = () => {
   const guestNavItems: NavItem[] = [];
   const userNavItems: NavItem[] = [
     { label: t("navbar_create"), path: PrivateAppRoutes.CREATE_QUIZ },
+    { label: t("navbar_myquizzes"), path: PrivateAppRoutes.USER_QUIZZES },
   ];
   const commonNavItems: NavItem[] = [];
 
