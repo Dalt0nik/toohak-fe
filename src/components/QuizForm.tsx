@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
-import { TextField, Button, Stack } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
+import ImageUpload from "@ui/ImageUpload";
+import FormTextField from "@ui/FormTextField";
 
 interface QuizFormProps {
   onSubmit: SubmitHandler<NewQuizRequest>;
@@ -9,9 +11,11 @@ interface QuizFormProps {
 }
 
 const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
+  const [image, setImage] = useState<File | null>(null);
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<NewQuizRequest>({
     defaultValues: {
@@ -21,10 +25,21 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
     },
   });
 
+  const maxDescriptionLength = 500;
+  const descriptionValue = watch("description");
+
+  const handleImageUpload = (file: File): void => {
+    setImage(file);
+  };
+
+  useEffect(() => {
+    console.log("Updated image:", image);
+  }, [image]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={2}>
-        <TextField
+        <FormTextField
           label="Title"
           {...register("title", {
             required: "Title is required",
@@ -33,14 +48,31 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
           error={!!errors.title}
           helperText={errors.title?.message}
         />
-        <TextField
+        <FormTextField
           label="Description"
+          multiline
+          rows={4}
           {...register("description", {
-            maxLength: { value: 500, message: "Max 500 characters" },
+            maxLength: {
+              value: maxDescriptionLength,
+              message: "Max 500 characters",
+            },
           })}
+          slotProps={{
+            htmlInput: { maxLength: maxDescriptionLength },
+          }}
           error={!!errors.description}
-          helperText={errors.description?.message}
+          helperText={
+            errors.description
+              ? errors.description.message
+              : `${descriptionValue?.length || 0} / ${maxDescriptionLength}`
+          }
+          fullWidth
         />
+        <Typography variant="h5" align="left">
+          Upload cover picture
+        </Typography>
+        <ImageUpload onImageUpload={handleImageUpload} />
         <Button
           type="submit"
           variant="contained"
