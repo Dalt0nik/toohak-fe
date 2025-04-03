@@ -16,7 +16,7 @@
     "add_question": "Add new Question",
     "no_questions": "No questions added yet",
     "question": "Question",
-    "question_option": "Option",
+    "question_option": "Option {{number}}",
     "cancel": "Cancel",
     "save": "Save"
 }

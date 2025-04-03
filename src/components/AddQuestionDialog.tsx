@@ -67,6 +67,7 @@ export default function AddQuestionDialog({ onSave }: QuestionProps) {
       options: questionOptions,
     };
 
+    console.log("Question Data:", questionData);
     onSave(questionData);
     handleClose();
   };
