@@ -11,6 +11,7 @@ import React from "react";
 import theme from "@assets/styles/theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { AuthProvider } from "@contexts/AuthContext.tsx";
+import ErrorBoundary from "@components/ErrorBoundary";
 
 const queryClient = new QueryClient();
 
@@ -31,10 +32,12 @@ createRoot(document.getElementById("root")!).render(
           <AuthProvider>
             <BrowserRouter>
               <React.Suspense fallback="loading">
-                <ThemeProvider theme={theme}>
-                  <CssBaseline />
-                  <App />
-                </ThemeProvider>
+                <ErrorBoundary>
+                  <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <App />
+                  </ThemeProvider>
+                </ErrorBoundary>
               </React.Suspense>
             </BrowserRouter>
           </AuthProvider>

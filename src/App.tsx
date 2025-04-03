@@ -9,34 +9,31 @@ import QuizList from "@pages/QuizList";
 import { WebSocketProvider } from "@contexts/WebSocketContext";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import { PublicAppRoutes } from "@models/PublicRoutes";
-import ErrorBoundary from "@components/ErrorBoundary";
 
 function App() {
   return (
-    <ErrorBoundary>
-      <Routes>
-        <Route element={<Navbar />}>
-          <Route path={PublicAppRoutes.HOME} element={<HomePage />} />
-          <Route
-            path={PrivateAppRoutes.LOBBY}
-            element={
-              <WebSocketProvider>
-                <LobbyConnection />
-              </WebSocketProvider>
-            }
-          />
-          <Route
-            path={PrivateAppRoutes.CREATE_QUIZ}
-            element={<CreateQuizPage />}
-          />
-          <Route path={PrivateAppRoutes.USER_QUIZZES} element={<QuizList />} />
-          <Route
-            path={PublicAppRoutes.PAGE_NOT_FOUND}
-            element={<PageNotFound />}
-          />
-        </Route>
-      </Routes>
-    </ErrorBoundary>
+    <Routes>
+      <Route element={<Navbar />}>
+        <Route path={PublicAppRoutes.HOME} element={<HomePage />} />
+        <Route
+          path={PrivateAppRoutes.LOBBY}
+          element={
+            <WebSocketProvider>
+              <LobbyConnection />
+            </WebSocketProvider>
+          }
+        />
+        <Route
+          path={PrivateAppRoutes.CREATE_QUIZ}
+          element={<CreateQuizPage />}
+        />
+        <Route path={PrivateAppRoutes.USER_QUIZZES} element={<QuizList />} />
+        <Route
+          path={PublicAppRoutes.PAGE_NOT_FOUND}
+          element={<PageNotFound />}
+        />
+      </Route>
+    </Routes>
   );
 }
 
