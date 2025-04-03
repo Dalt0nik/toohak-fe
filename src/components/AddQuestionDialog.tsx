@@ -14,6 +14,7 @@ import {
   Question,
   QuestionOption,
 } from "@models/Request/NewQuestionRequest.ts";
+import { useTranslation } from "react-i18next";
 
 interface QuestionProps {
   onSave: (question: Question) => void;
@@ -24,6 +25,7 @@ export default function AddQuestionDialog({ onSave }: QuestionProps) {
   const [question, setQuestion] = React.useState("");
   const [options, setOptions] = React.useState(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = React.useState("0");
+  const { t } = useTranslation();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -72,7 +74,7 @@ export default function AddQuestionDialog({ onSave }: QuestionProps) {
   return (
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Add New Question
+        {t("add_question")}
       </Button>
 
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
@@ -82,7 +84,7 @@ export default function AddQuestionDialog({ onSave }: QuestionProps) {
               autoFocus
               margin="dense"
               id="question"
-              label="Question"
+              label={t("question")}
               type="text"
               fullWidth
               variant="outlined"
@@ -111,7 +113,7 @@ export default function AddQuestionDialog({ onSave }: QuestionProps) {
                       variant="outlined"
                       size="small"
                       fullWidth
-                      label={`Option ${index + 1}`}
+                      label={t("question_option", { number: index + 1 })}
                       required
                     />
                   </Box>
@@ -121,10 +123,10 @@ export default function AddQuestionDialog({ onSave }: QuestionProps) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} variant="contained">
-              Cancel
+              {t("cancel")}
             </Button>
             <Button type="submit" variant="contained">
-              Save
+              {t("save")}
             </Button>
           </DialogActions>
         </form>

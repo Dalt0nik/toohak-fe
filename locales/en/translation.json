@@ -13,5 +13,10 @@
     "navbar_login": "LOG IN",
     "navbar_logout": "LOG OUT",
     "navbar_myquizzes": "MY QUIZZES",
-    "add_question": "Add a Question"
+    "add_question": "Add new Question",
+    "no_questions": "No questions added yet",
+    "question": "Question",
+    "question_option": "Option",
+    "cancel": "Cancel",
+    "save": "Save"
 }
