@@ -5,16 +5,19 @@ import AddQuestionDialog from "@components/AddQuestionDialog.tsx";
 import {
   CARD_BACKGROUND_PURPLE,
   EDIT_BUTTON_IMG,
+  DELETE_BUTTON_IMG,
 } from "../assets/styles/constants";
 
 interface QuestionListProps {
   questions: Question[];
   onEditQuestion: (updatedQuestion: Question, index: number) => void;
+  onDeleteQuestion: (index: number) => void;
 }
 
 export default function QuestionList({
   questions,
   onEditQuestion,
+  onDeleteQuestion,
 }: QuestionListProps) {
   const [editingIndex, setEditingIndex] = React.useState<number | null>(null);
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
@@ -58,13 +61,22 @@ export default function QuestionList({
               <ListItemText>
                 <Typography variant="h6">{question.question}</Typography>
               </ListItemText>
-              <Box
-                component="img"
-                src={EDIT_BUTTON_IMG}
-                alt="Edit"
-                onClick={() => handleEditClick(index)}
-                sx={{ width: 24, height: 24, cursor: "pointer" }}
-              />
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Box
+                  component="img"
+                  src={EDIT_BUTTON_IMG}
+                  alt="Edit"
+                  onClick={() => handleEditClick(index)}
+                  sx={{ width: 24, height: 24, cursor: "pointer" }}
+                />
+                <Box
+                  component="img"
+                  src={DELETE_BUTTON_IMG}
+                  alt="Delete"
+                  onClick={() => onDeleteQuestion(index)}
+                  sx={{ width: 24, height: 24, cursor: "pointer", ml: 1 }}
+                />
+              </Box>
             </ListItem>
           </React.Fragment>
         ))}

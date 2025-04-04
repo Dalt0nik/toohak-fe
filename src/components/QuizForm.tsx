@@ -17,10 +17,7 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<NewQuizRequest>({
-    defaultValues: {
-      title: "",
-      description: "",
-    },
+    defaultValues: { title: "", description: "" },
   });
   const [questions, setQuestions] = React.useState<Question[]>([]);
 
@@ -34,6 +31,12 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
       newQuestions[index] = updatedQuestion;
       return newQuestions;
     });
+  };
+
+  const handleDeleteQuestion = (index: number) => {
+    setQuestions((prevQuestions) =>
+      prevQuestions.filter((_, i) => i !== index),
+    );
   };
 
   return (
@@ -61,6 +64,7 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
         <QuestionList
           questions={questions}
           onEditQuestion={handleEditQuestion}
+          onDeleteQuestion={handleDeleteQuestion}
         />
         <Button
           type="submit"
