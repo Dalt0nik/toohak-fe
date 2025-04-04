@@ -15,27 +15,58 @@ import {
   QuestionOption,
 } from "@models/Request/NewQuestionRequest.ts";
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 
-interface QuestionProps {
+interface AddQuestionDialogProps {
   onSave: (question: Question) => void;
+  initialData?: Question;
+  open?: boolean;
+  onClose?: () => void;
 }
 
-export default function AddQuestionDialog({ onSave }: QuestionProps) {
-  const [open, setOpen] = React.useState(false);
-  const [question, setQuestion] = React.useState("");
-  const [options, setOptions] = React.useState(["", "", "", ""]);
-  const [correctAnswer, setCorrectAnswer] = React.useState("0");
+export default function AddQuestionDialog({
+  onSave,
+  initialData,
+  open,
+  onClose,
+}: AddQuestionDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const dialogOpen = typeof open === "boolean" ? open : internalOpen;
+
   const { t } = useTranslation();
 
+  const [question, setQuestion] = useState("");
+  const [options, setOptions] = useState(["", "", "", ""]);
+  const [correctAnswer, setCorrectAnswer] = useState("0");
+
+  useEffect(() => {
+    if (initialData) {
+      setQuestion(initialData.question);
+      setOptions(initialData.options.map((opt) => opt.text));
+      const idx = initialData.options.findIndex((opt) => opt.isCorrect);
+      setCorrectAnswer(idx.toString());
+    } else {
+      setQuestion("");
+      setOptions(["", "", "", ""]);
+      setCorrectAnswer("0");
+    }
+  }, [initialData, dialogOpen]);
+
   const handleClickOpen = () => {
-    setOpen(true);
+    if (open === undefined) {
+      setInternalOpen(true);
+    }
   };
 
   const handleClose = () => {
     setQuestion("");
     setOptions(["", "", "", ""]);
     setCorrectAnswer("0");
-    setOpen(false);
+    if (onClose) {
+      onClose();
+    } else {
+      setInternalOpen(false);
+    }
   };
 
   const handleQuestionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +87,6 @@ export default function AddQuestionDialog({ onSave }: QuestionProps) {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-
     const questionOptions: QuestionOption[] = options.map((option, index) => ({
       text: option,
       isCorrect: index === parseInt(correctAnswer),
@@ -74,11 +104,13 @@ export default function AddQuestionDialog({ onSave }: QuestionProps) {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        {t("add_question")}
-      </Button>
+      {open === undefined && (
+        <Button variant="outlined" onClick={handleClickOpen}>
+          {t("add_question")}
+        </Button>
+      )}
 
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+      <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="sm">
         <form onSubmit={handleSubmit}>
           <DialogContent>
             <TextField

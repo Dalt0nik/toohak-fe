@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from "react";
-import { useWebSocket } from "@hooks/useWebSocket";
+import { useWebSocket } from "@hooks/context/useWebSocket";
 
 const WebSocketContext = createContext<ReturnType<typeof useWebSocket> | null>(
   null,

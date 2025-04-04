@@ -3,3 +3,4 @@ export const IMAGE_BACKGROUND_LIGHT_PURPLE = "rgb(103, 85, 170)";
 export const TEXT_LIGHT_BLUE = "rgb(220, 213, 253)";
 
 export const NO_IMAGE_IMG_URL = "/no_image.png";
+export const EDIT_BUTTON_IMG = "/edit_button.png";

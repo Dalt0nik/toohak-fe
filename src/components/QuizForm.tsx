@@ -18,7 +18,6 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
     formState: { errors },
   } = useForm<NewQuizRequest>({
     defaultValues: {
-      createdBy: "d8621080-a2d0-4011-a0d3-e6ae5d7a4f72",
       title: "",
       description: "",
     },
@@ -27,6 +26,14 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
 
   const handleSaveQuestion = (newQuestion: Question) => {
     setQuestions([...questions, newQuestion]);
+  };
+
+  const handleEditQuestion = (updatedQuestion: Question, index: number) => {
+    setQuestions((prevQuestions) => {
+      const newQuestions = [...prevQuestions];
+      newQuestions[index] = updatedQuestion;
+      return newQuestions;
+    });
   };
 
   return (
@@ -49,8 +56,12 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
           error={!!errors.description}
           helperText={errors.description?.message}
         />
+
         <AddQuestionDialog onSave={handleSaveQuestion} />
-        <QuestionList questions={questions} />
+        <QuestionList
+          questions={questions}
+          onEditQuestion={handleEditQuestion}
+        />
         <Button
           type="submit"
           variant="contained"
