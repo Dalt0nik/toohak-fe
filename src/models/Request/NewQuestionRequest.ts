@@ -4,7 +4,6 @@ export interface QuestionOption {
 }
 
 export interface Question {
-  id?: string;
   question: string;
   options: QuestionOption[];
 }

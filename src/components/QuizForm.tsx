@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
 import { TextField, Button, Stack } from "@mui/material";
@@ -17,16 +18,26 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<NewQuizRequest>({
-    defaultValues: {
-      createdBy: "d8621080-a2d0-4011-a0d3-e6ae5d7a4f72",
-      title: "",
-      description: "",
-    },
+    defaultValues: { title: "", description: "" },
   });
-  const [questions, setQuestions] = React.useState<Question[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   const handleSaveQuestion = (newQuestion: Question) => {
     setQuestions([...questions, newQuestion]);
+  };
+
+  const handleEditQuestion = (updatedQuestion: Question, index: number) => {
+    setQuestions((prevQuestions) => {
+      const newQuestions = [...prevQuestions];
+      newQuestions[index] = updatedQuestion;
+      return newQuestions;
+    });
+  };
+
+  const handleDeleteQuestion = (index: number) => {
+    setQuestions((prevQuestions) =>
+      prevQuestions.filter((_, i) => i !== index),
+    );
   };
 
   return (
@@ -49,8 +60,13 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
           error={!!errors.description}
           helperText={errors.description?.message}
         />
+
         <AddQuestionDialog onSave={handleSaveQuestion} />
-        <QuestionList questions={questions} />
+        <QuestionList
+          questions={questions}
+          onEditQuestion={handleEditQuestion}
+          onDeleteQuestion={handleDeleteQuestion}
+        />
         <Button
           type="submit"
           variant="contained"
