@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
 import { TextField, Button, Stack } from "@mui/material";
@@ -19,7 +20,7 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
   } = useForm<NewQuizRequest>({
     defaultValues: { title: "", description: "" },
   });
-  const [questions, setQuestions] = React.useState<Question[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   const handleSaveQuestion = (newQuestion: Question) => {
     setQuestions([...questions, newQuestion]);

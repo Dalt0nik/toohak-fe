@@ -1,12 +1,12 @@
 import { Card, CardContent, Typography, Box } from "@mui/material";
-import { QuizCardResponse } from "../models/Response/quizCardResponse";
+import { QuizCardResponse } from "@models/Response/quizCardResponse";
 
 import {
   CARD_BACKGROUND_PURPLE,
   IMAGE_BACKGROUND_LIGHT_PURPLE,
   TEXT_LIGHT_BLUE,
   NO_IMAGE_IMG_URL,
-} from "../assets/styles/constants";
+} from "@assets/styles/constants";
 
 interface QuizCardProps {
   quiz: QuizCardResponse;

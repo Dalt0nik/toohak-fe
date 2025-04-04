@@ -20,18 +20,18 @@ import { useState, useEffect } from "react";
 interface AddQuestionDialogProps {
   onSave: (question: Question) => void;
   initialData?: Question;
-  open?: boolean;
+  isOpen?: boolean;
   onClose?: () => void;
 }
 
 export default function AddQuestionDialog({
   onSave,
   initialData,
-  open,
+  isOpen,
   onClose,
 }: AddQuestionDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
-  const dialogOpen = typeof open === "boolean" ? open : internalOpen;
+  const dialogIsOpen = typeof isOpen === "boolean" ? isOpen : internalOpen;
 
   const { t } = useTranslation();
 
@@ -50,10 +50,10 @@ export default function AddQuestionDialog({
       setOptions(["", "", "", ""]);
       setCorrectAnswer("0");
     }
-  }, [initialData, dialogOpen]);
+  }, [initialData, dialogIsOpen]);
 
   const handleClickOpen = () => {
-    if (open === undefined) {
+    if (isOpen === undefined) {
       setInternalOpen(true);
     }
   };
@@ -104,13 +104,13 @@ export default function AddQuestionDialog({
 
   return (
     <React.Fragment>
-      {open === undefined && (
+      {isOpen === undefined && (
         <Button variant="outlined" onClick={handleClickOpen}>
           {t("add_question")}
         </Button>
       )}
 
-      <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="sm">
+      <Dialog open={dialogIsOpen} onClose={handleClose} fullWidth maxWidth="sm">
         <form onSubmit={handleSubmit}>
           <DialogContent>
             <TextField

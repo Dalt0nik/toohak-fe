@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { Question } from "@models/Request/NewQuestionRequest.ts";
 import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
 import AddQuestionDialog from "@components/AddQuestionDialog.tsx";
@@ -6,7 +7,7 @@ import {
   CARD_BACKGROUND_PURPLE,
   EDIT_BUTTON_IMG,
   DELETE_BUTTON_IMG,
-} from "../assets/styles/constants";
+} from "@assets/styles/constants";
 
 interface QuestionListProps {
   questions: Question[];
@@ -19,8 +20,8 @@ export default function QuestionList({
   onEditQuestion,
   onDeleteQuestion,
 }: QuestionListProps) {
-  const [editingIndex, setEditingIndex] = React.useState<number | null>(null);
-  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const handleEditClick = (index: number) => {
     setEditingIndex(index);
@@ -83,7 +84,7 @@ export default function QuestionList({
       </List>
       {editingIndex !== null && (
         <AddQuestionDialog
-          open={editDialogOpen}
+          isOpen={editDialogOpen}
           initialData={questions[editingIndex]}
           onClose={handleEditDialogClose}
           onSave={handleSaveEditedQuestion}
