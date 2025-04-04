@@ -3,7 +3,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
 import { Button, Stack, Typography } from "@mui/material";
 import ImageUpload from "@ui/ImageUpload";
-import FormTextField from "@ui/FormTextField";
+import WhiteTextField from "@ui/WhiteTextField";
+import { useTranslation } from "react-i18next";
 
 interface QuizFormProps {
   onSubmit: SubmitHandler<NewQuizRequest>;
@@ -11,6 +12,7 @@ interface QuizFormProps {
 }
 
 const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
+  const { t } = useTranslation();
   const [image, setImage] = useState<File | null>(null);
   const {
     register,
@@ -33,29 +35,31 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
   };
 
   useEffect(() => {
-    console.log("Updated image:", image);
+    if (image) {
+      alert(t("quiz_form_image_successfully_saved"));
+    }
   }, [image]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={2}>
-        <FormTextField
-          label="Title"
+        <WhiteTextField
+          label={t("quiz_form_title")}
           {...register("title", {
-            required: "Title is required",
-            maxLength: { value: 200, message: "Max 200 characters" },
+            required: t("quiz_form_title_required"),
+            maxLength: { value: 200, message: t("quiz_form_title_maxchar") },
           })}
           error={!!errors.title}
           helperText={errors.title?.message}
         />
-        <FormTextField
-          label="Description"
+        <WhiteTextField
+          label={t("quiz_form_description")}
           multiline
           rows={4}
           {...register("description", {
             maxLength: {
               value: maxDescriptionLength,
-              message: "Max 500 characters",
+              message: t("quiz_form_description_maxchar"),
             },
           })}
           slotProps={{
@@ -79,7 +83,9 @@ const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, isSubmitting }) => {
           color="primary"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Saving..." : "Save"}
+          {isSubmitting
+            ? t("quiz_form_button_saving")
+            : t("quiz_form_button_save")}
         </Button>
       </Stack>
     </form>

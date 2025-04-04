@@ -1,6 +1,6 @@
 import { styled, TextField } from "@mui/material";
 
-const FormTextField = styled(TextField)(({ theme }) => {
+const WhiteTextField = styled(TextField)(({ theme }) => {
   const contrastColor = theme.palette.contrast.text;
   return {
     backgroundColor: theme.palette.background.default,
@@ -32,4 +32,4 @@ const FormTextField = styled(TextField)(({ theme }) => {
   };
 });
 
-export default FormTextField;
+export default WhiteTextField;

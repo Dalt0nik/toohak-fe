@@ -2,12 +2,14 @@ import React, { useCallback } from "react";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { useDropzone } from "react-dropzone";
 import { Paper, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 interface ImageUploadProps {
   onImageUpload: (file: File) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
+  const { t } = useTranslation();
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles && acceptedFiles.length > 0) {
@@ -40,17 +42,17 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
     >
       <input {...getInputProps()} />
       <UploadFileIcon sx={{ color: "#2196f3" }} />
-      <Typography variant="body1" sx={{ mb: 0.5, color: "#333" }}>
-        Link or drag and drop
+      <Typography variant="body1" sx={{ mb: 0.5, color: "contrast.text" }}>
+        {t("quiz_form_image_dnd")}
       </Typography>
       <Typography variant="caption" sx={{ color: "gray" }}>
-        PNG, JPG (max. 3MB)
+        {t("quiz_form_image_types")}
       </Typography>
       {isDragActive && (
-        <Typography variant="body2" sx={{ mt: 2 }}>
-          Drop the image here...
+        <Typography variant="body2" sx={{ mt: 2, color: "contrast.text" }}>
+          {t("quiz_form_image_dnd_dragging")}
         </Typography>
-      )}{" "}
+      )}
     </Paper>
   );
 };

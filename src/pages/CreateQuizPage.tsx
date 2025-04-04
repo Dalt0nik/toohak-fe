@@ -3,8 +3,10 @@ import { Typography, Grid } from "@mui/material";
 import QuizForm from "@components/QuizForm";
 import { useCreateQuiz } from "@hooks/useCreateQuiz";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
+import { useTranslation } from "react-i18next";
 
 const CreateQuizPage: React.FC = () => {
+  const { t } = useTranslation();
   const createQuizMutation = useCreateQuiz();
 
   const handleCreateQuiz = (data: NewQuizRequest) => {
@@ -14,12 +16,12 @@ const CreateQuizPage: React.FC = () => {
   return (
     <>
       <Typography variant="h2" component="h2" align="left" sx={{ mb: 3 }}>
-        Create new quiz
+        {t("quiz_form_create_new_quiz")}
       </Typography>
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 4 }}>
           <Typography variant="h5" align="left">
-            Quiz Details
+            {t("quiz_form_quiz_details")}
           </Typography>
         </Grid>
         <Grid size={{ xs: 12, md: 8 }}>
