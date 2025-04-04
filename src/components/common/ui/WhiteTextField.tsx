@@ -16,6 +16,10 @@ const WhiteTextField = styled(TextField)(({ theme }) => {
         color: "error.main",
       },
     },
+    "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
+      transform: "translate(14px, -3px) scale(0.90)",
+      fontSize: "0.95rem",
+    },
     borderRadius: "12px",
     "& .MuiOutlinedInput-root": {
       borderRadius: "12px",

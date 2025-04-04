@@ -17,9 +17,10 @@
   "quiz_form_quiz_details": "Quiz Details",
   "quiz_form_title": "Title",
   "quiz_form_title_required": "Title is required",
-  "quiz_form_title_maxchar": "Max 200 characters",
+  "quiz_form_title_maxchar": " max characters",
   "quiz_form_description": "Description",
-  "quiz_form_description_maxchar": "Max 500 characters",
+  "quiz_form_description_maxchar": " max characters",
+  "quiz_form_image_upload": "Upload Cover Image",
   "quiz_form_image_dnd": "Drag and drop",
   "quiz_form_image_types": "PNG, JPG (max. 3MB)",
   "quiz_form_image_dnd_dragging": "Drop the image here...",
@@ -27,4 +28,3 @@
   "quiz_form_button_saving": "Saving...",
   "quiz_form_button_save": "Save"
 }
-
