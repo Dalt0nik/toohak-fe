@@ -9,6 +9,7 @@ import QuizList from "@pages/QuizList";
 import { WebSocketProvider } from "@contexts/WebSocketContext";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import { PublicAppRoutes } from "@models/PublicRoutes";
+import QuizPage from "@pages/QuizPage";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           path={PublicAppRoutes.PAGE_NOT_FOUND}
           element={<PageNotFound />}
         />
+        <Route path={PrivateAppRoutes.QUIZ_PAGE} element={<QuizPage />} />
       </Route>
     </Routes>
   );
