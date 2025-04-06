@@ -1,6 +1,10 @@
 import { api } from "@api/Api";
 import theme from "@assets/styles/theme";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Grid,
@@ -81,20 +85,40 @@ const QuizPage = () => {
               objectFit: "contain",
             }}
           />
-          <Typography variant="h5">{quiz?.description}</Typography>
-          {quiz?.questions && quiz.questions.length > 0 ? (
-            <List>
-              {quiz.questions.map((q) => (
-                <ListItem key={q.id} sx={{ paddingY: 0 }}>
-                  <ListItemText primary={q.title} />
-                </ListItem>
-              ))}
-            </List>
-          ) : (
-            <Typography color="red">
-              There is no questions in this quiz
-            </Typography>
-          )}
+          <Typography variant="h5" sx={{ textAlign: "left" }}>
+            {quiz?.description}
+          </Typography>
+          <Accordion
+            sx={{
+              backgroundColor: CARD_BACKGROUND_PURPLE,
+              border: "1px solid",
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span">
+                Total Questions: {quiz?.questions?.length}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {quiz?.questions && quiz.questions.length > 0 ? (
+                <List>
+                  {quiz.questions.map((q) => (
+                    <ListItem key={q.id} sx={{ paddingY: 0 }}>
+                      <ListItemText primary={q.title} />
+                    </ListItem>
+                  ))}
+                </List>
+              ) : (
+                <Typography color="red">
+                  There is no questions in this quiz
+                </Typography>
+              )}
+            </AccordionDetails>
+          </Accordion>
         </Grid>
 
         <Grid size={{ xs: 12, sm: 4 }}>
