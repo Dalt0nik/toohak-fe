@@ -2,10 +2,16 @@ import { NewQuizRequest } from "@models/Request/NewQuizRequest";
 import { NewQuizCoverImageRequest } from "@models/Request/NewQuizCoverImageRequest";
 import { NewQuizCoverImageResponse } from "@models/Response/NewQuizCoverImageResponse";
 import { api } from "@api/Api";
+import { QuizResponse } from "@models/Response/quizResponse";
 
 export const createNewQuiz = async (data: NewQuizRequest): Promise<number> => {
   const response = await api.post<NewQuizRequest>("/quizzes", data);
   return response.status;
+};
+
+export const fetchQuizById = async (id: string): Promise<QuizResponse> => {
+  const { data } = await api.get(`/quizzes/${id}`);
+  return data;
 };
 
 export const newCoverImage = async (
