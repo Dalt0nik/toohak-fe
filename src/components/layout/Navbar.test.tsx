@@ -1,53 +1,94 @@
-import { render, screen } from "@testing-library/react";
-import { vi, expect, test } from "vitest";
-import { BrowserRouter } from "react-router-dom"; // Navbar uses links, doesn't work without
+import { render, screen, cleanup } from "@testing-library/react";
+import { vi, expect, test, describe, afterEach } from "vitest";
+import { BrowserRouter } from "react-router-dom"; // Navbar uses links and needs this to work
 import Navbar from "./Navbar";
 import { useAuth0 } from "@auth0/auth0-react";
+import { userEvent } from "@testing-library/user-event";
+import { PrivateAppRoutes } from "@models/PrivateRoutes";
+//import { PublicAppRoutes } from "@models/PublicRoutes";
+
+afterEach(() => {
+  cleanup();
+}); // Might not be necessary
 
 vi.mock("@auth0/auth0-react");
 
-// Would be nice to import the userNavItems, but feels bad to do just for the tests
+describe("Navbar tests", () => {
+  describe("NavItem tests", () => {
+    test("Set userNavItems on login", () => {
+      useAuth0.mockReturnValue({ isAuthenticated: true }); // Auth bypass
 
-test("Set userNavItems on login", () => {
-  useAuth0.mockReturnValue({ isAuthenticated: true });
+      render(
+        <BrowserRouter>
+          <Navbar />
+        </BrowserRouter>,
+      );
 
-  render(
-    <BrowserRouter>
-      <Navbar />
-    </BrowserRouter>,
-  );
+      // Check for logout button
+      expect(
+        screen.queryByRole("button", { name: "navbar_logout" }),
+        "Logout button was not found after login",
+      ).not.toBeNull();
+      // Check for create button
+      expect(
+        screen.queryByRole("link", { name: "navbar_create" }), // Routes are treated as links
+        "Create button was not found after login",
+      ).not.toBeNull();
+      // Check for my quizzes button
+      expect(
+        screen.queryByRole("link", { name: "navbar_myquizzes" }),
+        "My Quizzes button was not found after login",
+      ).not.toBeNull();
+    });
 
-  const links = screen.queryAllByRole("link");
+    test("Set guestNavItems on logout", () => {
+      useAuth0.mockReturnValue({ isAuthenticated: false });
 
-  const buttons: string[] = [];
+      render(
+        <BrowserRouter>
+          <Navbar />
+        </BrowserRouter>,
+      );
+      // Check for login button
+      expect(
+        screen.queryByRole("button", { name: "navbar_login" }),
+        "Login button was not found after logout",
+      ).not.toBeNull();
+    });
+  });
 
-  links.forEach((link) => buttons.push(link.textContent));
+  // Login and logout buttons should have their own tests, but My Quizzes and Create are inbuilt inside of navbar so we test them here
 
-  expect(
-    screen.getByRole("button").textContent,
-    "Logout button was not found after login",
-  ).toBe("navbar_logout");
-  expect(
-    buttons.find((button) => button === "navbar_create"),
-    "Create button was not found after login",
-  ).toBeDefined();
-  expect(
-    buttons.find((button) => button === "navbar_myquizzes"),
-    "My Quizzes button was not found after login",
-  ).toBeDefined();
-});
+  describe("Button press tests", () => {
+    test("Press My Quizzes", async () => {
+      useAuth0.mockReturnValue({ isAuthenticated: true });
+      const user = userEvent.setup();
 
-test("Set guestNavItems on logout", () => {
-  useAuth0.mockReturnValue({ isAuthenticated: false });
+      render(
+        <BrowserRouter>
+          <Navbar />
+        </BrowserRouter>,
+      );
 
-  render(
-    <BrowserRouter>
-      <Navbar />
-    </BrowserRouter>,
-  );
-
-  expect(
-    screen.getByRole("button").textContent,
-    "Login button was not found after logout",
-  ).toBe("navbar_login");
+      await user.click(screen.getByRole("link", { name: "navbar_myquizzes" }));
+      // Check if path matches
+      expect(
+        window.location.pathname,
+        "My Quizzes went to the wrong path",
+      ).toBe(PrivateAppRoutes.USER_QUIZZES);
+    });
+    test("Press Create", async () => {
+      const user = userEvent.setup();
+      render(
+        <BrowserRouter>
+          <Navbar />
+        </BrowserRouter>,
+      );
+      await user.click(screen.getByRole("link", { name: "navbar_create" }));
+      // Check if path matches
+      expect(window.location.pathname, "Create went to the wrong path").toBe(
+        PrivateAppRoutes.CREATE_QUIZ,
+      );
+    });
+  });
 });
