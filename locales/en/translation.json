@@ -35,4 +35,14 @@
   "quiz_form_questions": "Questions",
   "quiz_form_no_questions": "No questions added yet",
   "quiz_form_add_question": "+ ADD NEW QUESTION"
+  "quiz_form_button_save": "Save",
+
+  "QuizPage": {
+    "editButton": "Edit",
+    "totalQuestions": "Total Questions: ",
+    "startButton": "Start",
+    "gameSettings": "Game settings:",
+    "form": "Form for settings",
+    "noQuestions": "There is no questions in this quiz"
+  }
 }
