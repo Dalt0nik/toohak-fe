@@ -27,5 +27,14 @@
   "quiz_form_image_successfully_saved": "Image successfully saved",
   "quiz_form_image_error": "An error has occurred",
   "quiz_form_button_saving": "Saving...",
-  "quiz_form_button_save": "Save"
+  "quiz_form_button_save": "Save",
+
+  "QuizPage": {
+    "editButton": "Edit",
+    "totalQuestions": "Total Questions: ",
+    "startButton": "Start",
+    "gameSettings": "Game settings:",
+    "form": "Form for settings",
+    "noQuestions": "There is no questions in this quiz"
+  }
 }
