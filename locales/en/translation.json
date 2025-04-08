@@ -34,8 +34,7 @@
   "quiz_form_button_save": "Save",
   "quiz_form_questions": "Questions",
   "quiz_form_no_questions": "No questions added yet",
-  "quiz_form_add_question": "+ ADD NEW QUESTION"
-  "quiz_form_button_save": "Save",
+  "quiz_form_add_question": "+ ADD NEW QUESTION",
 
   "QuizPage": {
     "editButton": "Edit",
