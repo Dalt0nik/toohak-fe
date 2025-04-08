@@ -35,7 +35,6 @@
     "startButton": "Start",
     "gameSettings": "Game settings:",
     "form": "Form for settings",
-    "noQuestions": "There is no questions in this quiz",
-    "error": "Error: "
+    "noQuestions": "There is no questions in this quiz"
   }
 }

@@ -38,12 +38,7 @@ const QuizPage = () => {
   });
 
   if (isLoading) return <p>{t("loading")}</p>;
-  if (error instanceof Error)
-    return (
-      <p>
-        {t("QuizPage.error")} {error.message}
-      </p>
-    );
+  if (error instanceof Error) return <p>{error.message}</p>;
 
   return (
     <ThemeProvider theme={theme}>
