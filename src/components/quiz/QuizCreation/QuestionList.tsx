@@ -63,7 +63,7 @@ export default function QuestionList({
             >
               <ListItemText>
                 <Typography variant="h6">
-                  {index + 1}. {question.question}
+                  {index + 1}. {question.title}
                 </Typography>
               </ListItemText>
               <Box sx={{ display: "flex", alignItems: "center" }}>

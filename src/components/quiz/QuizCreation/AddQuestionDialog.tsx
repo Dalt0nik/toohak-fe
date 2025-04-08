@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -15,7 +15,6 @@ import {
   QuestionOption,
 } from "@models/Request/NewQuestionRequest.ts";
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
 
 interface AddQuestionDialogProps {
   onSave: (question: Question) => void;
@@ -41,8 +40,8 @@ export default function AddQuestionDialog({
 
   useEffect(() => {
     if (initialData) {
-      setQuestion(initialData.question);
-      setOptions(initialData.options.map((opt) => opt.text));
+      setQuestion(initialData.title);
+      setOptions(initialData.options.map((opt) => opt.title));
       const idx = initialData.options.findIndex((opt) => opt.isCorrect);
       setCorrectAnswer(idx.toString());
     } else {
@@ -85,15 +84,15 @@ export default function AddQuestionDialog({
     setCorrectAnswer(event.target.value);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleLocalSubmit = () => {
     const questionOptions: QuestionOption[] = options.map((option, index) => ({
-      text: option,
+      title: option,
+      ordering: index + 1,
       isCorrect: index === parseInt(correctAnswer),
     }));
 
     const questionData: Question = {
-      question: question,
+      title: question,
       options: questionOptions,
     };
 
@@ -110,60 +109,56 @@ export default function AddQuestionDialog({
       )}
 
       <Dialog open={dialogIsOpen} onClose={handleClose} fullWidth maxWidth="sm">
-        <form onSubmit={handleSubmit}>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="question"
-              label={t("question")}
-              type="text"
-              fullWidth
-              variant="outlined"
-              value={question}
-              onChange={handleQuestionChange}
-              required
-            />
-            <FormControl component="fieldset" sx={{ mt: 2 }} fullWidth>
-              <RadioGroup
-                aria-label="correct-answer"
-                name="correct-answer"
-                value={correctAnswer}
-                onChange={handleCorrectAnswerChange}
-              >
-                {options.map((option, index) => (
-                  <Box
-                    key={index}
-                    sx={{ display: "flex", alignItems: "center", mb: 1 }}
-                  >
-                    <Radio value={index.toString()} />
-                    <TextField
-                      value={option}
-                      onChange={(e) =>
-                        handleOptionChange(index, e.target.value)
-                      }
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      label={t("question_dialog_question_option", {
-                        number: index + 1,
-                      })}
-                      required
-                    />
-                  </Box>
-                ))}
-              </RadioGroup>
-            </FormControl>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} variant="contained">
-              {t("question_dialog_cancel")}
-            </Button>
-            <Button type="submit" variant="contained">
-              {t("question_dialog_save")}
-            </Button>
-          </DialogActions>
-        </form>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="question"
+            label={t("question")}
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={question}
+            onChange={handleQuestionChange}
+            required
+          />
+          <FormControl component="fieldset" sx={{ mt: 2 }} fullWidth>
+            <RadioGroup
+              aria-label="correct-answer"
+              name="correct-answer"
+              value={correctAnswer}
+              onChange={handleCorrectAnswerChange}
+            >
+              {options.map((option, index) => (
+                <Box
+                  key={index}
+                  sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                >
+                  <Radio value={index.toString()} />
+                  <TextField
+                    value={option}
+                    onChange={(e) => handleOptionChange(index, e.target.value)}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    label={t("question_dialog_question_option", {
+                      number: index + 1,
+                    })}
+                    required
+                  />
+                </Box>
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant="contained">
+            {t("question_dialog_cancel")}
+          </Button>
+          <Button onClick={handleLocalSubmit} variant="contained">
+            {t("question_dialog_save")}
+          </Button>
+        </DialogActions>
       </Dialog>
     </React.Fragment>
   );

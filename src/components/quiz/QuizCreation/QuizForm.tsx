@@ -11,11 +11,13 @@ import QuestionList from "@components/quiz/QuizCreation/QuestionList";
 interface QuizFormProps {
   onSubmit: (data: NewQuizRequest) => void;
   isSubmitting: boolean;
+  autoSubmitQuestion?: boolean;
 }
 
 export const QuizForm: React.FC<QuizFormProps> = ({
   onSubmit,
   isSubmitting,
+  autoSubmitQuestion = false,
 }) => {
   const { t } = useTranslation();
 
@@ -23,6 +25,13 @@ export const QuizForm: React.FC<QuizFormProps> = ({
 
   const handleSaveQuestion = (newQuestion: Question) => {
     setQuestions([...questions, newQuestion]);
+
+    if (autoSubmitQuestion) {
+      const updatedQuestions = [...questions, newQuestion];
+      methods.handleSubmit((data) => {
+        onSubmit({ ...data, questions: updatedQuestions });
+      })();
+    }
   };
 
   const handleEditQuestion = (updatedQuestion: Question, index: number) => {

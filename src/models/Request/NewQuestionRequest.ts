@@ -1,9 +1,10 @@
 export interface QuestionOption {
-  text: string;
+  title: string;
   isCorrect: boolean;
+  ordering: number;
 }
 
 export interface Question {
-  question: string;
+  title: string;
   options: QuestionOption[];
 }
