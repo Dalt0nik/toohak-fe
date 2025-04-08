@@ -13,8 +13,6 @@
   "navbar_login": "LOG IN",
   "navbar_logout": "LOG OUT",
   "navbar_myquizzes": "MY QUIZZES",
-  "add_question": "Add new Question",
-  "no_questions": "No questions added yet",
   "question": "Question",
   "question_option": "Option {{number}}",
   "cancel": "Cancel",
@@ -33,5 +31,8 @@
   "quiz_form_image_successfully_saved": "Image successfully saved",
   "quiz_form_image_error": "An error has occurred",
   "quiz_form_button_saving": "Saving...",
-  "quiz_form_button_save": "Save"
+  "quiz_form_button_save": "Save",
+  "quiz_form_questions": "Questions",
+  "quiz_form_no_questions": "No questions added yet",
+  "quiz_form_add_question": "+ ADD NEW QUESTION"
 }

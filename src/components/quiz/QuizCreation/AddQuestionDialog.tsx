@@ -97,7 +97,6 @@ export default function AddQuestionDialog({
       options: questionOptions,
     };
 
-    console.log("Question Data:", questionData);
     onSave(questionData);
     handleClose();
   };
@@ -106,7 +105,7 @@ export default function AddQuestionDialog({
     <React.Fragment>
       {isOpen === undefined && (
         <Button variant="outlined" onClick={handleClickOpen}>
-          {t("add_question")}
+          {t("quiz_form_add_question")}
         </Button>
       )}
 

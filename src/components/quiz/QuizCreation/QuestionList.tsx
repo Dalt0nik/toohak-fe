@@ -1,13 +1,12 @@
 import React from "react";
 import { useState } from "react";
-import { Question } from "@models/Request/NewQuestionRequest.ts";
+import { Question } from "@models/Request/NewQuestionRequest";
 import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
-import AddQuestionDialog from "@components/AddQuestionDialog.tsx";
-import {
-  CARD_BACKGROUND_PURPLE,
-  EDIT_BUTTON_IMG,
-  DELETE_BUTTON_IMG,
-} from "@assets/styles/constants";
+import AddQuestionDialog from "@components/quiz/QuizCreation/AddQuestionDialog";
+import { useTranslation } from "react-i18next";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
+import { CARD_BACKGROUND_PURPLE } from "@assets/styles/constants";
 
 interface QuestionListProps {
   questions: Question[];
@@ -20,6 +19,7 @@ export default function QuestionList({
   onEditQuestion,
   onDeleteQuestion,
 }: QuestionListProps) {
+  const { t } = useTranslation();
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
@@ -41,7 +41,9 @@ export default function QuestionList({
   };
 
   if (questions.length === 0) {
-    return <Typography variant="body1">No questions added yet.</Typography>;
+    return (
+      <Typography variant="body1">{t("quiz_form_no_questions")}</Typography>
+    );
   }
   return (
     <Box sx={{ width: "100%", maxHeight: 200, overflowY: "auto" }}>
@@ -60,22 +62,18 @@ export default function QuestionList({
               }}
             >
               <ListItemText>
-                <Typography variant="h6">{question.question}</Typography>
+                <Typography variant="h6">
+                  {index + 1}. {question.question}
+                </Typography>
               </ListItemText>
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Box
-                  component="img"
-                  src={EDIT_BUTTON_IMG}
-                  alt="Edit"
+                <EditIcon
                   onClick={() => handleEditClick(index)}
-                  sx={{ width: 24, height: 24, cursor: "pointer" }}
+                  sx={{ fontSize: 24, cursor: "pointer", color: "black" }}
                 />
-                <Box
-                  component="img"
-                  src={DELETE_BUTTON_IMG}
-                  alt="Delete"
+                <DeleteForeverIcon
                   onClick={() => onDeleteQuestion(index)}
-                  sx={{ width: 24, height: 24, cursor: "pointer", ml: 1 }}
+                  sx={{ fontSize: 24, cursor: "pointer", ml: 1, color: "red" }}
                 />
               </Box>
             </ListItem>
