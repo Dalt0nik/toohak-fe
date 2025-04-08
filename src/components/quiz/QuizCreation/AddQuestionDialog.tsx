@@ -145,7 +145,9 @@ export default function AddQuestionDialog({
                       variant="outlined"
                       size="small"
                       fullWidth
-                      label={t("question_option", { number: index + 1 })}
+                      label={t("question_dialog_question_option", {
+                        number: index + 1,
+                      })}
                       required
                     />
                   </Box>
@@ -155,10 +157,10 @@ export default function AddQuestionDialog({
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} variant="contained">
-              {t("cancel")}
+              {t("question_dialog_cancel")}
             </Button>
             <Button type="submit" variant="contained">
-              {t("save")}
+              {t("question_dialog_save")}
             </Button>
           </DialogActions>
         </form>

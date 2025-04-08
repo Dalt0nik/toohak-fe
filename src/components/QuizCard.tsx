@@ -1,6 +1,6 @@
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import { QuizCardResponse } from "@models/Response/quizCardResponse";
-import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
+import ImageNotSupportedOutlinedIcon from "@mui/icons-material/ImageNotSupportedOutlined";
 
 import {
   CARD_BACKGROUND_PURPLE,
@@ -50,7 +50,9 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
             }}
           />
         ) : (
-          <ImageNotSupportedIcon sx={{ fontSize: 80, color: "black" }} />
+          <ImageNotSupportedOutlinedIcon
+            sx={{ fontSize: 80, color: "black" }}
+          />
         )}
       </Box>
 
