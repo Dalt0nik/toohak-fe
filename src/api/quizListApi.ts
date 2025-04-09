@@ -1,4 +1,4 @@
-import { QuizCardResponse } from "../models/Response/quizCardResponse";
+import { QuizCardResponse } from "@models/Response/quizCardResponse";
 import { api } from "./Api";
 
 export async function fetchQuizList(): Promise<QuizCardResponse[]> {

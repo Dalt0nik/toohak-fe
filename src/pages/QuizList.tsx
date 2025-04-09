@@ -1,8 +1,8 @@
-import { QuizCardResponse } from "../models/Response/quizCardResponse";
+import { QuizCardResponse } from "@models/Response/quizCardResponse";
 import { Grid, Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import QuizCard from "../components/QuizCard";
-import { fetchQuizList } from "../api/quizListApi";
+import QuizCard from "@components/QuizCard";
+import { fetchQuizList } from "@api/quizListApi";
 import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 

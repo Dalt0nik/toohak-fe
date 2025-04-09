@@ -1,20 +1,18 @@
 import { Card, CardContent, Typography, Box } from "@mui/material";
-import { QuizCardResponse } from "../models/Response/quizCardResponse";
+import { QuizCardResponse } from "@models/Response/quizCardResponse";
+import ImageNotSupportedOutlinedIcon from "@mui/icons-material/ImageNotSupportedOutlined";
 
 import {
   CARD_BACKGROUND_PURPLE,
   IMAGE_BACKGROUND_LIGHT_PURPLE,
   TEXT_LIGHT_BLUE,
-  NO_IMAGE_IMG_URL,
-} from "../assets/styles/constants";
+} from "@assets/styles/constants";
 
 interface QuizCardProps {
   quiz: QuizCardResponse;
 }
 
 export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
-  const quizImage = quiz.imageUrl ?? NO_IMAGE_IMG_URL;
-
   const lastModified = new Date(quiz.updatedAt).toLocaleDateString();
 
   return (
@@ -41,15 +39,21 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
           borderRadius: 3,
         }}
       >
-        <Box
-          component="img"
-          src={quizImage}
-          sx={{
-            maxHeight: "100%",
-            maxWidth: "100%",
-            objectFit: "contain",
-          }}
-        />
+        {quiz.imageUrl ? (
+          <Box
+            component="img"
+            src={quiz.imageUrl}
+            sx={{
+              maxHeight: "100%",
+              maxWidth: "100%",
+              objectFit: "contain",
+            }}
+          />
+        ) : (
+          <ImageNotSupportedOutlinedIcon
+            sx={{ fontSize: 80, color: "black" }}
+          />
+        )}
       </Box>
 
       <CardContent

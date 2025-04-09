@@ -1,5 +1,6 @@
 import theme from "@assets/styles/theme";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ImageNotSupportedOutlinedIcon from "@mui/icons-material/ImageNotSupportedOutlined";
 import {
   Accordion,
   AccordionDetails,
@@ -13,10 +14,7 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import {
-  CARD_BACKGROUND_PURPLE,
-  NO_IMAGE_IMG_URL,
-} from "../assets/styles/constants";
+import { CARD_BACKGROUND_PURPLE } from "../assets/styles/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchQuizById } from "@api/QuizApi";
@@ -57,13 +55,10 @@ const QuizPage = () => {
           size={{ xs: 12, sm: 8 }}
           sx={{ backgroundColor: CARD_BACKGROUND_PURPLE }}
         >
-          <Box
-            component="img"
-            src={NO_IMAGE_IMG_URL}
+          <ImageNotSupportedOutlinedIcon
             sx={{
-              maxHeight: "100%",
-              maxWidth: "100%",
-              objectFit: "contain",
+              fontSize: { xs: 100, sm: 150, md: 200, lg: 250 },
+              color: "black",
             }}
           />
           <Typography variant="h5" sx={{ textAlign: "left" }}>
