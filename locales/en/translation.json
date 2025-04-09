@@ -33,7 +33,6 @@
     "deleteButton": "Delete",
     "confirmDeleteMessage": "Are you sure you want to delete this quiz?",
     "cancelButton": "Cancel",
-    "deleteError": "Failed to delete quiz",
     "totalQuestions": "Total Questions: ",
     "startButton": "Start",
     "gameSettings": "Game settings:",
