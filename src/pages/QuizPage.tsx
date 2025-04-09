@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import theme from "@assets/styles/theme";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -13,21 +13,18 @@ import {
   ListItemText,
   ThemeProvider,
   Typography,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
 } from "@mui/material";
 import {
   CARD_BACKGROUND_PURPLE,
   NO_IMAGE_IMG_URL,
 } from "../assets/styles/constants";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchQuizById, deleteQuizById } from "@api/QuizApi";
 import { QuestionResponse } from "@models/Response/questionResponse";
 import { useTranslation } from "react-i18next";
 import { PrivateAppRoutes } from "../models/PrivateRoutes";
+import DeleteConfirmationDialog from "@components/DeleteConfirmationDialog";
 
 const QuizPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -55,16 +52,15 @@ const QuizPage = () => {
     setOpenDialog(false);
   };
 
-  const handleDelete = useCallback(
-    (id?: string) => {
-      if (id) {
-        deleteQuizById(id).finally(() => {
-          navigate(PrivateAppRoutes.USER_QUIZZES);
-        });
-      }
+  const handleDelete = useMutation({
+    mutationFn: (id: string) => deleteQuizById(id),
+    onSuccess: () => {
+      navigate(PrivateAppRoutes.USER_QUIZZES);
     },
-    [navigate],
-  );
+    onError: (error) => {
+      console.error(error);
+    },
+  });
 
   if (isLoading) return <p>{t("loading")}</p>;
   if (error instanceof Error) return <p>{error.message}</p>;
@@ -149,27 +145,11 @@ const QuizPage = () => {
           </Box>
         </Grid>
       </Grid>
-
-      {/* Patvirtinimo dialogas */}
-      <Dialog open={openDialog} onClose={handleDeleteDialogClose}>
-        <DialogTitle>{t("QuizPage.confirmDeleteTitle")}</DialogTitle>
-        <DialogContent>
-          <Typography
-            variant="body1"
-            sx={{ color: "#000", fontWeight: "normal" }}
-          >
-            {t("QuizPage.confirmDeleteMessage")}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteDialogClose} color="primary">
-            {t("QuizPage.cancelButton")}
-          </Button>
-          <Button onClick={() => handleDelete(quiz?.id)} color="error">
-            {t("QuizPage.deleteButton")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteConfirmationDialog
+        open={openDialog}
+        onClose={handleDeleteDialogClose}
+        onDelete={() => quiz && handleDelete.mutate(quiz.id)}
+      />
     </ThemeProvider>
   );
 };
