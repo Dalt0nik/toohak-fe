@@ -34,3 +34,7 @@ export const newCoverImage = async (
   );
   return response.data;
 };
+
+export const deleteQuizById = async (id: string): Promise<void> => {
+  await api.delete(`/quizzes/${id}`);
+};

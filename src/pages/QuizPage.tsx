@@ -1,3 +1,4 @@
+import { useState } from "react";
 import theme from "@assets/styles/theme";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -12,20 +13,26 @@ import {
   ListItemText,
   ThemeProvider,
   Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import {
   CARD_BACKGROUND_PURPLE,
   NO_IMAGE_IMG_URL,
 } from "../assets/styles/constants";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import { fetchQuizById } from "@api/QuizApi";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchQuizById, deleteQuizById } from "@api/QuizApi";
 import { QuestionResponse } from "@models/Response/questionResponse";
 import { useTranslation } from "react-i18next";
 
 const QuizPage = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+
+  const navigate = useNavigate();
 
   const {
     data: quiz,
@@ -36,6 +43,30 @@ const QuizPage = () => {
     queryFn: () => fetchQuizById(id!),
     enabled: !!id,
   });
+
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleDeleteDialogOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleDelete = async () => {
+    if (!id) return;
+
+    try {
+      await deleteQuizById(id);
+      navigate("/user-quizzes");
+    } catch (error) {
+      console.error(error);
+      alert(t("QuizPage.deleteError"));
+    } finally {
+      setOpenDialog(false);
+    }
+  };
 
   if (isLoading) return <p>{t("loading")}</p>;
   if (error instanceof Error) return <p>{error.message}</p>;
@@ -50,7 +81,18 @@ const QuizPage = () => {
         }}
       >
         {quiz?.title}
-        <Button variant="contained"> {t("QuizPage.editButton")}</Button>
+        <Button variant="contained" sx={{ ml: 2 }}>
+          {" "}
+          {t("QuizPage.editButton")}
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          sx={{ ml: 2 }}
+          onClick={handleDeleteDialogOpen}
+        >
+          {t("QuizPage.deleteButton")}
+        </Button>
       </Typography>
       <Grid container spacing={2}>
         <Grid
@@ -109,7 +151,29 @@ const QuizPage = () => {
           </Box>
         </Grid>
       </Grid>
+
+      {/* Patvirtinimo dialogas */}
+      <Dialog open={openDialog} onClose={handleDeleteDialogClose}>
+        <DialogTitle>{t("QuizPage.confirmDeleteTitle")}</DialogTitle>
+        <DialogContent>
+          <Typography
+            variant="body1"
+            sx={{ color: "#000", fontWeight: "normal" }}
+          >
+            {t("QuizPage.confirmDeleteMessage")}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteDialogClose} color="primary">
+            {t("QuizPage.cancelButton")}
+          </Button>
+          <Button onClick={handleDelete} color="error">
+            {t("QuizPage.deleteButton")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ThemeProvider>
   );
 };
+
 export default QuizPage;
