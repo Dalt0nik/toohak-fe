@@ -62,9 +62,6 @@ export const QuizForm: React.FC<QuizFormProps> = ({
           onSubmit({ ...data, questions });
         })}
       >
-        <Typography variant="h2" component="h2" align="left" sx={{ mb: 3 }}>
-          {t("quiz_form_create_new_quiz")}
-        </Typography>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 4 }}>
             <Typography variant="h5" align="left">

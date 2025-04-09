@@ -30,7 +30,7 @@ export default function AddQuestionDialog({
   onClose,
 }: AddQuestionDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
-  const dialogIsOpen = typeof isOpen === "boolean" ? isOpen : internalOpen;
+  const dialogIsOpen = isOpen ?? internalOpen;
 
   const { t } = useTranslation();
 
