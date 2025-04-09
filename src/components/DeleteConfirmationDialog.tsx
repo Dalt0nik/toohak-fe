@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Button,
   Typography,
 } from "@mui/material";
@@ -24,7 +23,6 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{t("QuizPage.confirmDeleteTitle")}</DialogTitle>
       <DialogContent>
         <Typography
           variant="body1"
@@ -37,7 +35,7 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
         <Button onClick={onClose} color="primary">
           {t("QuizPage.cancelButton")}
         </Button>
-        <Button onClick={onDelete} color="error">
+        <Button onClick={onDelete} variant="contained" color="error">
           {t("QuizPage.deleteButton")}
         </Button>
       </DialogActions>
