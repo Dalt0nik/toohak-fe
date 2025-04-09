@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import theme from "@assets/styles/theme";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -27,6 +27,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchQuizById, deleteQuizById } from "@api/QuizApi";
 import { QuestionResponse } from "@models/Response/questionResponse";
 import { useTranslation } from "react-i18next";
+import { PrivateAppRoutes } from "../models/PrivateRoutes";
 
 const QuizPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,19 +55,16 @@ const QuizPage = () => {
     setOpenDialog(false);
   };
 
-  const handleDelete = async () => {
-    if (!id) return;
-
-    try {
-      await deleteQuizById(id);
-      navigate("/user-quizzes");
-    } catch (error) {
-      console.error(error);
-      alert(t("QuizPage.deleteError"));
-    } finally {
-      setOpenDialog(false);
-    }
-  };
+  const handleDelete = useCallback(
+    (id?: string) => {
+      if (id) {
+        deleteQuizById(id).finally(() => {
+          navigate(PrivateAppRoutes.USER_QUIZZES);
+        });
+      }
+    },
+    [navigate],
+  );
 
   if (isLoading) return <p>{t("loading")}</p>;
   if (error instanceof Error) return <p>{error.message}</p>;
@@ -167,7 +165,7 @@ const QuizPage = () => {
           <Button onClick={handleDeleteDialogClose} color="primary">
             {t("QuizPage.cancelButton")}
           </Button>
-          <Button onClick={handleDelete} color="error">
+          <Button onClick={() => handleDelete(quiz?.id)} color="error">
             {t("QuizPage.deleteButton")}
           </Button>
         </DialogActions>
