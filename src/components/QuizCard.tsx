@@ -1,6 +1,14 @@
-import { Card, CardContent, Typography, Box } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  CardActionArea,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 import { QuizCardResponse } from "@models/Response/quizCardResponse";
 import ImageNotSupportedOutlinedIcon from "@mui/icons-material/ImageNotSupportedOutlined";
+import { PrivateAppRoutes } from "../models/PrivateRoutes";
 
 import {
   CARD_BACKGROUND_PURPLE,
@@ -27,83 +35,88 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
         flexDirection: "column",
       }}
     >
-      <Box
-        sx={{
-          height: 140,
-          backgroundColor: IMAGE_BACKGROUND_LIGHT_PURPLE,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          m: 2,
-          mb: 0,
-          borderRadius: 3,
-        }}
+      <CardActionArea
+        component={Link}
+        to={PrivateAppRoutes.QUIZ_PAGE.replace(":id", quiz.id)}
       >
-        {quiz.imageUrl ? (
-          <Box
-            component="img"
-            src={quiz.imageUrl}
-            sx={{
-              maxHeight: "100%",
-              maxWidth: "100%",
-              objectFit: "contain",
-            }}
-          />
-        ) : (
-          <ImageNotSupportedOutlinedIcon
-            sx={{ fontSize: 80, color: "black" }}
-          />
-        )}
-      </Box>
-
-      <CardContent
-        sx={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          color: TEXT_LIGHT_BLUE,
-          p: 2,
-          pt: 1,
-        }}
-      >
-        <Typography
-          variant="h5"
-          gutterBottom
-          sx={{ textAlign: "left", fontWeight: "bold" }}
-        >
-          {quiz.title}
-        </Typography>
-
-        <Typography
-          variant="body2"
-          sx={{
-            height: 40,
-            textAlign: "left",
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {quiz.description}
-        </Typography>
-
         <Box
           sx={{
-            mt: "auto",
+            height: 140,
+            backgroundColor: IMAGE_BACKGROUND_LIGHT_PURPLE,
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
-            textAlign: "left",
+            justifyContent: "center",
+            m: 2,
+            mb: 0,
+            borderRadius: 3,
           }}
         >
-          <Typography variant="caption">
-            Last modified: {lastModified}
-          </Typography>
-          <Typography variant="body2">Q: {quiz.questionAmount}</Typography>
+          {quiz.imageUrl ? (
+            <Box
+              component="img"
+              src={quiz.imageUrl}
+              sx={{
+                maxHeight: "100%",
+                maxWidth: "100%",
+                objectFit: "contain",
+              }}
+            />
+          ) : (
+            <ImageNotSupportedOutlinedIcon
+              sx={{ fontSize: 80, color: "black" }}
+            />
+          )}
         </Box>
-      </CardContent>
+
+        <CardContent
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            color: TEXT_LIGHT_BLUE,
+            p: 2,
+            pt: 1,
+          }}
+        >
+          <Typography
+            variant="h5"
+            gutterBottom
+            sx={{ textAlign: "left", fontWeight: "bold" }}
+          >
+            {quiz.title}
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{
+              height: 40,
+              textAlign: "left",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {quiz.description}
+          </Typography>
+
+          <Box
+            sx={{
+              mt: "auto",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              textAlign: "left",
+            }}
+          >
+            <Typography variant="caption">
+              Last modified: {lastModified}
+            </Typography>
+            <Typography variant="body2">Q: {quiz.questionAmount}</Typography>
+          </Box>
+        </CardContent>
+      </CardActionArea>
     </Card>
   );
 };

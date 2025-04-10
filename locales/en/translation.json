@@ -34,9 +34,11 @@
   "quiz_form_questions": "Questions",
   "quiz_form_no_questions": "No questions added yet",
   "quiz_form_add_question": "+ ADD NEW QUESTION",
-
   "QuizPage": {
     "editButton": "Edit",
+    "deleteButton": "Delete",
+    "confirmDeleteMessage": "Are you sure you want to delete this quiz?",
+    "cancelButton": "Cancel",
     "totalQuestions": "Total Questions: ",
     "startButton": "Start",
     "gameSettings": "Game settings:",

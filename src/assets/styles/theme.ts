@@ -85,6 +85,13 @@ const theme = createTheme({
             backgroundColor: "#421ec1",
           },
         },
+        containedError: {
+          backgroundColor: "#c62828",
+          color: "#fff",
+          "&:hover": {
+            backgroundColor: "#e53935",
+          },
+        },
         outlined: {
           borderColor: "#DCD5FD",
           borderWidth: "3px",
