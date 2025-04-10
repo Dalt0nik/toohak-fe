@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { vi, expect, test, describe } from "vitest";
 import { BrowserRouter } from "react-router-dom"; // Navbar uses links and needs this to work
-import Navbar from "./Navbar";
+import Navbar from "../Navbar";
 import { useAuth0 } from "@auth0/auth0-react";
 import { userEvent } from "@testing-library/user-event";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
