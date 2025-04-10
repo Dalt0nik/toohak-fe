@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Grid, Button, Box } from "@mui/material";
 import QuizDetailsSection from "@components/quiz/QuizCreation/QuizDetailsSection";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
@@ -7,21 +7,59 @@ import { FormProvider, useForm } from "react-hook-form";
 import AddQuestionDialog from "@components/quiz/QuizCreation/AddQuestionDialog";
 import { Question } from "@models/Request/NewQuestionRequest.ts";
 import QuestionList from "@components/quiz/QuizCreation/QuestionList";
+import { QuizResponse } from "@models/Response/quizResponse";
+import { QuestionResponse } from "@models/Response/questionResponse";
 
 interface QuizFormProps {
   onSubmit: (data: NewQuizRequest) => void;
   isSubmitting: boolean;
   autoSubmitQuestion?: boolean;
+  initialData?: QuizResponse;
 }
 
 export const QuizForm: React.FC<QuizFormProps> = ({
   onSubmit,
   isSubmitting,
   autoSubmitQuestion = false,
+  initialData,
 }) => {
   const { t } = useTranslation();
 
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const transformQuestions = (
+    questionResponses?: QuestionResponse[],
+  ): Question[] => {
+    if (!questionResponses) return [];
+
+    return questionResponses.map((q) => ({
+      title: q.title,
+      options: q.questionOptions.map((opt) => ({
+        title: opt.title,
+        isCorrect: opt.isCorrect,
+        ordering: opt.ordering,
+      })),
+    }));
+  };
+
+  const [questions, setQuestions] = useState<Question[]>(
+    transformQuestions(initialData?.questions),
+  );
+
+  const methods = useForm<NewQuizRequest>({
+    defaultValues: {
+      title: initialData?.title || "",
+      description: initialData?.description || "",
+    },
+  });
+
+  useEffect(() => {
+    if (initialData) {
+      methods.reset({
+        title: initialData.title,
+        description: initialData.description,
+      });
+      setQuestions(transformQuestions(initialData.questions));
+    }
+  }, [initialData, methods]);
 
   const handleSaveQuestion = (newQuestion: Question) => {
     setQuestions([...questions, newQuestion]);
@@ -47,13 +85,6 @@ export const QuizForm: React.FC<QuizFormProps> = ({
       prevQuestions.filter((_, i) => i !== index),
     );
   };
-
-  const methods = useForm<NewQuizRequest>({
-    defaultValues: {
-      title: "",
-      description: "",
-    },
-  });
 
   return (
     <FormProvider {...methods}>
