@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { registerUser } from "@api/userApi";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useRegisterUser } from "@hooks/api/useRegisterUser";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -9,13 +9,11 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const { isAuthenticated } = useAuth0();
 
+  const { mutate } = useRegisterUser();
+
   useEffect(() => {
-    if (isAuthenticated) {
-      registerUser().catch((err) => {
-        console.error("Registration error:", err);
-      });
-    }
-  }, [isAuthenticated]);
+    if (isAuthenticated) mutate();
+  }, [isAuthenticated, mutate]);
 
   return children;
 };

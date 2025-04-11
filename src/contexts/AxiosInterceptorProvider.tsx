@@ -37,9 +37,7 @@ const AxiosInterceptorProvider = ({
       },
     );
 
-    setTimeout(() => {
-      setIsInterceptorSetup(true);
-    }, 10);
+    setIsInterceptorSetup(true);
 
     return () => {
       setIsInterceptorSetup(false);
