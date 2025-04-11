@@ -1,5 +1,6 @@
 import { api } from "@api/Api";
 import { useAuth0 } from "@auth0/auth0-react";
+import LoadingBackdrop from "@components/common/ui/LoadingBackdrop";
 import { AxiosResponse } from "axios";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -35,7 +36,10 @@ const AxiosInterceptorProvider = ({
         return Promise.reject(error);
       },
     );
-    setIsInterceptorSetup(true);
+
+    setTimeout(() => {
+      setIsInterceptorSetup(true);
+    }, 10);
 
     return () => {
       setIsInterceptorSetup(false);
@@ -44,7 +48,7 @@ const AxiosInterceptorProvider = ({
     };
   }, [getAccessTokenSilently, isAuthenticated]);
 
-  return isInterceptorSetup ? children : null;
+  return isInterceptorSetup ? children : <LoadingBackdrop />;
 };
 
 export default AxiosInterceptorProvider;
