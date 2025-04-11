@@ -1,7 +1,7 @@
 import { api } from "@api/Api";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AxiosResponse } from "axios";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 interface AxiosInterceptorProviderProps {
   children: ReactNode;
@@ -11,6 +11,7 @@ const AxiosInterceptorProvider = ({
   children,
 }: AxiosInterceptorProviderProps) => {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const [isInterceptorSetup, setIsInterceptorSetup] = useState(false);
 
   useEffect(() => {
     const requestInterceptor = api.interceptors.request.use(
@@ -34,13 +35,16 @@ const AxiosInterceptorProvider = ({
         return Promise.reject(error);
       },
     );
+    setIsInterceptorSetup(true);
 
     return () => {
+      setIsInterceptorSetup(false);
       api.interceptors.request.eject(requestInterceptor);
       api.interceptors.response.eject(responseInterceptor);
     };
   }, [getAccessTokenSilently, isAuthenticated]);
-  return children;
+
+  return isInterceptorSetup ? children : null;
 };
 
 export default AxiosInterceptorProvider;
