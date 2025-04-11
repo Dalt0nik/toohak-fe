@@ -9,11 +9,13 @@ import { Question } from "@models/Request/NewQuestionRequest.ts";
 import QuestionList from "@components/quiz/QuizCreation/QuestionList";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { QuestionResponse } from "@models/Response/questionResponse";
+import { deleteQuestionById } from "@api/questionApi";
 
 interface QuizFormProps {
   onSubmit: (data: NewQuizRequest) => void;
   isSubmitting: boolean;
   autoSubmitQuestion?: boolean;
+  autoDeleteQuestion?: boolean;
   initialData?: QuizResponse;
 }
 
@@ -21,6 +23,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({
   onSubmit,
   isSubmitting,
   autoSubmitQuestion = false,
+  autoDeleteQuestion = false,
   initialData,
 }) => {
   const { t } = useTranslation();
@@ -31,6 +34,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({
     if (!questionResponses) return [];
 
     return questionResponses.map((q) => ({
+      id: q.id,
       title: q.title,
       options: q.questionOptions.map((opt) => ({
         title: opt.title,
@@ -81,6 +85,23 @@ export const QuizForm: React.FC<QuizFormProps> = ({
   };
 
   const handleDeleteQuestion = (index: number) => {
+    const questionToDelete = questions[index];
+
+    if (autoDeleteQuestion && questionToDelete.id) {
+      deleteQuestionById(questionToDelete.id)
+        .then(() => {
+          console.log(
+            `Question with ID ${questionToDelete.id} deleted successfully`,
+          );
+        })
+        .catch((error) => {
+          console.error(
+            `Failed to delete question with ID ${questionToDelete.id}:`,
+            error,
+          );
+        });
+    }
+
     setQuestions((prevQuestions) =>
       prevQuestions.filter((_, i) => i !== index),
     );
@@ -90,7 +111,9 @@ export const QuizForm: React.FC<QuizFormProps> = ({
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit((data) => {
-          onSubmit({ ...data, questions });
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const questionsWithoutIds = questions.map(({ id, ...rest }) => rest);
+          onSubmit({ ...data, questions: questionsWithoutIds });
         })}
       >
         <Grid container spacing={2}>
