@@ -8,6 +8,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  CardMedia,
   Grid,
   List,
   ListItem,
@@ -18,12 +19,13 @@ import {
 import { CARD_BACKGROUND_PURPLE } from "../assets/styles/constants";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchQuizById, deleteQuizById } from "@api/QuizApi";
+import { fetchQuizById, deleteQuizById, fetchImageById } from "@api/QuizApi";
 
 import { QuestionResponse } from "@models/Response/questionResponse";
 import { useTranslation } from "react-i18next";
-import { PrivateAppRoutes } from "../models/PrivateRoutes";
+import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import DeleteConfirmationDialog from "@components/DeleteConfirmationDialog";
+import { QuizResponse } from "@models/Response/quizResponse";
 
 const QuizPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -35,10 +37,20 @@ const QuizPage = () => {
     data: quiz,
     isLoading,
     error,
-  } = useQuery({
+  } = useQuery<QuizResponse>({
     queryKey: ["quiz", id],
     queryFn: () => fetchQuizById(id!),
     enabled: !!id,
+  });
+
+  const {
+    data: coverImage,
+    isLoading: imageLoading,
+    error: imageError,
+  } = useQuery<string>({
+    queryKey: ["coverImage", quiz?.imageId],
+    queryFn: () => fetchImageById(quiz!.imageId),
+    enabled: Boolean(quiz?.imageId),
   });
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -61,8 +73,14 @@ const QuizPage = () => {
     },
   });
 
-  if (isLoading) return <p>{t("loading")}</p>;
+  if (isLoading || imageLoading) return <p>{t("loading")}</p>;
   if (error instanceof Error) return <p>{error.message}</p>;
+  if (imageError instanceof Error)
+    return (
+      <p>
+        {t("Error loading cover image")}: {imageError.message}
+      </p>
+    );
 
   return (
     <ThemeProvider theme={theme}>
@@ -92,12 +110,16 @@ const QuizPage = () => {
           size={{ xs: 12, sm: 8 }}
           sx={{ backgroundColor: CARD_BACKGROUND_PURPLE }}
         >
-          <ImageNotSupportedOutlinedIcon
-            sx={{
-              fontSize: { xs: 100, sm: 150, md: 200, lg: 250 },
-              color: "black",
-            }}
-          />
+          {coverImage ? (
+            <CardMedia component="img" image={coverImage} alt="Quiz Cover" />
+          ) : (
+            <ImageNotSupportedOutlinedIcon
+              sx={{
+                fontSize: { xs: 100, sm: 150, md: 200, lg: 250 },
+                color: "black",
+              }}
+            />
+          )}
           <Typography variant="h5" sx={{ textAlign: "left" }}>
             {quiz?.description}
           </Typography>

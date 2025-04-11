@@ -52,6 +52,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({
     defaultValues: {
       title: "",
       description: "",
+      imageId: undefined,
     },
   });
 
@@ -71,12 +72,6 @@ export const QuizForm: React.FC<QuizFormProps> = ({
           <Grid size={{ xs: 12, md: 8 }}>
             <QuizDetailsSection />
           </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <Typography variant="h5" align="left">
-              Something else
-            </Typography>
-          </Grid>
-          <Grid size={{ xs: 12, md: 8 }}>Quiz options and so on</Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <Typography variant="h5" align="left">
               {t("quiz_form_questions")}
