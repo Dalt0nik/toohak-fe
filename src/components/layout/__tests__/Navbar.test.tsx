@@ -1,17 +1,23 @@
 import { render, screen } from "@testing-library/react";
-import { vi, expect, test, describe } from "vitest";
+import { vi, expect, test, describe, Mock } from "vitest";
 import { BrowserRouter } from "react-router-dom"; // Navbar uses links and needs this to work
 import Navbar from "../Navbar";
 import { useAuth0 } from "@auth0/auth0-react";
 import { userEvent } from "@testing-library/user-event";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
+import { useTranslation } from "react-i18next";
 
+vi.mock("react-i18next");
 vi.mock("@auth0/auth0-react");
+
+const mockedUseAuth0 = useAuth0 as Mock;
+
+(useTranslation as Mock).mockReturnValue({ t: (output: string) => output }); // Bypasses NO_I18NEXT_INSTANCE error
 
 describe("Navbar tests", () => {
   describe("NavItem tests", () => {
     test("Set userNavItems on login (login, create, my quizzes))", () => {
-      useAuth0.mockReturnValue({ isAuthenticated: true }); // Auth bypass
+      mockedUseAuth0.mockReturnValue({ isAuthenticated: true }); // Auth bypass
 
       render(
         <BrowserRouter>
@@ -40,7 +46,7 @@ describe("Navbar tests", () => {
     });
 
     test("Set guestNavItems on logout", () => {
-      useAuth0.mockReturnValue({ isAuthenticated: false });
+      mockedUseAuth0.mockReturnValue({ isAuthenticated: false });
 
       render(
         <BrowserRouter>
@@ -59,7 +65,7 @@ describe("Navbar tests", () => {
 
   describe("Button press tests", () => {
     test("Press My Quizzes", async () => {
-      useAuth0.mockReturnValue({ isAuthenticated: true });
+      mockedUseAuth0.mockReturnValue({ isAuthenticated: true });
       const user = userEvent.setup();
 
       render(
