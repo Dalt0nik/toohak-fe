@@ -32,12 +32,12 @@ createRoot(document.getElementById("root")!).render(
           <AuthProvider>
             <BrowserRouter>
               <React.Suspense fallback="loading">
-                <ErrorBoundary>
-                  <ThemeProvider theme={theme}>
-                    <CssBaseline />
+                <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  <ErrorBoundary>
                     <App />
-                  </ThemeProvider>
-                </ErrorBoundary>
+                  </ErrorBoundary>
+                </ThemeProvider>
               </React.Suspense>
             </BrowserRouter>
           </AuthProvider>
