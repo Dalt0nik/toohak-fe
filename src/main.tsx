@@ -10,8 +10,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import theme from "@assets/styles/theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { AuthProvider } from "@contexts/AuthContext.tsx";
 import ErrorBoundary from "@components/ErrorBoundary";
+import AxiosInterceptorProvider from "@contexts/AxiosInterceptorProvider.tsx";
+import { AuthProvider } from "@contexts/AuthProvider.tsx";
 
 const queryClient = new QueryClient();
 
@@ -24,24 +25,27 @@ createRoot(document.getElementById("root")!).render(
         authorizationParams={{
           redirect_uri: window.location.origin,
           audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+          scope: "openid offline_access",
         }}
         useRefreshTokens
         cacheLocation="localstorage"
       >
-        <CookiesProvider>
+        <AxiosInterceptorProvider>
           <AuthProvider>
-            <BrowserRouter>
-              <React.Suspense fallback="loading">
-                <ThemeProvider theme={theme}>
-                  <CssBaseline />
-                  <ErrorBoundary>
-                    <App />
-                  </ErrorBoundary>
-                </ThemeProvider>
-              </React.Suspense>
-            </BrowserRouter>
+            <CookiesProvider>
+              <BrowserRouter>
+                <React.Suspense fallback="loading">
+                  <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <ErrorBoundary>
+                      <App />
+                    </ErrorBoundary>
+                  </ThemeProvider>
+                </React.Suspense>
+              </BrowserRouter>
+            </CookiesProvider>
           </AuthProvider>
-        </CookiesProvider>
+        </AxiosInterceptorProvider>
       </Auth0Provider>
     </QueryClientProvider>
   </StrictMode>,
