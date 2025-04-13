@@ -4,6 +4,8 @@ import {
   Typography,
   Box,
   CardActionArea,
+  CardMedia,
+  CircularProgress,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { QuizCardResponse } from "@models/Response/quizCardResponse";
@@ -15,6 +17,8 @@ import {
   IMAGE_BACKGROUND_LIGHT_PURPLE,
   TEXT_LIGHT_BLUE,
 } from "@assets/styles/constants";
+import { fetchImageById } from "@api/QuizApi";
+import { useQuery } from "@tanstack/react-query";
 
 interface QuizCardProps {
   quiz: QuizCardResponse;
@@ -22,6 +26,16 @@ interface QuizCardProps {
 
 export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
   const lastModified = new Date(quiz.updatedAt).toLocaleDateString();
+
+  const {
+    data: coverImage,
+    isLoading: imageLoading,
+    error: imageError,
+  } = useQuery<string>({
+    queryKey: ["coverImage", quiz.coverImageId],
+    queryFn: () => fetchImageById(quiz.coverImageId!),
+    enabled: Boolean(quiz.coverImageId),
+  });
 
   return (
     <Card
@@ -51,16 +65,16 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
             borderRadius: 3,
           }}
         >
-          {quiz.imageUrl ? (
-            <Box
-              component="img"
-              src={quiz.imageUrl}
-              sx={{
-                maxHeight: "100%",
-                maxWidth: "100%",
-                objectFit: "contain",
-              }}
-            />
+          {quiz.coverImageId ? (
+            imageLoading ? (
+              <CircularProgress />
+            ) : imageError || !coverImage ? (
+              <ImageNotSupportedOutlinedIcon
+                sx={{ fontSize: 80, color: "black" }}
+              />
+            ) : (
+              <CardMedia component="img" image={coverImage} alt="Quiz Cover" />
+            )
           ) : (
             <ImageNotSupportedOutlinedIcon
               sx={{ fontSize: 80, color: "black" }}

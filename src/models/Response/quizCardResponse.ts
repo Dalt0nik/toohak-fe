@@ -5,6 +5,6 @@ export interface QuizCardResponse {
   createdBy: string;
   createdAt: string;
   updatedAt: string;
-  imageUrl?: string;
+  coverImageId?: string;
   questionAmount: number;
 }

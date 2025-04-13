@@ -1,3 +1,4 @@
 export interface NewQuizCoverImageResponse {
-  image_url: string;
+  imageId: string;
+  fileType: string;
 }

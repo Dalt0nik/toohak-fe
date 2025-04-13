@@ -8,8 +8,7 @@ export const useUploadCoverImage = () => {
   return useMutation({
     mutationFn: newCoverImage,
     onSuccess: (data: NewQuizCoverImageResponse) => {
-      alert(t("quiz_form_image_successfully_saved"));
-      return data.image_url;
+      return data;
     },
     onError: (error: Error) => {
       console.error("Error uploading image:", error);
