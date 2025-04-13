@@ -11,8 +11,8 @@ vi.mock("react-i18next");
 vi.mock("@auth0/auth0-react");
 
 const mockedUseAuth0 = useAuth0 as Mock;
-
-(useTranslation as Mock).mockReturnValue({ t: (output: string) => output }); // Bypasses NO_I18NEXT_INSTANCE error
+const mockedUseTranslation = useTranslation as Mock;
+mockedUseTranslation.mockReturnValue({ t: (output: string) => output }); // Bypasses NO_I18NEXT_INSTANCE error
 
 describe("Navbar tests", () => {
   describe("NavItem tests", () => {
