@@ -5,6 +5,7 @@ import QuizCard from "@components/QuizCard";
 import { fetchQuizList } from "@api/quizListApi";
 import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import Loader from "@components/Loader";
 
 const QuizList = () => {
   const { t } = useTranslation();
@@ -19,7 +20,7 @@ const QuizList = () => {
   });
 
   if (isLoading) {
-    return <div>{t("loading")}</div>;
+    return <Loader />;
   }
 
   if (isError) {
