@@ -27,7 +27,7 @@
   "quiz_form_image_dnd": "Drag and drop",
   "quiz_form_image_types": "PNG, JPG (max. 3MB)",
   "quiz_form_image_dnd_dragging": "Drop the image here...",
-  "quiz_form_image_successfully_saved": "Image successfully saved",
+  "quiz_form_image_remove": "Remove",
   "quiz_form_image_error": "An error has occurred",
   "quiz_form_button_saving": "Saving...",
   "quiz_form_button_save": "Save",
@@ -46,3 +46,4 @@
     "noQuestions": "There is no questions in this quiz"
   }
 }
+

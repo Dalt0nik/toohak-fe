@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Typography, Grid, Button, Box } from "@mui/material";
 import QuizDetailsSection from "@components/quiz/QuizCreation/QuizDetailsSection";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
@@ -52,6 +52,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({
     defaultValues: {
       title: initialData?.title || "",
       description: initialData?.description || "",
+      imageId: initialData?.imageId || undefined,
     },
   });
 
@@ -116,12 +117,6 @@ export const QuizForm: React.FC<QuizFormProps> = ({
           <Grid size={{ xs: 12, md: 8 }}>
             <QuizDetailsSection />
           </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <Typography variant="h5" align="left">
-              Something else
-            </Typography>
-          </Grid>
-          <Grid size={{ xs: 12, md: 8 }}>Quiz options and so on</Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <Typography variant="h5" align="left">
               {t("quiz_form_questions")}
