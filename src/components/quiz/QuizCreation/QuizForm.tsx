@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Grid, Button, Box } from "@mui/material";
 import QuizDetailsSection from "@components/quiz/QuizCreation/QuizDetailsSection";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
