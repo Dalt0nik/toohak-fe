@@ -98,7 +98,10 @@ const theme = createTheme({
         containedSuccess: {
           backgroundColor: green[300],
           color: PALETTE_PRIMARY_DARK,
-          "&:hover": { color: PALETTE_PRIMARY_LIGHT },
+          "&:hover": {
+            color: PALETTE_PRIMARY_LIGHT,
+            backgroundColor: green[500],
+          },
         },
         outlined: {
           borderColor: "#DCD5FD",

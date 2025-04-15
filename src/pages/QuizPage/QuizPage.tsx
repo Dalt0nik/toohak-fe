@@ -1,12 +1,9 @@
-import { useState } from "react";
 import { Box, Button, Grid, Typography, useTheme } from "@mui/material";
 import { CARD_BACKGROUND_PURPLE } from "../../assets/styles/constants";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import { fetchQuizById, deleteQuizById } from "@api/QuizApi";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { fetchQuizById } from "@api/QuizApi";
 import { useTranslation } from "react-i18next";
-import { PrivateAppRoutes } from "@models/PrivateRoutes";
-import DeleteConfirmationDialog from "@components/DeleteConfirmationDialog";
 import { QuizResponse } from "@models/Response/quizResponse";
 import Loader from "@components/Loader";
 import ImageCard from "@components/common/ui/ImageCard";
@@ -17,8 +14,6 @@ const QuizPage = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
 
-  const navigate = useNavigate();
-
   const {
     data: quiz,
     isLoading,
@@ -27,26 +22,6 @@ const QuizPage = () => {
     queryKey: ["quiz", id],
     queryFn: () => fetchQuizById(id!),
     enabled: !!id,
-  });
-
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const handleDeleteDialogOpen = () => {
-    setOpenDialog(true);
-  };
-
-  const handleDeleteDialogClose = () => {
-    setOpenDialog(false);
-  };
-
-  const handleDelete = useMutation({
-    mutationFn: (id: string) => deleteQuizById(id),
-    onSuccess: () => {
-      navigate(PrivateAppRoutes.USER_QUIZZES);
-    },
-    onError: (error) => {
-      console.error(error);
-    },
   });
 
   if (isLoading) return <Loader />;
@@ -72,16 +47,6 @@ const QuizPage = () => {
         </Typography>
         <Box sx={{ display: "flex", gap: theme.spacing(1) }}>
           <Button variant="contained">{t("QuizPage.editButton")}</Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleDeleteDialogOpen}
-          >
-            {t("QuizPage.deleteButton")}
-          </Button>
-          <Button variant="contained" color="success">
-            {t("QuizPage.startButton")}
-          </Button>
         </Box>
       </Box>
       <Grid container spacing={2}>
@@ -121,14 +86,12 @@ const QuizPage = () => {
               {t("QuizPage.gameSettings")}
             </Typography>
             <Typography variant="h4">{t("QuizPage.form")}</Typography>
+            <Button variant="contained" color="success">
+              {t("QuizPage.startButton")}
+            </Button>
           </Box>
         </Grid>
       </Grid>
-      <DeleteConfirmationDialog
-        open={openDialog}
-        onClose={handleDeleteDialogClose}
-        onDelete={() => quiz && handleDelete.mutate(quiz.id)}
-      />
     </>
   );
 };
