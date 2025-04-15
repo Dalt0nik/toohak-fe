@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Button, Grid, Stack, Typography, useTheme } from "@mui/material";
 import { CARD_BACKGROUND_PURPLE } from "../../assets/styles/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -28,18 +28,16 @@ const QuizPage = () => {
   if (error instanceof Error) return <p>{error.message}</p>;
 
   return (
-    <>
+    <Stack spacing={2}>
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          gap: theme.spacing(2),
         }}
       >
         <Typography
           variant="h3"
           sx={{
-            mb: 3,
             textAlign: "left",
           }}
         >
@@ -50,49 +48,48 @@ const QuizPage = () => {
         </Box>
       </Box>
       <Grid container spacing={2}>
-        <Grid
-          size={{ xs: 12, sm: 8 }}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: theme.spacing(2),
-          }}
-        >
-          <Box
-            sx={{
-              backgroundColor: CARD_BACKGROUND_PURPLE,
-              borderRadius: theme.borderRadius?.md,
-            }}
-          >
-            <ImageCard alt="Quiz cover" id={quiz!.imageId} />
-          </Box>
-          <Typography variant="h4" sx={{ textAlign: "left" }}>
-            {t("QuizPage.descriptionTitle")}
-          </Typography>
-          <Typography variant="h5" sx={{ textAlign: "left" }}>
-            {quiz?.description}
-          </Typography>
-          <Typography variant="h4" sx={{ textAlign: "left" }}>
-            {t("QuizPage.questionsTitle")}
-          </Typography>
-          <Typography component="span" variant="h5" sx={{ textAlign: "left" }}>
-            {t("QuizPage.totalQuestions")} {quiz?.questions?.length}
-          </Typography>
-          <OptionsList questions={quiz!.questions} />
+        <Grid size={{ xs: 12, sm: 8 }}>
+          <Stack spacing={2}>
+            <Box
+              sx={{
+                backgroundColor: CARD_BACKGROUND_PURPLE,
+                borderRadius: theme.borderRadius?.md,
+              }}
+            >
+              <ImageCard alt="Quiz cover" id={quiz!.imageId} />
+            </Box>
+            <Typography variant="h4" sx={{ textAlign: "left" }}>
+              {t("QuizPage.descriptionTitle")}
+            </Typography>
+            <Typography variant="h5" sx={{ textAlign: "left" }}>
+              {quiz?.description}
+            </Typography>
+            <Typography variant="h4" sx={{ textAlign: "left" }}>
+              {t("QuizPage.questionsTitle")}
+            </Typography>
+            <Typography
+              component="span"
+              variant="h5"
+              sx={{ textAlign: "left" }}
+            >
+              {t("QuizPage.totalQuestions")} {quiz?.questions?.length}
+            </Typography>
+            <OptionsList questions={quiz!.questions} />
+          </Stack>
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }}>
-          <Box sx={{ textAlign: "left" }}>
+          <Stack sx={{ textAlign: "left" }} spacing={2}>
             <Typography variant="h3" gutterBottom>
               {t("QuizPage.gameSettings")}
             </Typography>
             <Typography variant="h4">{t("QuizPage.form")}</Typography>
-            <Button variant="contained" color="success">
+            <Button variant="contained" color="success" fullWidth>
               {t("QuizPage.startButton")}
             </Button>
-          </Box>
+          </Stack>
         </Grid>
       </Grid>
-    </>
+    </Stack>
   );
 };
 
