@@ -5,6 +5,7 @@ import QuizCard from "@components/QuizCard";
 import { fetchQuizList } from "@api/quizListApi";
 import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import Loader from "@components/Loader.tsx";
 import ErrorAlert from "@ui/ErrorAlert.tsx";
 
 const QuizList = () => {
@@ -20,7 +21,7 @@ const QuizList = () => {
   });
 
   if (isLoading) {
-    return <div>{t("loading")}</div>;
+    return <Loader />;
   }
 
   if (isError) {
@@ -63,5 +64,4 @@ const QuizList = () => {
     </>
   );
 };
-
 export default QuizList;

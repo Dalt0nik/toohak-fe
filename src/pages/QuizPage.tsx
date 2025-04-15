@@ -26,6 +26,7 @@ import { useTranslation } from "react-i18next";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import DeleteConfirmationDialog from "@components/DeleteConfirmationDialog";
 import { QuizResponse } from "@models/Response/quizResponse";
+import Loader from "@components/Loader";
 
 const QuizPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -73,7 +74,7 @@ const QuizPage = () => {
     },
   });
 
-  if (isLoading || imageLoading) return <p>{t("loading")}</p>;
+  if (isLoading || imageLoading) return <Loader />;
   if (error instanceof Error) return <p>{error.message}</p>;
   if (imageError instanceof Error)
     return (
