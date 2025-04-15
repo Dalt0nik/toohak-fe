@@ -34,6 +34,7 @@
   "quiz_form_questions": "Questions",
   "quiz_form_no_questions": "No questions added yet",
   "quiz_form_add_question": "+ ADD NEW QUESTION",
+  "error_fetching_quizzes": "Could not retrieve quizzes",
   "QuizPage": {
     "editButton": "Edit",
     "deleteButton": "Delete",

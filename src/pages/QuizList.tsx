@@ -5,6 +5,7 @@ import QuizCard from "@components/QuizCard";
 import { fetchQuizList } from "@api/quizListApi";
 import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import ErrorAlert from "@ui/ErrorAlert.tsx";
 
 const QuizList = () => {
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ const QuizList = () => {
   }
 
   if (isError) {
-    return <div>{t("user_quiz_list_error")}</div>;
+    return <ErrorAlert error={t("error_fetching_quizzes")} />;
   }
 
   return (
