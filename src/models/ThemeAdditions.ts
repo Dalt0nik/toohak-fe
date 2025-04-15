@@ -13,7 +13,9 @@ declare module "@mui/material/styles" {
       text?: string;
     };
   }
+
   interface Theme {
+    multiLineEllipsis: (linesToShow: number) => React.CSSProperties;
     borderRadius?: {
       xs: string;
       sm: string;
@@ -22,6 +24,7 @@ declare module "@mui/material/styles" {
     };
   }
   interface ThemeOptions {
+    multiLineEllipsis: (linesToShow: number) => React.CSSProperties;
     borderRadius?: {
       xs: string;
       sm: string;

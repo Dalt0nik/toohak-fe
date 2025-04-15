@@ -190,5 +190,14 @@ const theme = createTheme({
     md: "8px",
     lg: "16px",
   },
+  multiLineEllipsis: (linesToShow: number) => {
+    return {
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      display: "-webkit-box",
+      "-webkit-line-clamp": String(linesToShow),
+      "-webkit-box-orient": "vertical",
+    };
+  },
 });
 export default theme;

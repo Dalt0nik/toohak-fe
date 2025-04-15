@@ -25,8 +25,26 @@ interface OptionsListProps {
 const OptionsList = ({ questions }: OptionsListProps) => {
   const { t } = useTranslation();
 
+  const mockQuestions: QuestionResponse[] = [
+    {
+      id: "1",
+      imageId: "2",
+      questionOptions: [
+        {
+          id: "1",
+          isCorrect: false,
+          ordering: 1,
+          questionId: "1",
+          title: "Important",
+        },
+      ],
+      quizId: "12",
+      title: "Hell",
+    },
+  ];
+
   return questions.length ? (
-    questions.map((question) => (
+    mockQuestions.map((question) => (
       <Accordion
         sx={{
           backgroundColor: CARD_BACKGROUND_PURPLE,
@@ -37,10 +55,29 @@ const OptionsList = ({ questions }: OptionsListProps) => {
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+          sx={[
+            {
+              "&.MuiButtonBase-root .MuiAccordionSummary-content": {
+                width: "100%",
+              },
+              "&.MuiButtonBase-root .Mui-expanded *": {
+                whiteSpace: "wrap",
+                "-webkit-line-clamp": "unset",
+              },
+            },
+          ]}
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          <Typography variant="h4">{question.title}</Typography>
+          <Typography
+            variant="h4"
+            sx={{
+              textAlign: "left",
+              ...theme.multiLineEllipsis(1),
+            }}
+          >
+            {question.title}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           {question.questionOptions?.length ? (
@@ -57,7 +94,17 @@ const OptionsList = ({ questions }: OptionsListProps) => {
                       <CancelIcon />
                     </Tooltip>
                   )}
-                  <ListItemText primary={q.title} />
+                  <ListItemText
+                    primary={q.title}
+                    slotProps={{
+                      primary: {
+                        sx: {
+                          textAlign: "left",
+                          ...theme.multiLineEllipsis(1),
+                        },
+                      },
+                    }}
+                  />
                 </QuizPageListItem>
               ))}
             </QuizPageList>

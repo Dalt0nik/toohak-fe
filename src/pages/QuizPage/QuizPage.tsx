@@ -39,6 +39,7 @@ const QuizPage = () => {
           variant="h3"
           sx={{
             textAlign: "left",
+            ...theme.multiLineEllipsis(1),
           }}
         >
           {quiz?.title}
