@@ -13,4 +13,20 @@ declare module "@mui/material/styles" {
       text?: string;
     };
   }
+  interface Theme {
+    borderRadius?: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+    };
+  }
+  interface ThemeOptions {
+    borderRadius?: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+    };
+  }
 }
