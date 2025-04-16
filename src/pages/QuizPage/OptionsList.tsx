@@ -25,26 +25,8 @@ interface OptionsListProps {
 const OptionsList = ({ questions }: OptionsListProps) => {
   const { t } = useTranslation();
 
-  const mockQuestions: QuestionResponse[] = [
-    {
-      id: "1",
-      imageId: "2",
-      questionOptions: [
-        {
-          id: "1",
-          isCorrect: false,
-          ordering: 1,
-          questionId: "1",
-          title: "Important",
-        },
-      ],
-      quizId: "12",
-      title: "Hell",
-    },
-  ];
-
   return questions.length ? (
-    mockQuestions.map((question) => (
+    questions.map((question) => (
       <Accordion
         sx={{
           backgroundColor: CARD_BACKGROUND_PURPLE,
