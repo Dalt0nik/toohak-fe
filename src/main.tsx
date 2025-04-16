@@ -13,6 +13,8 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import ErrorBoundary from "@components/ErrorBoundary";
 import AxiosInterceptorProvider from "@contexts/AxiosInterceptorProvider.tsx";
 import { AuthProvider } from "@contexts/AuthProvider.tsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,7 @@ createRoot(document.getElementById("root")!).render(
                     <CssBaseline />
                     <ErrorBoundary>
                       <App />
+                      <ToastContainer />
                     </ErrorBoundary>
                   </ThemeProvider>
                 </React.Suspense>

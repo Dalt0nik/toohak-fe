@@ -6,10 +6,11 @@ import { fetchQuizList } from "@api/quizListApi";
 import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "@components/Loader.tsx";
-import ErrorAlert from "@ui/ErrorAlert.tsx";
+import { showToast } from "@ui/Toast.tsx";
 
 const QuizList = () => {
   const { t } = useTranslation();
+  const { handleError } = showToast();
 
   const {
     data: quizzes,
@@ -25,7 +26,7 @@ const QuizList = () => {
   }
 
   if (isError) {
-    return <ErrorAlert error={t("error_fetching_quizzes")} />;
+    handleError(isError, "Could not load quizzes");
   }
 
   return (

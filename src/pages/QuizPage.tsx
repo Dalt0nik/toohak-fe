@@ -27,10 +27,12 @@ import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import DeleteConfirmationDialog from "@components/DeleteConfirmationDialog";
 import { QuizResponse } from "@models/Response/quizResponse";
 import Loader from "@components/Loader";
+import { showToast } from "@ui/Toast.tsx";
 
 const QuizPage = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const { handleError } = showToast();
 
   const navigate = useNavigate();
 
@@ -71,6 +73,7 @@ const QuizPage = () => {
     },
     onError: (error) => {
       console.error(error);
+      handleError(error, "Could not delete quiz");
     },
   });
 

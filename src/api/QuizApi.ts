@@ -4,45 +4,75 @@ import { NewQuizCoverImageResponse } from "@models/Response/NewQuizCoverImageRes
 import { api } from "@api/Api";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { NewQuizResponse } from "@models/Response/NewQuizResponse";
+import { AxiosError } from "axios";
 
 export const createNewQuiz = async (
   data: NewQuizRequest,
 ): Promise<NewQuizResponse> => {
-  // Too lazy to make proper response interface
-  const response = await api.post("/quizzes", data);
-  return { id: response.data.id };
+  try {
+    const response = await api.post("/quizzes", data);
+    return { id: response.data.id };
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const errorMessage = axiosError.message || "Could not create the quiz";
+    throw new Error(errorMessage);
+  }
 };
 
 export const fetchQuizById = async (id: string): Promise<QuizResponse> => {
-  const { data } = await api.get(`/quizzes/${id}`);
-  return data;
+  try {
+    const { data } = await api.get(`/quizzes/${id}`);
+    return data;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const errorMessage = axiosError.message || "Could not find the quiz";
+    throw new Error(errorMessage);
+  }
 };
 
 export const newCoverImage = async (
   data: NewQuizCoverImageRequest,
 ): Promise<NewQuizCoverImageResponse> => {
-  const formData = new FormData();
-  formData.append("file", data.image);
+  try {
+    const formData = new FormData();
+    formData.append("file", data.image);
 
-  const response = await api.post<NewQuizCoverImageResponse>(
-    "/files/image",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
+    const response = await api.post<NewQuizCoverImageResponse>(
+      "/files/image",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       },
-    },
-  );
-  return response.data;
+    );
+    return response.data;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const errorMessage = axiosError.message || "Could not upload the image";
+    throw new Error(errorMessage);
+  }
 };
 
 export const deleteQuizById = async (id: string): Promise<void> => {
-  await api.delete(`/quizzes/${id}`);
+  try {
+    await api.delete(`/quizzes/${id}`);
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const errorMessage = axiosError.message || "Could not delete the quiz";
+    throw new Error(errorMessage);
+  }
 };
 
 export const fetchImageById = async (id: string): Promise<string> => {
-  const response = await api.get(`/files/image/${id}`, {
-    responseType: "blob",
-  });
-  return URL.createObjectURL(response.data);
+  try {
+    const response = await api.get(`/files/image/${id}`, {
+      responseType: "blob",
+    });
+    return URL.createObjectURL(response.data);
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const errorMessage = axiosError.message || "Could not find the image";
+    throw new Error(errorMessage);
+  }
 };
