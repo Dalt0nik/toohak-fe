@@ -28,6 +28,7 @@ const OptionsList = ({ questions }: OptionsListProps) => {
   return questions.length ? (
     questions.map((question) => (
       <Accordion
+        key={question.id}
         sx={{
           backgroundColor: CARD_BACKGROUND_PURPLE,
           border: "1px solid",
@@ -44,7 +45,7 @@ const OptionsList = ({ questions }: OptionsListProps) => {
               },
               "&.MuiButtonBase-root .Mui-expanded *": {
                 whiteSpace: "wrap",
-                "-webkit-line-clamp": "unset",
+                WebkitLineClamp: "unset",
               },
             },
           ]}
