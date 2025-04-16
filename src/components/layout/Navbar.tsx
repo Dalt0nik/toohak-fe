@@ -25,7 +25,9 @@ const Navbar: React.FC = () => {
     { label: t("navbar_create"), path: PrivateAppRoutes.CREATE_QUIZ },
     { label: t("navbar_myquizzes"), path: PrivateAppRoutes.USER_QUIZZES },
   ];
-  const commonNavItems: NavItem[] = [];
+  const commonNavItems: NavItem[] = [
+    { label: "Join Quiz", path: PublicAppRoutes.JOIN_SESSION },
+  ];
 
   const navItems = isAuthenticated
     ? [...commonNavItems, ...userNavItems]

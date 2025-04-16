@@ -27,6 +27,9 @@ import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import DeleteConfirmationDialog from "@components/DeleteConfirmationDialog";
 import { QuizResponse } from "@models/Response/quizResponse";
 import Loader from "@components/Loader";
+import { createQuizSession } from "@api/QuizSessionApi";
+import { NewQuizSessionResponse } from "@models/Response/NewQuizSessionResponse";
+import { NewQuizSessionRequest } from "@models/Request/NewQuizSessionRequest";
 
 const QuizPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -74,6 +77,25 @@ const QuizPage = () => {
     },
   });
 
+  const createQuizSessionMutation = useMutation({
+    mutationFn: (req: NewQuizSessionRequest) => createQuizSession(req),
+    onSuccess: (res: NewQuizSessionResponse) => {
+      navigate(PrivateAppRoutes.QUIZ_SESSION_PAGE, { state: res });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const handleStartClick = (id: string | undefined) => {
+    if (id != undefined) {
+      const requestData: NewQuizSessionRequest = {
+        quizId: id,
+      };
+      createQuizSessionMutation.mutate(requestData);
+    }
+  };
+
   if (isLoading || imageLoading) return <Loader />;
   if (error instanceof Error) return <p>{error.message}</p>;
   if (imageError instanceof Error)
@@ -94,7 +116,6 @@ const QuizPage = () => {
       >
         {quiz?.title}
         <Button variant="contained" sx={{ ml: 2 }}>
-          {" "}
           {t("QuizPage.editButton")}
         </Button>
         <Button
@@ -160,7 +181,12 @@ const QuizPage = () => {
               {t("QuizPage.gameSettings")}
             </Typography>
             <Typography>{t("QuizPage.form")}</Typography>
-            <Button variant="contained"> {t("QuizPage.startButton")}</Button>
+            <Button
+              variant="contained"
+              onClick={() => handleStartClick(quiz?.id)}
+            >
+              {t("QuizPage.startButton")}
+            </Button>
           </Box>
         </Grid>
       </Grid>

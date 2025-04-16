@@ -3,4 +3,5 @@ export enum PrivateAppRoutes {
   USER_QUIZZES = "/user-quizzes",
   QUIZ_PAGE = "/user-quizzes/:id",
   LOBBY = "/lobby",
+  QUIZ_SESSION_PAGE = "/session",
 }

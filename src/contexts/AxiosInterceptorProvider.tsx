@@ -17,7 +17,11 @@ const AxiosInterceptorProvider = ({
   useEffect(() => {
     const requestInterceptor = api.interceptors.request.use(
       async (config) => {
-        if (isAuthenticated) {
+        const excludedPaths = ["/sessions/find", "/sessions/join"];
+        const shouldExclude = excludedPaths.some((path) =>
+          config.url?.startsWith(path),
+        );
+        if (isAuthenticated && !shouldExclude) {
           const token = await getAccessTokenSilently();
           if (token) {
             config.headers.Authorization = `Bearer ${token}`;

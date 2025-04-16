@@ -10,6 +10,9 @@ import { WebSocketProvider } from "@contexts/WebSocketContext";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import { PublicAppRoutes } from "@models/PublicRoutes";
 import QuizPage from "@pages/QuizPage";
+import QuizSessionPage from "@pages/QuizSessionPage";
+import JoinQuizSessionPage from "@pages/JoinQuizSessionPage";
+import JoinDirectlyPage from "@pages/JoinDirectlyPage";
 
 function App() {
   return (
@@ -34,6 +37,18 @@ function App() {
           element={<PageNotFound />}
         />
         <Route path={PrivateAppRoutes.QUIZ_PAGE} element={<QuizPage />} />
+        <Route
+          path={PrivateAppRoutes.QUIZ_SESSION_PAGE}
+          element={<QuizSessionPage />}
+        />
+        <Route
+          path={PublicAppRoutes.JOIN_SESSION}
+          element={<JoinQuizSessionPage />}
+        />
+        <Route
+          path={PublicAppRoutes.JOIN_SESSION_DIRECTLY}
+          element={<JoinDirectlyPage />}
+        />
       </Route>
     </Routes>
   );
