@@ -9,7 +9,7 @@ import QuizList from "@pages/QuizList";
 import { WebSocketProvider } from "@contexts/WebSocketContext";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import { PublicAppRoutes } from "@models/PublicRoutes";
-import QuizPage from "@pages/QuizPage";
+import QuizPage from "@pages/QuizPage/QuizPage";
 
 function App() {
   return (

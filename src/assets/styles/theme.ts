@@ -1,12 +1,15 @@
 import { createTheme } from "@mui/material";
-import { red } from "@mui/material/colors";
+import { green, red } from "@mui/material/colors";
+
+const PALETTE_PRIMARY_DARK = "#241362";
+const PALETTE_PRIMARY_LIGHT = "#DCD5FD";
 
 const theme = createTheme({
   palette: {
     primary: {
       main: "#4A28C6",
-      dark: "#241362",
-      light: "#DCD5FD",
+      dark: PALETTE_PRIMARY_DARK,
+      light: PALETTE_PRIMARY_LIGHT,
     },
     secondary: {
       main: "#2F109E", // Button background color
@@ -92,6 +95,14 @@ const theme = createTheme({
             backgroundColor: "#e53935",
           },
         },
+        containedSuccess: {
+          backgroundColor: green[300],
+          color: PALETTE_PRIMARY_DARK,
+          "&:hover": {
+            color: PALETTE_PRIMARY_LIGHT,
+            backgroundColor: green[500],
+          },
+        },
         outlined: {
           borderColor: "#DCD5FD",
           borderWidth: "3px",
@@ -171,6 +182,22 @@ const theme = createTheme({
         },
       },
     },
+  },
+
+  borderRadius: {
+    xs: "2px",
+    sm: "4px",
+    md: "8px",
+    lg: "16px",
+  },
+  multiLineEllipsis: (linesToShow: number) => {
+    return {
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      display: "-webkit-box",
+      "-webkit-line-clamp": String(linesToShow),
+      "-webkit-box-orient": "vertical",
+    };
   },
 });
 export default theme;
