@@ -195,8 +195,8 @@ const theme = createTheme({
       overflow: "hidden",
       textOverflow: "ellipsis",
       display: "-webkit-box",
-      "-webkit-line-clamp": String(linesToShow),
-      "-webkit-box-orient": "vertical",
+      WebkitLineClamp: String(linesToShow),
+      WebkitBoxOrient: "vertical",
     };
   },
 });
