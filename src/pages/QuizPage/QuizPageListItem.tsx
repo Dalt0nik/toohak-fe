@@ -4,7 +4,7 @@ const QuizPageListItem = styled(ListItem)(({ theme }) => {
   return {
     paddingLeft: theme.spacing(1),
     gap: theme.spacing(1),
-    "&:nth-child(2n + 2)": {
+    "&:nth-of-type(odd)": {
       background: `${theme.palette.primary.dark}50`,
       display: "flex",
     },
