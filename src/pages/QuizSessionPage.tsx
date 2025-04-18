@@ -1,4 +1,3 @@
-import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
 import {
   Box,
   Button,
@@ -8,22 +7,68 @@ import {
   Typography,
 } from "@mui/material";
 import { Cookies } from "react-cookie";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import QRCode from "react-qr-code";
+import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { findQuizSession } from "@api/QuizSessionApi";
+import { PublicAppRoutes } from "@models/PublicRoutes";
+import { useEffect, useState } from "react";
+import { SpringJwtInfo } from "@models/SpringJwtInfo";
+import { useAuth0 } from "@auth0/auth0-react";
+import { decodeToken } from "react-jwt";
 
 const QuizSessionPage = () => {
-  const location = useLocation();
-  const quizSessionData: QuizSessionResponse = location.state;
+  const { "join-id": joinId } = useParams<{ "join-id": string }>();
+  const { t } = useTranslation();
   const cookies = new Cookies();
-  const hasQuizSessionJwt = cookies.get("QuizSessionJwt");
+  const navigate = useNavigate();
+  const { user } = useAuth0();
+
+  const {
+    data: session,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["session", joinId],
+    queryFn: () => findQuizSession(joinId!),
+    enabled: !!joinId,
+  });
+
+  const [springJwt, setSpringJwt] = useState<SpringJwtInfo | null>(null);
+
+  useEffect(() => {
+    const raw = cookies.get("QuizSessionJwt");
+    if (raw) {
+      const decoded = decodeToken<SpringJwtInfo>(raw);
+      if (decoded) {
+        setSpringJwt(decoded);
+      } else {
+        console.error("Invalid or expired QuizSessionJwt");
+      }
+    }
+  }, []);
 
   const handleStartQuiz = () => {
     console.log("Starting the quiz...");
   };
 
-  const joinUrl = `${window.location.origin}/join/${quizSessionData.joinId}`;
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Typography>{t("loading")}</Typography>
+      </Box>
+    );
+  }
 
-  if (hasQuizSessionJwt) {
+  if (error instanceof Error) {
     return (
       <Box
         sx={{
@@ -33,6 +78,36 @@ const QuizSessionPage = () => {
           padding: "20px",
         }}
       >
+        <Typography variant="h6" sx={{ marginBottom: "20px" }}>
+          {t("QuizSession.JoinCodeInvalid")}
+        </Typography>
+        <Typography sx={{ marginBottom: "20px" }}>{error.message}</Typography>
+        <Button
+          variant="contained"
+          onClick={() => navigate(PublicAppRoutes.JOIN_SESSION)}
+        >
+          {t("QuizSession.TryDifferentCode")}
+        </Button>
+      </Box>
+    );
+  }
+
+  const auth0Id = user?.sub;
+  const isSessionOwner = session?.createdBy === auth0Id;
+  const isValidSessionJwt = session?.quizSessionId === springJwt?.quizSessionId;
+  const joinUrl = `${window.location.origin}/join/${session?.joinId}`;
+
+  if (isValidSessionJwt) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: "20px",
+        }}
+      >
+        {/* Temporary UI */}
         <Typography variant="h6" sx={{ marginBottom: "10px" }}>
           Joined Users
         </Typography>
@@ -48,58 +123,63 @@ const QuizSessionPage = () => {
     );
   }
 
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "20px",
-      }}
-    >
-      <Typography variant="h6" sx={{ marginBottom: "20px" }}>
-        Scan this QR to join the session
-      </Typography>
+  if (isSessionOwner) {
+    return (
       <Box
         sx={{
-          marginBottom: "20px",
-          padding: "10px",
-          border: "1px solid gray",
-          borderRadius: "8px",
-        }}
-      >
-        <QRCode value={joinUrl} />
-      </Box>
-      <Box
-        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
           padding: "20px",
-          marginBottom: "20px",
-          textAlign: "center",
-          boxShadow: 1,
-          borderRadius: 1,
         }}
       >
-        <Typography variant="h6">Join Code</Typography>
-        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-          {quizSessionData.joinId}
+        <Typography variant="h6" sx={{ marginBottom: "20px" }}>
+          {t("QuizSession.ScanQRCode")}
         </Typography>
+        <Box
+          sx={{
+            marginBottom: "20px",
+            padding: "10px",
+            border: "1px solid gray",
+            borderRadius: "8px",
+          }}
+        >
+          <QRCode value={joinUrl} />
+        </Box>
+        <Box
+          sx={{
+            padding: "20px",
+            marginBottom: "20px",
+            textAlign: "center",
+            boxShadow: 1,
+            borderRadius: 1,
+          }}
+        >
+          <Typography variant="h6">Join Code</Typography>
+          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+            {joinId}
+          </Typography>
+        </Box>
+
+        {/* Temporary UI */}
+        <Typography variant="h6" sx={{ marginBottom: "10px" }}>
+          Joined Users
+        </Typography>
+        <List sx={{ marginBottom: "20px" }}>
+          <ListItem key={0}>
+            <ListItemText primary="SomeDude" />
+          </ListItem>
+          <ListItem key={1}>
+            <ListItemText primary="SomeOtheDude" />
+          </ListItem>
+        </List>
+
+        <Button variant="contained" onClick={handleStartQuiz}>
+          {t("QuizSession.Start")}
+        </Button>
       </Box>
-      <Typography variant="h6" sx={{ marginBottom: "10px" }}>
-        Joined Users
-      </Typography>
-      <List sx={{ marginBottom: "20px" }}>
-        <ListItem key={0}>
-          <ListItemText primary="SomeDude" />
-        </ListItem>
-        <ListItem key={1}>
-          <ListItemText primary="SomeOtheDude" />
-        </ListItem>
-      </List>
-      <Button variant="contained" onClick={handleStartQuiz}>
-        Start Quiz
-      </Button>
-    </Box>
-  );
+    );
+  }
 };
 
 export default QuizSessionPage;

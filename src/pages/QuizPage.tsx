@@ -80,7 +80,13 @@ const QuizPage = () => {
   const createQuizSessionMutation = useMutation({
     mutationFn: (req: NewQuizSessionRequest) => createQuizSession(req),
     onSuccess: (res: NewQuizSessionResponse) => {
-      navigate(PrivateAppRoutes.QUIZ_SESSION_PAGE, { state: res });
+      navigate(
+        PrivateAppRoutes.QUIZ_SESSION_PAGE.replace(
+          ":session-id",
+          res.quizSessionId,
+        ),
+        { state: res },
+      );
     },
     onError: (error) => {
       console.error(error);

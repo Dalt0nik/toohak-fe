@@ -44,6 +44,18 @@
     "gameSettings": "Game settings:",
     "form": "Form for settings",
     "noQuestions": "There is no questions in this quiz"
+  },
+  "QuizSession": {
+    "EnterNickname": "Enter nickname",
+    "NicknamePlaceholder": "Nickname",
+    "Enter": "Enter",
+    "JoinCodeInvalid": "The code is incorrect",
+    "TryDifferentCode": "Try a different code",
+    "ValidatorJoinCodeRequired": "Join code is required",
+    "ValidatorJoinCodeLength": "Join code must be exactly 5 characters",
+    "EnterJoinCode": "Enter Join Code",
+    "Join": "Join",
+    "Start": "Start",
+    "ScanQRCode": "Scan this QR to join the session"
   }
 }
-

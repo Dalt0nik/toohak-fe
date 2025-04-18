@@ -3,4 +3,5 @@ export interface QuizSessionResponse {
   status: string;
   createdAt: Date;
   quizSessionId: string;
+  createdBy: string;
 }

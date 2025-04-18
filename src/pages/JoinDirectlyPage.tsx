@@ -9,11 +9,14 @@ import { useState } from "react";
 import { JoinQuizSessionRequest } from "@models/Request/JoinQuizSessionRequest";
 import { JwtResponse } from "@models/Response/JwtResponse";
 import { Cookies } from "react-cookie";
+import { useTranslation } from "react-i18next";
 
 const JoinDirectlyPage = () => {
   const { "join-id": joinId } = useParams<{ "join-id": string }>();
   const navigate = useNavigate();
   const [nickname, setNickname] = useState("");
+  const cookies = new Cookies();
+  const { t } = useTranslation();
 
   const {
     data: session,
@@ -25,13 +28,18 @@ const JoinDirectlyPage = () => {
     enabled: !!joinId,
   });
 
-  const cookies = new Cookies();
-
   const joinQuizSessionMutation = useMutation({
     mutationFn: (req: JoinQuizSessionRequest) => joinQuizSession(req),
     onSuccess: (res: JwtResponse) => {
-      cookies.set("QuizSessionJwt", res.accessToken);
-      navigate(PrivateAppRoutes.QUIZ_SESSION_PAGE, { state: session });
+      if (session?.joinId) {
+        cookies.set("QuizSessionJwt", res.accessToken);
+        navigate(
+          PrivateAppRoutes.QUIZ_SESSION_PAGE.replace(
+            ":join-id",
+            session?.joinId,
+          ),
+        );
+      }
     },
     onError: (error) => {
       console.error(error);
@@ -58,7 +66,7 @@ const JoinDirectlyPage = () => {
           height: "100vh",
         }}
       >
-        <Typography>Loading session...</Typography>
+        <Typography>{t("loading")}</Typography>
       </Box>
     );
   }
@@ -74,14 +82,14 @@ const JoinDirectlyPage = () => {
         }}
       >
         <Typography variant="h6" sx={{ marginBottom: "20px" }}>
-          The code is incorrect.
+          {t("QuizSession.JoinCodeInvalid")}
         </Typography>
         <Typography sx={{ marginBottom: "20px" }}>{error.message}</Typography>
         <Button
           variant="contained"
           onClick={() => navigate(PublicAppRoutes.JOIN_SESSION)}
         >
-          Try a different code
+          {t("QuizSession.TryDifferentCode")}
         </Button>
       </Box>
     );
@@ -97,17 +105,17 @@ const JoinDirectlyPage = () => {
       }}
     >
       <Typography variant="h5" sx={{ marginBottom: "20px" }}>
-        Enter nickname
+        {t("QuizSession.EnterNickname")}
       </Typography>
       <WhiteTextField
         value={nickname}
         onChange={(e) => setNickname(e.target.value)}
-        placeholder="Nickname"
+        placeholder={t("QuizSession.NicknamePlaceholder")}
         variant="outlined"
         sx={{ marginBottom: "20px", width: "300px" }}
       />
       <Button variant="contained" onClick={handleOnClick}>
-        Enter
+        {t("QuizSession.Enter")}
       </Button>
     </Box>
   );
