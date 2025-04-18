@@ -41,7 +41,7 @@
     "cancelButton": "Cancel",
     "totalQuestions": "Total Questions: ",
     "startButton": "Start",
-    "gameSettings": "Game settings:",
+    "gameSettings": "Game settings",
     "form": "Form for settings",
     "noQuestions": "There is no questions in this quiz"
   },
@@ -56,6 +56,12 @@
     "EnterJoinCode": "Enter Join Code",
     "Join": "Join",
     "Start": "Start",
-    "ScanQRCode": "Scan this QR to join the session"
+    "ScanQRCode": "Scan this QR to join the session",
+    "noQuestions": "There is no questions in this quiz",
+    "noAnswers": "There is no answers for this question",
+    "correctAnswerTooltip": "Correct answer",
+    "incorrectAnswerTooltip": "Incorrect answer",
+    "descriptionTitle": "Description",
+    "questionsTitle": "Questions"
   }
 }
