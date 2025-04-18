@@ -11,7 +11,6 @@ import React from "react";
 import theme from "@assets/styles/theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import ErrorBoundary from "@components/ErrorBoundary";
-import AxiosInterceptorProvider from "@contexts/AxiosInterceptorProvider.tsx";
 import { AuthProvider } from "@contexts/AuthProvider.tsx";
 
 const queryClient = new QueryClient();
@@ -30,22 +29,20 @@ createRoot(document.getElementById("root")!).render(
         useRefreshTokens
         cacheLocation="localstorage"
       >
-        <AxiosInterceptorProvider>
-          <AuthProvider>
-            <CookiesProvider>
-              <BrowserRouter>
-                <React.Suspense fallback="loading">
-                  <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <ErrorBoundary>
-                      <App />
-                    </ErrorBoundary>
-                  </ThemeProvider>
-                </React.Suspense>
-              </BrowserRouter>
-            </CookiesProvider>
-          </AuthProvider>
-        </AxiosInterceptorProvider>
+        <AuthProvider>
+          <CookiesProvider>
+            <BrowserRouter>
+              <React.Suspense fallback="loading">
+                <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  <ErrorBoundary>
+                    <App />
+                  </ErrorBoundary>
+                </ThemeProvider>
+              </React.Suspense>
+            </BrowserRouter>
+          </CookiesProvider>
+        </AuthProvider>
       </Auth0Provider>
     </QueryClientProvider>
   </StrictMode>,
