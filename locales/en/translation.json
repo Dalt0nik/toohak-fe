@@ -70,6 +70,9 @@
     },
     "Image": {
       "couldNotUpload": "Could not upload image"
+    },
+    "User": {
+      "couldNotRegister": "Could not register user"
     }
   },
   "Success": {
@@ -85,6 +88,9 @@
       "created": "Question created successfully",
       "updated": "Question updated successfully",
       "deleted": "Question deleted successfully"
+    },
+    "User": {
+      "registered": "User registered successfully"
     }
   }
 }
