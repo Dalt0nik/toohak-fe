@@ -10,11 +10,21 @@ export const showToast = () => {
     draggable: true,
   };
 
+  const customId = "custom-id-yes";
+
   const showError = (message: string, options?: ToastOptions) => {
-    toast.error(message, { ...defaultOptions, ...options });
+    toast.error(message, {
+      toastId: customId,
+      ...defaultOptions,
+      ...options,
+    });
   };
   const showSuccess = (message: string, options?: ToastOptions) => {
-    toast.success(message, { ...defaultOptions, ...options });
+    toast.success(message, {
+      toastId: customId,
+      ...defaultOptions,
+      ...options,
+    });
   };
 
   const handleError = (error: unknown, fallbackMessage?: string) => {
