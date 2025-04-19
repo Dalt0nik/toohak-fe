@@ -26,7 +26,7 @@ const QuizList = () => {
   }
 
   if (isError) {
-    handleError(isError, "Could not load quizzes");
+    handleError(isError, t("Error.List.couldNotFind"));
   }
 
   return (

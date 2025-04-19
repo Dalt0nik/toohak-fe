@@ -10,13 +10,13 @@ export const useUploadCoverImage = () => {
   return useMutation({
     mutationFn: newCoverImage,
     onSuccess: (data: NewQuizCoverImageResponse) => {
-      showSuccess("Image uploaded successfully");
+      showSuccess(t("Success.Image.uploaded"));
       return data;
     },
     onError: (error: Error) => {
       console.error("Error uploading image:", error);
       alert(t("quiz_form_image_error"));
-      handleError(error, "Could not upload image");
+      handleError(error, t("Error.Image.couldNotUpload"));
     },
   });
 };

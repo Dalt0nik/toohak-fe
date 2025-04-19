@@ -49,24 +49,42 @@
     "correctAnswerTooltip": "Correct answer",
     "incorrectAnswerTooltip": "Incorrect answer",
     "descriptionTitle": "Description",
-    "questionsTitle": "Questions"
+    "questionsTitle": "Questions",
     "noQuestions": "There is no questions in this quiz"
   },
-  "error": {
-    "quiz": {
+  "Error": {
+    "Quiz": {
       "couldNotFind": "Could not find quiz",
       "couldNotDelete": "Could not delete quiz",
       "couldNotUpdate": "Could not update quiz",
       "couldNotCreate": "Could not create quiz"
     },
-    "question": {
+    "Question": {
       "couldNotFind": "Could not find question",
       "couldNotDelete": "Could not delete question",
       "couldNotUpdate": "Could not update question",
       "couldNotCreate": "Could not create question"
     },
-    "list": {
+    "List": {
       "couldNotFind": "Could not find any quizzes"
+    },
+    "Image": {
+      "couldNotUpload": "Could not upload image"
+    }
+  },
+  "Success": {
+    "Quiz": {
+      "created": "Quiz created successfully",
+      "updated": "Quiz updated successfully",
+      "deleted": "Quiz deleted successfully"
+    },
+    "Image": {
+      "uploaded": "Image uploaded successfully"
+    },
+    "Question": {
+      "created": "Question created successfully",
+      "updated": "Question updated successfully",
+      "deleted": "Question deleted successfully"
     }
   }
 }
