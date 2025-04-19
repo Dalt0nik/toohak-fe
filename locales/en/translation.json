@@ -49,8 +49,7 @@
     "correctAnswerTooltip": "Correct answer",
     "incorrectAnswerTooltip": "Incorrect answer",
     "descriptionTitle": "Description",
-    "questionsTitle": "Questions",
-    "noQuestions": "There is no questions in this quiz"
+    "questionsTitle": "Questions"
   },
   "Error": {
     "Quiz": {
