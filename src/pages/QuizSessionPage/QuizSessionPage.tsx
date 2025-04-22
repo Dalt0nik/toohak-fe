@@ -17,6 +17,8 @@ import { useEffect, useState } from "react";
 import { SpringJwtInfo } from "@models/SpringJwtInfo";
 import { useAuth0 } from "@auth0/auth0-react";
 import { decodeToken } from "react-jwt";
+import PlayerQuizSession from "./PlayerQuizSession";
+import HostQuizSession from "./HostQuizSession";
 
 const QuizSessionPage = () => {
   const { "join-id": joinId } = useParams<{ "join-id": string }>();
@@ -119,6 +121,7 @@ const QuizSessionPage = () => {
             <ListItemText primary="SomeOtheDude" />
           </ListItem>
         </List>
+        <PlayerQuizSession playerJwt={springJwt!} />
       </Box>
     );
   }
@@ -165,14 +168,15 @@ const QuizSessionPage = () => {
         <Typography variant="h6" sx={{ marginBottom: "10px" }}>
           Joined Users
         </Typography>
-        <List sx={{ marginBottom: "20px" }}>
+        <HostQuizSession sessionId={session!.quizSessionId} />
+        {/* <List sx={{ marginBottom: "20px" }}>
           <ListItem key={0}>
             <ListItemText primary="SomeDude" />
           </ListItem>
           <ListItem key={1}>
             <ListItemText primary="SomeOtheDude" />
           </ListItem>
-        </List>
+        </List> */}
 
         <Button variant="contained" onClick={handleStartQuiz}>
           {t("QuizSession.Start")}

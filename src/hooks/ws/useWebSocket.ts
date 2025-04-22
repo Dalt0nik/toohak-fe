@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef, useState } from "react";
 import {
   Client,
   IMessage,
@@ -12,44 +12,52 @@ const WS_CONFIG = {
   reconnectDelay: import.meta.env.VITE_WS_CONFIG_RECONNECTION_DELAY,
 };
 
-export interface WebSocketConfig {
-  authorizationHeader?: string;
-}
-
 /**
  * Instead of using this directly, use `WebSocketContext` which implements `useWebSocket`. This hook immediately establishes a connection based on predefined .ENV vars.
  * @param {WebSocketConfig} config - mainly is used to set `authorizationHeader` value. It is used when establishing a connection for authorization.
  */
-export const useWebSocket = (config: WebSocketConfig) => {
+export const useWebSocket = () => {
   const stompClientRef = useRef<Client | null>(null);
   const subscriptionsRef = useRef<Map<string, StompSubscription>>(new Map());
+  const [isConnected, setIsConnected] = useState(false);
+  const [messages, setMessages] = useState<IMessage[]>([]);
 
-  useEffect(() => {
-    const disconnect = initializeWebSocketClient();
-    return disconnect;
-  }, []);
-
-  const initializeWebSocketClient = () => {
+  const initializeWebSocketClient = (
+    authorizationHeader: string,
+    onConnect: () => void,
+    onDisconnect: () => void,
+  ) => {
     const socket = new SockJS(WS_CONFIG.url);
     const stompHeaders = new StompHeaders();
 
-    if (config.authorizationHeader)
-      stompHeaders["Authorization"] = config?.authorizationHeader;
+    if (authorizationHeader)
+      stompHeaders["Authorization"] = authorizationHeader;
 
     const stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: WS_CONFIG.reconnectDelay,
-      onConnect: () => console.log("Connected to WebSocket"),
-      onDisconnect: () => console.log("Disconnected from WebSocket"),
+      onConnect: () => {
+        console.log("Connected to WebSocket");
+        setIsConnected(true);
+        onConnect();
+      },
+      onDisconnect: () => {
+        console.log("Disconnected from WebSocket");
+        setIsConnected(false);
+        onDisconnect();
+      },
+      // TODO: send disconnect message to back
+      onWebSocketClose: () => {},
       connectHeaders: stompHeaders,
     });
 
     stompClient.activate();
     stompClientRef.current = stompClient;
+  };
 
-    return () => {
-      stompClient.deactivate();
-    };
+  const deactivateConnection = () => {
+    if (!stompClientRef.current) return;
+    stompClientRef.current.deactivate();
   };
 
   /**
@@ -57,9 +65,9 @@ export const useWebSocket = (config: WebSocketConfig) => {
    * @param {string} brokerPath - Receive messages from this message broker path. `brokerPath` should follow this format - `/topic/lobby/`. The client will listen to this broker for messages.
    * @param {string} handleMessageCallback - this will be callbacked when a message is received
    */
-  const subscribeToTopic = (
+  const subscribeToTopic = <EventResponse>(
     brokerPath: string,
-    handleMessageCallback: (message: IMessage) => void,
+    handleMessageCallback: (eventResponse: EventResponse) => void,
   ) => {
     if (!stompClientRef.current?.connected) return;
 
@@ -71,7 +79,11 @@ export const useWebSocket = (config: WebSocketConfig) => {
 
     const newSubscription = stompClientRef.current.subscribe(
       brokerPath,
-      handleMessageCallback,
+      (message: IMessage) => {
+        setMessages((prev) => [...prev, message]);
+        const eventResponse = JSON.parse(message.body);
+        handleMessageCallback(eventResponse);
+      },
     );
 
     subscriptionsRef.current.set(brokerPath, newSubscription);
@@ -103,8 +115,12 @@ export const useWebSocket = (config: WebSocketConfig) => {
   };
 
   return {
+    initializeWebSocketClient,
     subscribeToTopic,
     unsubscribeTopic,
     sendMessage,
+    isConnected,
+    deactivateConnection,
+    messages,
   };
 };

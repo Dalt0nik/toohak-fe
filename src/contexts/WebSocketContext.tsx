@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useContext } from "react";
-import { useWebSocket, WebSocketConfig } from "@hooks/context/useWebSocket";
+import { useWebSocket, WebSocketConfig } from "@hooks/ws/useWebSocket";
 
 interface WebSocketProviderProps {
   children: ReactNode;
-  config?: WebSocketConfig;
+  config: WebSocketConfig;
 }
 
 const WebSocketContext = createContext<ReturnType<typeof useWebSocket> | null>(
@@ -12,7 +12,7 @@ const WebSocketContext = createContext<ReturnType<typeof useWebSocket> | null>(
 
 export const WebSocketProvider = ({
   children,
-  config = {},
+  config,
 }: WebSocketProviderProps) => {
   const ws = useWebSocket(config);
   return (
