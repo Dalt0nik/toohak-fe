@@ -1,21 +1,20 @@
+import { usePlayerJwt } from "@hooks/usePlayerJwt";
 import { useWebSocket } from "@hooks/ws/useWebSocket";
 import { AllWebSocketEventResponse } from "@models/Response/ws/all/AllWebSocketEventResponse";
 import { HostDisconnectedEventResponse } from "@models/Response/ws/all/HostDisconnectedEventResponse";
 import { PlayerWebSocketEventResponse } from "@models/Response/ws/player/PlayerWebSocketEventResponse";
-import { SpringJwtInfo } from "@models/SpringJwtInfo";
 import { Cookies } from "react-cookie";
 
 interface PlayerWebSocketConfig {
-  playerJwt: SpringJwtInfo;
   onHostDisconnectedEvent: (
     eventResponse: HostDisconnectedEventResponse,
   ) => void;
 }
 
 const usePlayerWebSocket = ({
-  playerJwt,
   onHostDisconnectedEvent,
 }: PlayerWebSocketConfig) => {
+  const playerJwtInfo = usePlayerJwt();
   const {
     initializeWebSocketClient,
     subscribeToTopic,
@@ -26,7 +25,7 @@ const usePlayerWebSocket = ({
 
   const subscribeToPlayerTopics = () => {
     subscribeToTopic<PlayerWebSocketEventResponse>(
-      `/topic/session/${playerJwt.quizSessionId}/players`,
+      `/topic/session/${playerJwtInfo?.quizSessionId}/players`,
       (eventResponse) => {
         switch (eventResponse.event) {
           default:
@@ -38,7 +37,7 @@ const usePlayerWebSocket = ({
     );
 
     subscribeToTopic<AllWebSocketEventResponse>(
-      `/topic/session/${playerJwt.quizSessionId}/all`,
+      `/topic/session/${playerJwtInfo?.quizSessionId}/all`,
       (eventResponse) => {
         switch (eventResponse.event) {
           case "host_disconnected":
@@ -54,7 +53,6 @@ const usePlayerWebSocket = ({
   };
 
   const initializePlayerWebSocketClient = () => {
-    console.log("Hello?");
     const cookies = new Cookies();
     const authorizationHeader = cookies.get("QuizSessionJwt");
     initializeWebSocketClient(

@@ -104,7 +104,7 @@ const QuizSessionPage = () => {
             <ListItemText primary="SomeOtheDude" />
           </ListItem>
         </List>
-        <PlayerQuizSession playerJwt={playerJwt!} />
+        <PlayerQuizSession />
       </Box>
     );
   }

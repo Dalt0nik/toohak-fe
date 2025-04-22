@@ -1,19 +1,13 @@
 import usePlayerWebSocket from "@hooks/ws/usePlayerWebSocket";
-import { SpringJwtInfo } from "@models/SpringJwtInfo";
 import { useEffect } from "react";
 
-interface PlayerQuizSessionProps {
-  playerJwt: SpringJwtInfo;
-}
-
-const PlayerQuizSession = ({ playerJwt }: PlayerQuizSessionProps) => {
+const PlayerQuizSession = () => {
   const {
     initializePlayerWebSocketClient,
     messages,
     isConnected,
     deactivateConnection,
   } = usePlayerWebSocket({
-    playerJwt,
     onHostDisconnectedEvent: () => {},
   });
 
