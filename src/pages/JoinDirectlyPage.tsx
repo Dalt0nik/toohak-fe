@@ -12,7 +12,7 @@ import { Cookies } from "react-cookie";
 import { useTranslation } from "react-i18next";
 
 const JoinDirectlyPage = () => {
-  const { "join-id": joinId } = useParams<{ "join-id": string }>();
+  const { joinId } = useParams<{ joinId: string }>();
   const navigate = useNavigate();
   const [nickname, setNickname] = useState("");
   const cookies = new Cookies();
@@ -31,11 +31,13 @@ const JoinDirectlyPage = () => {
   const joinQuizSessionMutation = useMutation({
     mutationFn: (req: JoinQuizSessionRequest) => joinQuizSession(req),
     onSuccess: (res: JwtResponse) => {
+      console.log(res);
+
       if (session?.joinId) {
         cookies.set("QuizSessionJwt", res.accessToken);
         navigate(
           PrivateAppRoutes.QUIZ_SESSION_PAGE.replace(
-            ":join-id",
+            ":joinId",
             session?.joinId,
           ),
         );

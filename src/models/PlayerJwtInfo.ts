@@ -1,4 +1,4 @@
-export interface SpringJwtInfo {
+export interface PlayerJwtInfo {
   nickname: string;
   quizSessionId: string;
   sub: string;

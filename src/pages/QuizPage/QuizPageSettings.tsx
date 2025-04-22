@@ -18,7 +18,7 @@ const QuizPageSettings: React.FC<QuizPageSettingsProps> = ({ quizId }) => {
     mutationFn: (req: NewQuizSessionRequest) => createQuizSession(req),
     onSuccess: (res: NewQuizSessionResponse) => {
       navigate(
-        PrivateAppRoutes.QUIZ_SESSION_PAGE.replace(":join-id", res.joinId),
+        PrivateAppRoutes.QUIZ_SESSION_PAGE.replace(":joinId", res.joinId),
         { state: res },
       );
     },

@@ -22,6 +22,7 @@ export async function findQuizSession(
   const response = await api.get<QuizSessionResponse>(
     "/sessions/find/" + joinId,
   );
+
   return response.data;
 }
 
