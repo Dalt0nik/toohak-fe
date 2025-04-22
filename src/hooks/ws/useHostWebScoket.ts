@@ -54,7 +54,6 @@ const useHostWebSocket = ({
     subscribeToTopic<AllWebSocketEventResponse>(
       `/topic/session/${sessionId}/all`,
       (eventResponse) => {
-        console.log("Received");
         switch (eventResponse.event) {
           case "host_disconnected":
             onHostDisconnectedEvent(

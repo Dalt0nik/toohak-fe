@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import LoadingBackdrop from "@components/common/ui/LoadingBackdrop";
 import { WebSocketProvider } from "@contexts/WebSocketContext";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const LobbyPage = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -13,8 +13,6 @@ const LobbyPage = () => {
     };
     getToken();
   }, []);
-
-  console.log(token);
 
   return token ? (
     <WebSocketProvider config={{ authorizationHeader: token! }}>

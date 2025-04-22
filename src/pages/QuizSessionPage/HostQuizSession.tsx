@@ -17,8 +17,6 @@ const HostQuizSession = ({ sessionId }: HostQuizSessionProps) => {
     initializePlayerWebSocketClient(sessionId);
   }, []);
 
-  console.log(isConnected, messages);
-
   return (
     <div>
       {isConnected && messages.length
