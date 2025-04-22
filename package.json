@@ -30,6 +30,7 @@
     "react-hook-form": "^7.55.0",
     "react-i18next": "^15.4.1",
     "react-router-dom": "^7.4.0",
+    "react-toastify": "^11.0.5",
     "sockjs-client": "^1.6.1"
   },
   "devDependencies": {
