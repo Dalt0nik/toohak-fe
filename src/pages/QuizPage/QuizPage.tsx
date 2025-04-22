@@ -8,6 +8,7 @@ import { QuizResponse } from "@models/Response/quizResponse";
 import Loader from "@components/Loader";
 import ImageCard from "@components/common/ui/ImageCard";
 import OptionsList from "./OptionsList";
+import QuizPageSettings from "./QuizPageSettings";
 import { showToast } from "@ui/Toast.tsx";
 import PageNotFound from "@pages/PageNotFound.tsx";
 
@@ -84,17 +85,7 @@ const QuizPage = () => {
             <OptionsList questions={quiz!.questions} />
           </Stack>
         </Grid>
-        <Grid size={{ xs: 12, sm: 4 }}>
-          <Stack sx={{ textAlign: "left" }} spacing={2}>
-            <Typography variant="h3" gutterBottom>
-              {t("QuizPage.gameSettings")}
-            </Typography>
-            <Typography variant="h4">{t("QuizPage.form")}</Typography>
-            <Button variant="contained" color="success" fullWidth>
-              {t("QuizPage.startButton")}
-            </Button>
-          </Stack>
-        </Grid>
+        <QuizPageSettings quizId={quiz?.id} />
       </Grid>
     </Stack>
   );

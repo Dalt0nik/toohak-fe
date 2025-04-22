@@ -12,9 +12,15 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use(async (config) => {
-  const token = await getAccessToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const excludedPaths = ["/sessions/find", "/sessions/join"];
+  const shouldExclude = excludedPaths.some((path) =>
+    config.url?.startsWith(path),
+  );
+  if (!shouldExclude) {
+    const token = await getAccessToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
 
   return config;
