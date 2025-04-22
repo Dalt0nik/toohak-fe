@@ -46,3 +46,15 @@ export const fetchImageById = async (id: string): Promise<string> => {
   });
   return URL.createObjectURL(response.data);
 };
+
+export const updateQuiz = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: NewQuizRequest;
+}): Promise<QuizResponse> => {
+  const response = await api.put(`/quizzes/${id}`, data);
+  console.log(response.data, "response data from update");
+  return response.data;
+};
