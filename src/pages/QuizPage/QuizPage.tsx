@@ -1,17 +1,24 @@
 import { Box, Button, Grid, Stack, Typography, useTheme } from "@mui/material";
 import { CARD_BACKGROUND_PURPLE } from "../../assets/styles/constants";
-import { useParams } from "react-router-dom";
+import { generatePath, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Loader from "@components/Loader";
 import ImageCard from "@components/common/ui/ImageCard";
 import OptionsList from "./OptionsList";
 import { useQuiz } from "@hooks/useQuiz";
+import { PrivateAppRoutes } from "@models/PrivateRoutes";
 
 const QuizPage = () => {
   const theme = useTheme();
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { data: quiz, isLoading, error } = useQuiz(id);
+
+  const handleEditButton = () => {
+    const path = generatePath(PrivateAppRoutes.EDIT_QUIZ_PAGE, { id: id! });
+    navigate(path);
+  };
 
   if (isLoading) return <Loader />;
   if (error instanceof Error) return <p>{error.message}</p>;
@@ -34,7 +41,9 @@ const QuizPage = () => {
           {quiz?.title}
         </Typography>
         <Box sx={{ display: "flex", gap: theme.spacing(1) }}>
-          <Button variant="contained">{t("QuizPage.editButton")}</Button>
+          <Button variant="contained" onClick={handleEditButton}>
+            {t("QuizPage.editButton")}
+          </Button>
         </Box>
       </Box>
       <Grid container spacing={2}>
