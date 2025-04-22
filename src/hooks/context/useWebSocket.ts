@@ -1,27 +1,28 @@
-import { useEffect, useRef, useState } from "react";
-import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
+import { useEffect, useRef } from "react";
+import {
+  Client,
+  IMessage,
+  StompHeaders,
+  StompSubscription,
+} from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
 const WS_CONFIG = {
-  url: "http://localhost:8080/api/ws",
-  reconnectDelay: 5000,
-  topics: {
-    lobby: "/topic/lobby/",
-  },
-  destinations: {
-    answer: "/app/answer",
-  },
+  url: import.meta.env.VITE_WS_CONFIG_URL,
+  reconnectDelay: import.meta.env.VITE_WS_CONFIG_RECONNECTION_DELAY,
 };
 
-export const useWebSocket = () => {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [subscribedLobby, setSubscribedLobby] = useState("");
-  const [lobbyId, setLobbyId] = useState("");
-  const [answer, setAnswer] = useState("");
-  const playerId = useRef("player-" + Math.floor(Math.random() * 1000)).current;
+export interface WebSocketConfig {
+  authorizationHeader?: string;
+}
 
+/**
+ * Instead of using this directly, use `WebSocketContext` which implements `useWebSocket`. This hook immediately establishes a connection based on predefined .ENV vars.
+ * @param {WebSocketConfig} config - mainly is used to set `authorizationHeader` value. It is used when establishing a connection for authorization.
+ */
+export const useWebSocket = (config: WebSocketConfig) => {
   const stompClientRef = useRef<Client | null>(null);
-  const subscriptionRef = useRef<StompSubscription | null>(null);
+  const subscriptionsRef = useRef<Map<string, StompSubscription>>(new Map());
 
   useEffect(() => {
     const disconnect = initializeWebSocketClient();
@@ -30,11 +31,17 @@ export const useWebSocket = () => {
 
   const initializeWebSocketClient = () => {
     const socket = new SockJS(WS_CONFIG.url);
+    const stompHeaders = new StompHeaders();
+
+    if (config.authorizationHeader)
+      stompHeaders["Authorization"] = config?.authorizationHeader;
+
     const stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: WS_CONFIG.reconnectDelay,
       onConnect: () => console.log("Connected to WebSocket"),
       onDisconnect: () => console.log("Disconnected from WebSocket"),
+      connectHeaders: stompHeaders,
     });
 
     stompClient.activate();
@@ -45,62 +52,59 @@ export const useWebSocket = () => {
     };
   };
 
-  const subscribeToLobby = (id: string) => {
-    if (!id || !stompClientRef.current?.connected) return;
+  /**
+   * Subscribes to a certain topic.
+   * @param {string} brokerPath - Receive messages from this message broker path. `brokerPath` should follow this format - `/topic/lobby/`. The client will listen to this broker for messages.
+   * @param {string} handleMessageCallback - this will be callbacked when a message is received
+   */
+  const subscribeToTopic = (
+    brokerPath: string,
+    handleMessageCallback: (message: IMessage) => void,
+  ) => {
+    if (!stompClientRef.current?.connected) return;
 
-    if (subscriptionRef.current) {
-      subscriptionRef.current.unsubscribe();
+    const subscription = subscriptionsRef.current.get(brokerPath);
+
+    if (subscription) {
+      subscription.unsubscribe();
     }
 
-    subscriptionRef.current = stompClientRef.current.subscribe(
-      `${WS_CONFIG.topics.lobby}${id}`,
-      handleWebSocketMessage,
+    const newSubscription = stompClientRef.current.subscribe(
+      brokerPath,
+      handleMessageCallback,
     );
-    setSubscribedLobby(id);
+
+    subscriptionsRef.current.set(brokerPath, newSubscription);
   };
 
-  const handleWebSocketMessage = (message: IMessage) => {
-    try {
-      const body = JSON.parse(message.body);
-      setMessages((prev) => [
-        ...prev,
-        `New question: ${body.question} (Lobby: ${body.lobbyId})`,
-      ]);
-    } catch {
-      setMessages((prev) => [...prev, `Message: ${message.body}`]);
-    }
+  const unsubscribeTopic = (brokerUrl: string) => {
+    if (!stompClientRef.current?.connected) return;
+
+    const subscription = subscriptionsRef.current.get(brokerUrl);
+
+    if (subscription) subscription.unsubscribe();
   };
 
-  const sendAnswer = () => {
-    if (
-      !subscribedLobby ||
-      !stompClientRef.current?.connected ||
-      !answer.trim()
-    )
-      return;
-
-    const payload = {
-      lobbyId: subscribedLobby,
-      playerId,
-      answer,
-    };
+  /**
+   * Send message to a certain .
+   * @param {string} destinationPath - this path which BE listens to for messages from client. Example value - `/app/answer`
+   * @param {string} payload - this is the payload that will be sent as a message to the appropriate message endpoint
+   */
+  const sendMessage = (
+    destinationPath: string,
+    payload: { [key: string]: string },
+  ) => {
+    if (!stompClientRef.current?.connected) return;
 
     stompClientRef.current.publish({
-      destination: WS_CONFIG.destinations.answer,
+      destination: destinationPath,
       body: JSON.stringify(payload),
     });
-
-    setAnswer("");
   };
 
   return {
-    messages,
-    lobbyId,
-    setLobbyId,
-    subscribedLobby,
-    answer,
-    setAnswer,
-    subscribeToLobby,
-    sendAnswer,
+    subscribeToTopic,
+    unsubscribeTopic,
+    sendMessage,
   };
 };
