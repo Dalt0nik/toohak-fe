@@ -9,11 +9,14 @@ import Loader from "@components/Loader";
 import ImageCard from "@components/common/ui/ImageCard";
 import OptionsList from "./OptionsList";
 import QuizPageSettings from "./QuizPageSettings";
+import { showToast } from "@ui/Toast.tsx";
+import PageNotFound from "@pages/PageNotFound.tsx";
 
 const QuizPage = () => {
   const theme = useTheme();
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const { handleError } = showToast();
 
   const {
     data: quiz,
@@ -26,7 +29,10 @@ const QuizPage = () => {
   });
 
   if (isLoading) return <Loader />;
-  if (error instanceof Error) return <p>{error.message}</p>;
+  if (error instanceof Error) {
+    handleError(error, t("Error.Quiz.couldNotFind"));
+    return <PageNotFound />;
+  }
 
   return (
     <Stack spacing={2}>

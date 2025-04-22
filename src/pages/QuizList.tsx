@@ -5,10 +5,12 @@ import QuizCard from "@components/QuizCard";
 import { fetchQuizList } from "@api/quizListApi";
 import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import Loader from "@components/Loader";
+import Loader from "@components/Loader.tsx";
+import { showToast } from "@ui/Toast.tsx";
 
 const QuizList = () => {
   const { t } = useTranslation();
+  const { handleError } = showToast();
 
   const {
     data: quizzes,
@@ -24,7 +26,7 @@ const QuizList = () => {
   }
 
   if (isError) {
-    return <div>{t("user_quiz_list_error")}</div>;
+    handleError(isError, t("Error.List.couldNotFind"));
   }
 
   return (
@@ -63,5 +65,4 @@ const QuizList = () => {
     </>
   );
 };
-
 export default QuizList;

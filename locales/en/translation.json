@@ -12,6 +12,7 @@
   "navbar_login": "LOG IN",
   "navbar_logout": "LOG OUT",
   "navbar_myquizzes": "MY QUIZZES",
+  "navbar_joinquiz": "JOIN QUIZ",
   "question_dialog_question": "Question",
   "question_dialog_question_option": "Option {{number}}",
   "question_dialog_cancel": "Cancel",
@@ -34,6 +35,7 @@
   "quiz_form_questions": "Questions",
   "quiz_form_no_questions": "No questions added yet",
   "quiz_form_add_question": "+ ADD NEW QUESTION",
+  "error_fetching_quizzes": "Could not retrieve quizzes",
   "QuizPage": {
     "editButton": "Edit",
     "deleteButton": "Delete",
@@ -50,6 +52,7 @@
     "NicknamePlaceholder": "Nickname",
     "Enter": "Enter",
     "JoinCodeInvalid": "The code is incorrect",
+    "OwnSessionJoin": "Cannot join your own session",
     "TryDifferentCode": "Try a different code",
     "ValidatorJoinCodeRequired": "Join code is required",
     "ValidatorJoinCodeLength": "Join code must be exactly 5 characters",
@@ -63,5 +66,46 @@
     "incorrectAnswerTooltip": "Incorrect answer",
     "descriptionTitle": "Description",
     "questionsTitle": "Questions"
+  },
+  "Error": {
+    "Quiz": {
+      "couldNotFind": "Could not find quiz",
+      "couldNotDelete": "Could not delete quiz",
+      "couldNotUpdate": "Could not update quiz",
+      "couldNotCreate": "Could not create quiz"
+    },
+    "Question": {
+      "couldNotFind": "Could not find question",
+      "couldNotDelete": "Could not delete question",
+      "couldNotUpdate": "Could not update question",
+      "couldNotCreate": "Could not create question"
+    },
+    "List": {
+      "couldNotFind": "Could not find any quizzes"
+    },
+    "Image": {
+      "couldNotUpload": "Could not upload image"
+    },
+    "User": {
+      "couldNotRegister": "Could not register user"
+    }
+  },
+  "Success": {
+    "Quiz": {
+      "created": "Quiz created successfully",
+      "updated": "Quiz updated successfully",
+      "deleted": "Quiz deleted successfully"
+    },
+    "Image": {
+      "uploaded": "Image uploaded successfully"
+    },
+    "Question": {
+      "created": "Question created successfully",
+      "updated": "Question updated successfully",
+      "deleted": "Question deleted successfully"
+    },
+    "User": {
+      "registered": "User registered successfully"
+    }
   }
 }

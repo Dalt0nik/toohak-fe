@@ -6,26 +6,23 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { Cookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import QRCode from "react-qr-code";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { findQuizSession } from "@api/QuizSessionApi";
 import { PublicAppRoutes } from "@models/PublicRoutes";
-import { useEffect, useState } from "react";
-import { SpringJwtInfo } from "@models/SpringJwtInfo";
 import { useAuth0 } from "@auth0/auth0-react";
-import { decodeToken } from "react-jwt";
 import PlayerQuizSession from "./PlayerQuizSession";
 import HostQuizSession from "./HostQuizSession";
+import { usePlayerJwt } from "@hooks/usePlayerJwt";
 
 const QuizSessionPage = () => {
-  const { "join-id": joinId } = useParams<{ "join-id": string }>();
+  const { joinId } = useParams<{ joinId: string }>();
   const { t } = useTranslation();
-  const cookies = new Cookies();
   const navigate = useNavigate();
   const { user } = useAuth0();
+  const playerJwt = usePlayerJwt();
 
   const {
     data: session,
@@ -36,20 +33,6 @@ const QuizSessionPage = () => {
     queryFn: () => findQuizSession(joinId!),
     enabled: !!joinId,
   });
-
-  const [springJwt, setSpringJwt] = useState<SpringJwtInfo | null>(null);
-
-  useEffect(() => {
-    const raw = cookies.get("QuizSessionJwt");
-    if (raw) {
-      const decoded = decodeToken<SpringJwtInfo>(raw);
-      if (decoded) {
-        setSpringJwt(decoded);
-      } else {
-        console.error("Invalid or expired QuizSessionJwt");
-      }
-    }
-  }, []);
 
   const handleStartQuiz = () => {
     console.log("Starting the quiz...");
@@ -96,7 +79,7 @@ const QuizSessionPage = () => {
 
   const auth0Id = user?.sub;
   const isSessionOwner = session?.createdBy === auth0Id;
-  const isValidSessionJwt = session?.quizSessionId === springJwt?.quizSessionId;
+  const isValidSessionJwt = session?.quizSessionId === playerJwt?.quizSessionId;
   const joinUrl = `${window.location.origin}/join/${session?.joinId}`;
 
   if (isValidSessionJwt) {
@@ -121,7 +104,7 @@ const QuizSessionPage = () => {
             <ListItemText primary="SomeOtheDude" />
           </ListItem>
         </List>
-        <PlayerQuizSession playerJwt={springJwt!} />
+        <PlayerQuizSession playerJwt={playerJwt!} />
       </Box>
     );
   }

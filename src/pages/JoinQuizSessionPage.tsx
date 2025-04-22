@@ -7,6 +7,7 @@ import { PublicAppRoutes } from "@models/PublicRoutes";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import JoinCodeController from "@components/quizSession/JoinCodeController";
+import { useAuth0 } from "@auth0/auth0-react";
 
 type FormData = {
   joinId: string;
@@ -15,6 +16,7 @@ type FormData = {
 const JoinQuizSessionPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { user } = useAuth0();
 
   const {
     control,
@@ -28,9 +30,16 @@ const JoinQuizSessionPage = () => {
   const findQuizSessionMutation = useMutation({
     mutationFn: (joinId: string) => findQuizSession(joinId),
     onSuccess: (res: QuizSessionResponse) => {
-      navigate(
-        PublicAppRoutes.JOIN_SESSION_DIRECTLY.replace(":join-id", res.joinId),
-      );
+      if (res.createdBy != user?.sub) {
+        navigate(
+          PublicAppRoutes.JOIN_SESSION_DIRECTLY.replace(":joinId", res.joinId),
+        );
+      } else {
+        setError("joinId", {
+          type: "manual",
+          message: t("QuizSession.OwnSessionJoin"),
+        });
+      }
     },
     onError: () => {
       setError("joinId", {
