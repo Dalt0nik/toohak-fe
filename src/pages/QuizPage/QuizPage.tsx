@@ -1,28 +1,17 @@
 import { Box, Button, Grid, Stack, Typography, useTheme } from "@mui/material";
 import { CARD_BACKGROUND_PURPLE } from "../../assets/styles/constants";
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { fetchQuizById } from "@api/QuizApi";
 import { useTranslation } from "react-i18next";
-import { QuizResponse } from "@models/Response/quizResponse";
 import Loader from "@components/Loader";
 import ImageCard from "@components/common/ui/ImageCard";
 import OptionsList from "./OptionsList";
+import { useQuiz } from "@hooks/useQuiz";
 
 const QuizPage = () => {
   const theme = useTheme();
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
-
-  const {
-    data: quiz,
-    isLoading,
-    error,
-  } = useQuery<QuizResponse>({
-    queryKey: ["quiz", id],
-    queryFn: () => fetchQuizById(id!),
-    enabled: !!id,
-  });
+  const { data: quiz, isLoading, error } = useQuiz(id);
 
   if (isLoading) return <Loader />;
   if (error instanceof Error) return <p>{error.message}</p>;

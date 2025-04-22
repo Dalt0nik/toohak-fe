@@ -10,6 +10,7 @@ import { WebSocketProvider } from "@contexts/WebSocketContext";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import { PublicAppRoutes } from "@models/PublicRoutes";
 import QuizPage from "@pages/QuizPage/QuizPage";
+import EditQuizPage from "@pages/EditQuizPage";
 
 function App() {
   return (
@@ -34,6 +35,10 @@ function App() {
           element={<PageNotFound />}
         />
         <Route path={PrivateAppRoutes.QUIZ_PAGE} element={<QuizPage />} />
+        <Route
+          path={PrivateAppRoutes.EDIT_QUIZ_PAGE}
+          element={<EditQuizPage />}
+        />
       </Route>
     </Routes>
   );

@@ -10,6 +10,7 @@ import QuestionList from "@components/quiz/QuizCreation/QuestionList";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { QuestionResponse } from "@models/Response/questionResponse";
 import { useDeleteQuestion } from "@hooks/useDeleteQuestion";
+import { useParams } from "react-router-dom";
 
 interface QuizFormProps {
   onSubmit: (data: NewQuizRequest) => void;
@@ -27,6 +28,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({
   initialData,
 }) => {
   const { t } = useTranslation();
+  const { id } = useParams<{ id: string }>();
 
   const transformQuestions = (
     questionResponses?: QuestionResponse[],
@@ -65,7 +67,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({
       setQuestions(transformQuestions(initialData.questions));
     }
   }, [initialData, methods]);
-
+  // const { mutate: updateQuestion } = useUpdateQuestion(quizId);
   const handleSaveQuestion = (newQuestion: Question) => {
     setQuestions([...questions, newQuestion]);
 
@@ -85,7 +87,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({
     });
   };
 
-  const deleteQuestionMutation = useDeleteQuestion();
+  const deleteQuestionMutation = useDeleteQuestion(id!);
 
   const handleDeleteQuestion = (index: number) => {
     const questionToDelete = questions[index];
