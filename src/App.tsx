@@ -7,7 +7,7 @@ import Navbar from "@components/layout/Navbar.tsx";
 import QuizList from "@pages/QuizList";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import { PublicAppRoutes } from "@models/PublicRoutes";
-import QuizSessionPage from "@pages/QuizSessionPage";
+import QuizSessionPage from "@pages/QuizSessionPage/QuizSessionPage";
 import JoinQuizSessionPage from "@pages/JoinQuizSessionPage";
 import JoinDirectlyPage from "@pages/JoinDirectlyPage";
 import QuizPage from "@pages/QuizPage/QuizPage";

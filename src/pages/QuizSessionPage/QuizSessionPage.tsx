@@ -13,6 +13,8 @@ import { useQuery } from "@tanstack/react-query";
 import { findQuizSession } from "@api/QuizSessionApi";
 import { PublicAppRoutes } from "@models/PublicRoutes";
 import { useAuth0 } from "@auth0/auth0-react";
+import PlayerQuizSession from "./PlayerQuizSession";
+import HostQuizSession from "./HostQuizSession";
 import { usePlayerJwt } from "@hooks/usePlayerJwt";
 
 const QuizSessionPage = () => {
@@ -102,6 +104,7 @@ const QuizSessionPage = () => {
             <ListItemText primary="SomeOtheDude" />
           </ListItem>
         </List>
+        <PlayerQuizSession />
       </Box>
     );
   }
@@ -148,14 +151,15 @@ const QuizSessionPage = () => {
         <Typography variant="h6" sx={{ marginBottom: "10px" }}>
           Joined Users
         </Typography>
-        <List sx={{ marginBottom: "20px" }}>
+        <HostQuizSession sessionId={session!.quizSessionId} />
+        {/* <List sx={{ marginBottom: "20px" }}>
           <ListItem key={0}>
             <ListItemText primary="SomeDude" />
           </ListItem>
           <ListItem key={1}>
             <ListItemText primary="SomeOtheDude" />
           </ListItem>
-        </List>
+        </List> */}
 
         <Button variant="contained" onClick={handleStartQuiz}>
           {t("QuizSession.Start")}
