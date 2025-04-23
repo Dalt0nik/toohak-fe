@@ -71,7 +71,7 @@ const useHostWebSocket = ({
 
   const initializePlayerWebSocketClient = async (sessionId: string) => {
     return initializeWebSocketClient(
-      await getAccessTokenSilently(),
+      `Bearer ${await getAccessTokenSilently()}`,
       () => {
         subscribeToHostTopics(sessionId);
       },

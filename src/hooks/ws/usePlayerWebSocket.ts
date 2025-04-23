@@ -1,5 +1,5 @@
-import { usePlayerJwt } from "@hooks/usePlayerJwt";
 import { useWebSocket } from "@hooks/ws/useWebSocket";
+import { PlayerJwtInfo } from "@models/PlayerJwtInfo";
 import { AllWebSocketEventResponse } from "@models/Response/ws/all/AllWebSocketEventResponse";
 import { HostDisconnectedEventResponse } from "@models/Response/ws/all/HostDisconnectedEventResponse";
 import { PlayerWebSocketEventResponse } from "@models/Response/ws/player/PlayerWebSocketEventResponse";
@@ -14,7 +14,6 @@ interface PlayerWebSocketConfig {
 const usePlayerWebSocket = ({
   onHostDisconnectedEvent,
 }: PlayerWebSocketConfig) => {
-  const playerJwtInfo = usePlayerJwt();
   const {
     initializeWebSocketClient,
     subscribeToTopic,
@@ -23,9 +22,9 @@ const usePlayerWebSocket = ({
     deactivateConnection,
   } = useWebSocket();
 
-  const subscribeToPlayerTopics = () => {
+  const subscribeToPlayerTopics = (playerJwt: PlayerJwtInfo) => {
     subscribeToTopic<PlayerWebSocketEventResponse>(
-      `/topic/session/${playerJwtInfo?.quizSessionId}/players`,
+      `/topic/session/${playerJwt?.quizSessionId}/players`,
       (eventResponse) => {
         switch (eventResponse.event) {
           default:
@@ -37,7 +36,7 @@ const usePlayerWebSocket = ({
     );
 
     subscribeToTopic<AllWebSocketEventResponse>(
-      `/topic/session/${playerJwtInfo?.quizSessionId}/all`,
+      `/topic/session/${playerJwt?.quizSessionId}/all`,
       (eventResponse) => {
         switch (eventResponse.event) {
           case "host_disconnected":
@@ -52,13 +51,13 @@ const usePlayerWebSocket = ({
     );
   };
 
-  const initializePlayerWebSocketClient = () => {
+  const initializePlayerWebSocketClient = (playerJwt: PlayerJwtInfo) => {
     const cookies = new Cookies();
     const authorizationHeader = cookies.get("QuizSessionJwt");
     initializeWebSocketClient(
-      authorizationHeader,
+      `Bearer ${authorizationHeader}`,
       () => {
-        subscribeToPlayerTopics();
+        subscribeToPlayerTopics(playerJwt);
       },
       () => {},
     );

@@ -37,17 +37,27 @@ export const useWebSocket = () => {
       webSocketFactory: () => socket,
       reconnectDelay: WS_CONFIG.reconnectDelay,
       onConnect: () => {
-        console.log("Connected to WebSocket");
         setIsConnected(true);
         onConnect();
+        console.log("Connected to WebSocket");
       },
       onDisconnect: () => {
-        console.log("Disconnected from WebSocket");
         setIsConnected(false);
         onDisconnect();
+        console.log("Disconnected from WebSocket");
       },
-      // TODO: send disconnect message to back
-      onWebSocketClose: () => {},
+      onWebSocketError: () => {
+        setIsConnected(false);
+        console.log("WebSocketError");
+      },
+      onStompError: () => {
+        setIsConnected(false);
+        console.log("StompError");
+      },
+      onWebSocketClose: () => {
+        setIsConnected(false);
+        console.log("WebSocketClose");
+      },
       connectHeaders: stompHeaders,
     });
 

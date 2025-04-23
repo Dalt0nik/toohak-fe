@@ -1,7 +1,13 @@
+import { usePlayerJwt } from "@hooks/usePlayerJwt";
 import usePlayerWebSocket from "@hooks/ws/usePlayerWebSocket";
+import { Box, Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 
+/**
+ * Main component responsible for connecting player quiz session UI and websocket connection
+ */
 const PlayerQuizSession = () => {
+  const playerJwt = usePlayerJwt();
   const {
     initializePlayerWebSocketClient,
     messages,
@@ -12,20 +18,33 @@ const PlayerQuizSession = () => {
   });
 
   useEffect(() => {
-    initializePlayerWebSocketClient();
-  }, []);
+    if (playerJwt) initializePlayerWebSocketClient(playerJwt);
+  }, [playerJwt]);
 
   return (
-    <div>
-      {isConnected && messages.length
-        ? messages.map((message) => (
-            <pre>{JSON.stringify(message, null, 2)}</pre>
-          ))
-        : "No messages"}
-      <div>
-        <button onClick={deactivateConnection}>Disconnect</button>
-      </div>
-    </div>
+    <Container>
+      <Box>
+        {isConnected && messages.length
+          ? messages.map((message, idx) => (
+              <Typography key={idx}>
+                <pre style={{ whiteSpace: "wrap" }}>
+                  {JSON.stringify(message.body, null, 2)}
+                </pre>
+              </Typography>
+            ))
+          : "No messages"}
+      </Box>
+      {/* TODO: Remove in a long run. Temporary for testing */}
+      <Box>
+        {isConnected ? (
+          <button onClick={deactivateConnection}>Disconnect</button>
+        ) : (
+          <button onClick={() => initializePlayerWebSocketClient(playerJwt!)}>
+            Reconnect
+          </button>
+        )}
+      </Box>
+    </Container>
   );
 };
 

@@ -31,8 +31,6 @@ const JoinDirectlyPage = () => {
   const joinQuizSessionMutation = useMutation({
     mutationFn: (req: JoinQuizSessionRequest) => joinQuizSession(req),
     onSuccess: (res: JwtResponse) => {
-      console.log(res);
-
       if (session?.joinId) {
         cookies.set("QuizSessionJwt", res.accessToken);
         navigate(
