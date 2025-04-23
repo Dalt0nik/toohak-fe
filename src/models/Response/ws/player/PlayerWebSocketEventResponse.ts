@@ -1,3 +1,8 @@
 import { GenericWebSocketEventResponse } from "../GenericWebSocketEventResponse";
 
-export type PlayerWebSocketEventResponse = GenericWebSocketEventResponse<"">;
+export enum PlayerEventType {
+  TEMP_PLACEHOLDER = "",
+}
+
+export type PlayerWebSocketEventResponse =
+  GenericWebSocketEventResponse<PlayerEventType>;
