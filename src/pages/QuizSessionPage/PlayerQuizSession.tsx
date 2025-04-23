@@ -1,6 +1,6 @@
 import { usePlayerJwt } from "@hooks/usePlayerJwt";
 import usePlayerWebSocket from "@hooks/ws/usePlayerWebSocket";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { useEffect } from "react";
 
 /**
@@ -26,11 +26,9 @@ const PlayerQuizSession = () => {
       <Box>
         {isConnected && messages.length
           ? messages.map((message, idx) => (
-              <Typography key={idx}>
-                <pre style={{ whiteSpace: "wrap" }}>
-                  {JSON.stringify(message.body, null, 2)}
-                </pre>
-              </Typography>
+              <pre key={idx} style={{ whiteSpace: "wrap" }}>
+                {JSON.stringify(message.body, null, 2)}
+              </pre>
             ))
           : "No messages"}
       </Box>

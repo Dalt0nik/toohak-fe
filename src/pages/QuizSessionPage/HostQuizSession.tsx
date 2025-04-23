@@ -1,5 +1,5 @@
 import useHostWebSocket from "@hooks/ws/useHostWebScoket";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { useEffect } from "react";
 
 interface HostQuizSessionProps {
@@ -30,11 +30,9 @@ const HostQuizSession = ({ sessionId }: HostQuizSessionProps) => {
       <Box>
         {isConnected && messages.length
           ? messages.map((message, id) => (
-              <Typography key={id}>
-                <pre style={{ whiteSpace: "wrap" }}>
-                  {JSON.stringify(message.body, null, 2)}
-                </pre>
-              </Typography>
+              <pre key={id} style={{ whiteSpace: "wrap" }}>
+                {JSON.stringify(message.body, null, 2)}
+              </pre>
             ))
           : "No messages"}
       </Box>
