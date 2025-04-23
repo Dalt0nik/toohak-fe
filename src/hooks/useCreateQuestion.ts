@@ -1,18 +1,18 @@
-import { updateQuestionById } from "@api/questionApi";
+import { createQuestion } from "@api/questionApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useUpdateQuestion = () => {
+export const useCreateQuestion = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: updateQuestionById,
+    mutationFn: createQuestion,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["quiz", data.quizId] });
 
-      console.log(`Question with ID ${data.id} updated successfully`);
+      console.log(`Question with ID ${data.id} created successfully`);
     },
     onError: (error: Error) => {
-      console.error("Error editing question:", error.message);
+      console.error("Error creating question:", error.message);
     },
   });
 };

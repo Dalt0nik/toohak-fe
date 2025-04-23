@@ -11,6 +11,8 @@ import { QuizResponse } from "@models/Response/quizResponse";
 import { QuestionResponse } from "@models/Response/questionResponse";
 import { useDeleteQuestion } from "@hooks/useDeleteQuestion";
 import { useParams } from "react-router-dom";
+// import { useUpdateQuestion } from "@hooks/useUpdateQuestion";
+// import { useCreateQuestion } from "@hooks/useCreateQuestion";
 
 interface QuizFormProps {
   onSubmit: (data: NewQuizRequest) => void;
@@ -45,6 +47,8 @@ export const QuizForm: React.FC<QuizFormProps> = ({
       })),
     }));
   };
+  // const { mutate: updateQuestion } = useUpdateQuestion();
+  // const { mutate: createQuestion } = useCreateQuestion()
 
   const [questions, setQuestions] = useState<Question[]>(
     transformQuestions(initialData?.questions),
@@ -69,13 +73,16 @@ export const QuizForm: React.FC<QuizFormProps> = ({
   }, [initialData, methods]);
   // const { mutate: updateQuestion } = useUpdateQuestion(quizId);
   const handleSaveQuestion = (newQuestion: Question) => {
+    console.log("save", newQuestion);
     setQuestions([...questions, newQuestion]);
 
     if (autoSubmitQuestion) {
-      const updatedQuestions = [...questions, newQuestion];
-      methods.handleSubmit((data) => {
-        onSubmit({ ...data, questions: updatedQuestions });
-      })();
+      // console.log("here", newQuestion);
+      // createQuestion({quizId: initialData?.id, data: newQuestion});
+      // const updatedQuestions = [...questions, newQuestion];
+      // methods.handleSubmit((data) => {
+      //   onSubmit({ ...data, questions: updatedQuestions });
+      // })();
     }
   };
 
