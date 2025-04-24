@@ -9,10 +9,7 @@ import { Question } from "@models/Request/NewQuestionRequest.ts";
 import QuestionList from "@components/quiz/QuizCreation/QuestionList";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { QuestionResponse } from "@models/Response/questionResponse";
-import { useDeleteQuestion } from "@hooks/useDeleteQuestion";
-import { useParams } from "react-router-dom";
-// import { useUpdateQuestion } from "@hooks/useUpdateQuestion";
-// import { useCreateQuestion } from "@hooks/useCreateQuestion";
+// import { useDeleteQuestion } from "@hooks/useDeleteQuestion";
 
 interface QuizFormProps {
   onSubmit: (data: NewQuizRequest) => void;
@@ -30,7 +27,6 @@ export const QuizForm: React.FC<QuizFormProps> = ({
   initialData,
 }) => {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
 
   const transformQuestions = (
     questionResponses?: QuestionResponse[],
@@ -47,8 +43,6 @@ export const QuizForm: React.FC<QuizFormProps> = ({
       })),
     }));
   };
-  // const { mutate: updateQuestion } = useUpdateQuestion();
-  // const { mutate: createQuestion } = useCreateQuestion()
 
   const [questions, setQuestions] = useState<Question[]>(
     transformQuestions(initialData?.questions),
@@ -71,18 +65,15 @@ export const QuizForm: React.FC<QuizFormProps> = ({
       setQuestions(transformQuestions(initialData.questions));
     }
   }, [initialData, methods]);
-  // const { mutate: updateQuestion } = useUpdateQuestion(quizId);
+
   const handleSaveQuestion = (newQuestion: Question) => {
-    console.log("save", newQuestion);
     setQuestions([...questions, newQuestion]);
 
     if (autoSubmitQuestion) {
-      // console.log("here", newQuestion);
-      // createQuestion({quizId: initialData?.id, data: newQuestion});
-      // const updatedQuestions = [...questions, newQuestion];
-      // methods.handleSubmit((data) => {
-      //   onSubmit({ ...data, questions: updatedQuestions });
-      // })();
+      const updatedQuestions = [...questions, newQuestion];
+      methods.handleSubmit((data) => {
+        onSubmit({ ...data, questions: updatedQuestions });
+      })();
     }
   };
 
@@ -94,13 +85,13 @@ export const QuizForm: React.FC<QuizFormProps> = ({
     });
   };
 
-  const deleteQuestionMutation = useDeleteQuestion(id!);
+  // const deleteQuestionMutation = useDeleteQuestion();
 
   const handleDeleteQuestion = (index: number) => {
     const questionToDelete = questions[index];
 
     if (autoDeleteQuestion && questionToDelete.id) {
-      deleteQuestionMutation.mutate(questionToDelete.id);
+      // deleteQuestionMutation.mutate(questionToDelete.id);
     }
 
     setQuestions((prevQuestions) =>
