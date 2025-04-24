@@ -101,7 +101,7 @@ const Navbar: React.FC = () => {
                 </Drawer>
               </>
             ) : (
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 {navItems.map((item) => (
                   <Button
                     variant="contained"
