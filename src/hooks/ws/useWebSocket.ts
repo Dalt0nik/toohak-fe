@@ -12,10 +12,6 @@ const WS_CONFIG = {
   reconnectDelay: import.meta.env.VITE_WS_CONFIG_RECONNECTION_DELAY,
 };
 
-/**
- * Instead of using this directly, use `WebSocketContext` which implements `useWebSocket`. This hook immediately establishes a connection based on predefined .ENV vars.
- * @param {WebSocketConfig} config - mainly is used to set `authorizationHeader` value. It is used when establishing a connection for authorization.
- */
 export const useWebSocket = () => {
   const stompClientRef = useRef<Client | null>(null);
   const subscriptionsRef = useRef<Map<string, StompSubscription>>(new Map());
