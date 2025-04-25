@@ -1,5 +1,4 @@
 import React from "react";
-import { QuizForm } from "@components/quiz/QuizCreation/QuizForm";
 import { Button, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useQuiz } from "@hooks/useQuiz";
@@ -7,6 +6,7 @@ import Loader from "@components/Loader";
 import { useUpdateQuiz } from "@hooks/useUpdateQuiz";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
 import { useDeleteQuiz } from "@hooks/useDeleteQuiz";
+import EditQuizForm from "./EditQuizForm";
 
 const EditQuizPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,15 +24,9 @@ const EditQuizPage: React.FC = () => {
 
   const handleDelete = (id: string) => {
     // if (!id) return;
+    console.log(quiz);
     deleteQuiz(id);
   };
-
-  // export const QuizForm: React.FC<QuizFormProps> = ({
-  //   onSubmit,
-  //   isSubmitting,
-  //   autoSubmitQuestion = false,
-  //   autoDeleteQuestion = false,
-  //   initialData,
 
   return (
     <>
@@ -46,13 +40,7 @@ const EditQuizPage: React.FC = () => {
           delete
         </Button>
       </Typography>
-      <QuizForm
-        onSubmit={handleEditQuiz}
-        isSubmitting={false}
-        autoSubmitQuestion={true}
-        autoDeleteQuestion={true}
-        initialData={quiz}
-      />
+      <EditQuizForm initialData={quiz!} onSubmit={handleEditQuiz} />
     </>
   );
 };

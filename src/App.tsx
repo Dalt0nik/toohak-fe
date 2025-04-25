@@ -10,7 +10,7 @@ import { WebSocketProvider } from "@contexts/WebSocketContext";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import { PublicAppRoutes } from "@models/PublicRoutes";
 import QuizPage from "@pages/QuizPage/QuizPage";
-import EditQuizPage from "@pages/EditQuizPage";
+import EditQuizPage from "@pages/EditQuizPage/EditQuizPage";
 
 function App() {
   return (
