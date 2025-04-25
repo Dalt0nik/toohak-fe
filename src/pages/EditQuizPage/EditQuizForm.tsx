@@ -7,7 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Question } from "@models/Request/NewQuestionRequest.ts";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { QuestionResponse } from "@models/Response/questionResponse";
-// import QuestionsList from "./QuestionsList";
+import QuestionsList from "./QuestionsList";
 import QuestionModal from "./QuestionModal";
 
 type QuizFormProps = {
@@ -38,9 +38,8 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
 
   const [questions, setQuestions] = useState<Question[]>(
     transformQuestions(initialData?.questions),
-    //change
   );
-  console.log(questions);
+
   const methods = useForm<NewQuizRequest>({
     defaultValues: {
       title: initialData?.title || "",
@@ -94,7 +93,6 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
             </Grid>
             <Grid size={{ xs: 12, md: 8 }}>
               <Box sx={{ textAlign: "left", mb: 2 }}>
-                {/* <AddQuestionDialog onSave={handleSaveQuestion} /> */}
                 <Button onClick={handleOpenModal}>+ ADD NEW QUESTION</Button>
                 <QuestionModal
                   onSave={alert}
@@ -102,12 +100,8 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
                   onClose={() => setOpen(false)}
                 />
               </Box>
-              {/* change */}
 
-              {/* <QuestionsList
-              questions={initialData.questions}
-              onEditQuestion={alert}
-            /> */}
+              <QuestionsList questions={questions} />
             </Grid>
             <Grid justifyContent="center" mt={3} sx={{ width: "100%" }}>
               <Button

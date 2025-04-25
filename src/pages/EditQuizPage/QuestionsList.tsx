@@ -1,7 +1,7 @@
 import { Question } from "@models/Request/NewQuestionRequest";
 import { Box, List, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import SingleQuestion from "./SinlegleQuestion";
+import SingleQuestion from "./SingleQuestion";
 
 interface QuestionsListProps {
   questions: Question[];
