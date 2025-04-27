@@ -1,1 +1,1 @@
-npx lint-staged -v
+npx lint-staged -v && npm run typecheck

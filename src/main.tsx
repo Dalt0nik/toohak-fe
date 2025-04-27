@@ -12,6 +12,8 @@ import theme from "@assets/styles/theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { AuthProvider } from "@contexts/AuthProvider.tsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +26,7 @@ createRoot(document.getElementById("root")!).render(
         authorizationParams={{
           redirect_uri: window.location.origin,
           audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-          scope: "openid offline_access",
+          scope: "openid offline_access profile email",
         }}
         useRefreshTokens
         cacheLocation="localstorage"
@@ -37,6 +39,7 @@ createRoot(document.getElementById("root")!).render(
                   <CssBaseline />
                   <ErrorBoundary>
                     <App />
+                    <ToastContainer />
                   </ErrorBoundary>
                 </ThemeProvider>
               </React.Suspense>

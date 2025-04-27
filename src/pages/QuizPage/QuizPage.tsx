@@ -5,6 +5,9 @@ import { useTranslation } from "react-i18next";
 import Loader from "@components/Loader";
 import ImageCard from "@components/common/ui/ImageCard";
 import OptionsList from "./OptionsList";
+import QuizPageSettings from "./QuizPageSettings";
+import { showToast } from "@ui/Toast.tsx";
+import PageNotFound from "@pages/PageNotFound.tsx";
 import { useQuiz } from "@hooks/useQuiz";
 import { PrivateAppRoutes } from "@models/PrivateRoutes";
 
@@ -12,6 +15,7 @@ const QuizPage = () => {
   const theme = useTheme();
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const { handleError } = showToast();
   const navigate = useNavigate();
   const { data: quiz, isLoading, error } = useQuiz(id);
 
@@ -21,7 +25,10 @@ const QuizPage = () => {
   };
 
   if (isLoading) return <Loader />;
-  if (error instanceof Error) return <p>{error.message}</p>;
+  if (error instanceof Error) {
+    handleError(error, t("Error.Quiz.couldNotFind"));
+    return <PageNotFound />;
+  }
 
   return (
     <Stack spacing={2}>
@@ -76,17 +83,7 @@ const QuizPage = () => {
             <OptionsList questions={quiz!.questions} />
           </Stack>
         </Grid>
-        <Grid size={{ xs: 12, sm: 4 }}>
-          <Stack sx={{ textAlign: "left" }} spacing={2}>
-            <Typography variant="h3" gutterBottom>
-              {t("QuizPage.gameSettings")}
-            </Typography>
-            <Typography variant="h4">{t("QuizPage.form")}</Typography>
-            <Button variant="contained" color="success" fullWidth>
-              {t("QuizPage.startButton")}
-            </Button>
-          </Stack>
-        </Grid>
+        <QuizPageSettings quizId={quiz?.id} />
       </Grid>
     </Stack>
   );
