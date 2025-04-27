@@ -69,7 +69,7 @@ const useHostWebSocket = ({
     );
   };
 
-  const initializePlayerWebSocketClient = async (sessionId: string) => {
+  const initializeHostWebSocketClient = async (sessionId: string) => {
     return initializeWebSocketClient(
       `Bearer ${await getAccessTokenSilently()}`,
       () => {
@@ -80,7 +80,7 @@ const useHostWebSocket = ({
   };
 
   return {
-    initializePlayerWebSocketClient,
+    initializeHostWebSocketClient,
     isConnected,
     messages,
     deactivateConnection,

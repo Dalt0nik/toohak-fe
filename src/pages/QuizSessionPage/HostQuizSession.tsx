@@ -11,7 +11,7 @@ interface HostQuizSessionProps {
  */
 const HostQuizSession = ({ sessionId }: HostQuizSessionProps) => {
   const {
-    initializePlayerWebSocketClient,
+    initializeHostWebSocketClient,
     messages,
     isConnected,
     deactivateConnection,
@@ -22,7 +22,7 @@ const HostQuizSession = ({ sessionId }: HostQuizSessionProps) => {
   });
 
   useEffect(() => {
-    initializePlayerWebSocketClient(sessionId);
+    initializeHostWebSocketClient(sessionId);
   }, []);
 
   return (
@@ -41,7 +41,7 @@ const HostQuizSession = ({ sessionId }: HostQuizSessionProps) => {
         {isConnected ? (
           <button onClick={deactivateConnection}>Disconnect</button>
         ) : (
-          <button onClick={() => initializePlayerWebSocketClient(sessionId)}>
+          <button onClick={() => initializeHostWebSocketClient(sessionId)}>
             Reconnect
           </button>
         )}

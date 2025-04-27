@@ -24,7 +24,7 @@ const usePlayerWebSocket = ({
 
   const subscribeToPlayerTopics = (playerJwt: PlayerJwtInfo) => {
     subscribeToTopic<PlayerWebSocketEventResponse>(
-      `/topic/session/${playerJwt?.quizSessionId}/players`,
+      `/topic/session/${playerJwt.quizSessionId}/players`,
       (eventResponse) => {
         switch (eventResponse.event) {
           default:
@@ -36,7 +36,7 @@ const usePlayerWebSocket = ({
     );
 
     subscribeToTopic<AllWebSocketEventResponse>(
-      `/topic/session/${playerJwt?.quizSessionId}/all`,
+      `/topic/session/${playerJwt.quizSessionId}/all`,
       (eventResponse) => {
         switch (eventResponse.event) {
           case "host_disconnected":
