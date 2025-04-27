@@ -23,6 +23,7 @@ export const createNewQuiz = async (
 export const fetchQuizById = async (id: string): Promise<QuizResponse> => {
   try {
     const { data } = await api.get(`/quizzes/${id}`);
+    console.log("fetch quiz data by id", data);
     return data;
   } catch (error) {
     const axiosError = error as AxiosError;

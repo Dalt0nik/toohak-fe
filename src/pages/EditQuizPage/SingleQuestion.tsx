@@ -8,6 +8,7 @@ import QuestionModal from "./QuestionModal";
 import { useUpdateQuestion } from "@hooks/useUpdateQuestion";
 import { useParams } from "react-router-dom";
 import { useDeleteQuestion } from "@hooks/useDeleteQuestion";
+import ConfirmationDialog from "@components/ConfirmationDialog";
 
 type SingleQuestionProps = {
   question: Question;
@@ -16,10 +17,10 @@ type SingleQuestionProps = {
 
 const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
   const [open, setOpen] = useState(false);
+  const { id } = useParams<{ id: string }>(); //quiz id
   const { mutate: updateQuestion } = useUpdateQuestion();
-  const { mutate: deleteQuestion } = useDeleteQuestion(question.quizId!);
-  const { id } = useParams<{ id: string }>();
-  // console.log("data in sinle question", question);
+  const { mutate: deleteQuestion } = useDeleteQuestion(id!);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   const handleUpdateQuestion = (question: Question) => {
     console.log(question, "data to");
@@ -32,6 +33,7 @@ const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
 
   const handleDeleteQuestion = (question: Question) => {
     deleteQuestion(question.id!);
+    setOpenConfirmation(false);
   };
 
   return (
@@ -58,7 +60,7 @@ const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
             sx={{ fontSize: 24, cursor: "pointer", color: "black" }}
           />
           <DeleteForeverIcon
-            onClick={() => handleDeleteQuestion(question)}
+            onClick={() => setOpenConfirmation(true)}
             sx={{ fontSize: 24, cursor: "pointer", ml: 1, color: "red" }}
           />
         </Box>
@@ -68,6 +70,12 @@ const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
         initialData={question}
         open={open}
         onClose={() => setOpen(false)}
+      />
+      <ConfirmationDialog
+        open={openConfirmation}
+        onClose={() => setOpenConfirmation(false)}
+        onConfirm={() => handleDeleteQuestion(question)}
+        message="Are you sure you want to delete this question?"
       />
     </>
   );

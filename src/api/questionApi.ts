@@ -43,6 +43,5 @@ export const updateQuestionById = async ({
   data: Question;
 }): Promise<QuestionResponse> => {
   const response = await api.put(`/quizzes/${quizId}/questions/${id}`, data);
-  console.log(response.data, "update question API");
   return response.data;
 };
