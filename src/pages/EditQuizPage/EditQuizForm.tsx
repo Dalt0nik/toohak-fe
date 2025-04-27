@@ -29,6 +29,7 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
       id: q.id,
       title: q.title,
       questionOptions: q.questionOptions.map((opt) => ({
+        id: opt.id,
         title: opt.title,
         isCorrect: opt.isCorrect,
         ordering: opt.ordering,

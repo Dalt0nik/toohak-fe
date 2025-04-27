@@ -7,6 +7,7 @@ import { useState } from "react";
 import QuestionModal from "./QuestionModal";
 import { useUpdateQuestion } from "@hooks/useUpdateQuestion";
 import { useParams } from "react-router-dom";
+import { useDeleteQuestion } from "@hooks/useDeleteQuestion";
 
 type SingleQuestionProps = {
   question: Question;
@@ -16,8 +17,9 @@ type SingleQuestionProps = {
 const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
   const [open, setOpen] = useState(false);
   const { mutate: updateQuestion } = useUpdateQuestion();
+  const { mutate: deleteQuestion } = useDeleteQuestion(question.quizId!);
   const { id } = useParams<{ id: string }>();
-  console.log("data in sinle question", question);
+  // console.log("data in sinle question", question);
 
   const handleUpdateQuestion = (question: Question) => {
     console.log(question, "data to");
@@ -26,6 +28,10 @@ const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
       id: question.id!,
       data: question,
     });
+  };
+
+  const handleDeleteQuestion = (question: Question) => {
+    deleteQuestion(question.id!);
   };
 
   return (
@@ -52,7 +58,7 @@ const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
             sx={{ fontSize: 24, cursor: "pointer", color: "black" }}
           />
           <DeleteForeverIcon
-            onClick={alert}
+            onClick={() => handleDeleteQuestion(question)}
             sx={{ fontSize: 24, cursor: "pointer", ml: 1, color: "red" }}
           />
         </Box>
