@@ -63,6 +63,7 @@ const QuestionModal = ({
       isCorrect: option.isCorrect,
     }));
     const questionData: Question = {
+      id: initialData?.id,
       title: questionTitle,
       options: options,
     };
@@ -71,7 +72,7 @@ const QuestionModal = ({
     onClose();
   };
 
-  // Resets form state when modal closes
+  // Resets modal state on close
   useEffect(() => {
     if (!open) return;
     const title = initialData?.title ?? "";

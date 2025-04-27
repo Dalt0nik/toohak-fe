@@ -24,7 +24,6 @@ const EditQuizPage: React.FC = () => {
 
   const handleDelete = (id: string) => {
     // if (!id) return;
-    console.log(quiz);
     deleteQuiz(id);
   };
 

@@ -6,6 +6,7 @@ import { Question } from "@models/Request/NewQuestionRequest";
 import { useState } from "react";
 import QuestionModal from "./QuestionModal";
 import { useUpdateQuestion } from "@hooks/useUpdateQuestion";
+import { useParams } from "react-router-dom";
 
 type SingleQuestionProps = {
   question: Question;
@@ -14,12 +15,14 @@ type SingleQuestionProps = {
 
 const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
   const [open, setOpen] = useState(false);
-  const { mutate: updatedQuestion } = useUpdateQuestion();
+  const { mutate: updateQuestion } = useUpdateQuestion();
+  const { id } = useParams<{ id: string }>();
+  console.log("data in sinle question", question);
 
   const handleUpdateQuestion = (question: Question) => {
     console.log(question, "data to");
-    updatedQuestion({
-      quizId: question.quizId!,
+    updateQuestion({
+      quizId: id!,
       id: question.id!,
       data: question,
     });
