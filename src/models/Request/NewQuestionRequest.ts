@@ -9,5 +9,5 @@ export interface Question {
   id?: string;
   quizId?: string;
   title: string;
-  options: QuestionOption[];
+  questionOptions: QuestionOption[];
 }

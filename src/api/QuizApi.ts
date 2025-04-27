@@ -11,6 +11,7 @@ export const createNewQuiz = async (
 ): Promise<NewQuizResponse> => {
   try {
     const response = await api.post("/quizzes", data);
+    console.log("quiz create data: ", data);
     return { id: response.data.id };
   } catch (error) {
     const axiosError = error as AxiosError;

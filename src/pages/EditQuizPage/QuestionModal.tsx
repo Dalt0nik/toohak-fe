@@ -31,7 +31,7 @@ const QuestionModal = ({
 }: QuestionModalProps) => {
   const { t } = useTranslation();
   const [questionOptions, setQuestionOptions] = useState<QuestionOption[]>(
-    normalizeOptions(initialData?.options),
+    normalizeOptions(initialData?.questionOptions),
   );
   const [questionTitle, setQuestionTitle] = useState<string>(
     initialData?.title ?? "",
@@ -65,7 +65,7 @@ const QuestionModal = ({
     const questionData: Question = {
       id: initialData?.id,
       title: questionTitle,
-      options: options,
+      questionOptions: options,
     };
     console.log("question data", questionData);
     onSave(questionData);
@@ -76,8 +76,8 @@ const QuestionModal = ({
   useEffect(() => {
     if (!open) return;
     const title = initialData?.title ?? "";
-    const options = initialData?.options
-      ? normalizeOptions(initialData.options)
+    const options = initialData?.questionOptions
+      ? normalizeOptions(initialData.questionOptions)
       : getDefaultOptions();
     setQuestionTitle(title);
     setQuestionOptions(options);
