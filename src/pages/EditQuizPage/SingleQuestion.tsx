@@ -9,6 +9,7 @@ import { useUpdateQuestion } from "@hooks/useUpdateQuestion";
 import { useParams } from "react-router-dom";
 import { useDeleteQuestion } from "@hooks/useDeleteQuestion";
 import ConfirmationDialog from "@components/ConfirmationDialog";
+import { useTranslation } from "react-i18next";
 
 type SingleQuestionProps = {
   question: Question;
@@ -16,15 +17,16 @@ type SingleQuestionProps = {
 };
 
 const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const { id } = useParams<{ id: string }>(); //quiz id
+  const { id: quizId } = useParams<{ id: string }>();
   const { mutate: updateQuestion } = useUpdateQuestion();
-  const { mutate: deleteQuestion } = useDeleteQuestion(id!);
+  const { mutate: deleteQuestion } = useDeleteQuestion(quizId!);
   const [openConfirmation, setOpenConfirmation] = useState(false);
 
   const handleUpdateQuestion = (question: Question) => {
     updateQuestion({
-      quizId: id!,
+      quizId: quizId!,
       id: question.id!,
       data: question,
     });
@@ -74,7 +76,7 @@ const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
         open={openConfirmation}
         onClose={() => setOpenConfirmation(false)}
         onConfirm={() => handleDeleteQuestion(question)}
-        message="Are you sure you want to delete this question?"
+        message={t("ConfirmationDialog.messageDeleteQuestion")}
       />
     </>
   );

@@ -19,7 +19,7 @@ type QuizFormProps = {
 const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const { id } = useParams<{ id: string }>(); //quiz id
+  const { id: quizId } = useParams<{ id: string }>();
   const { mutate: createQuestion } = useCreateQuestion();
   const methods = useForm<NewQuizRequest>({
     defaultValues: {
@@ -34,9 +34,9 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
   };
 
   const handleAddQuestion = (question: Question) => {
-    question.quizId = id!;
+    question.quizId = quizId!;
     createQuestion({
-      quizId: id!,
+      quizId: quizId!,
       data: question,
     });
   };
@@ -65,7 +65,9 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
             </Grid>
             <Grid size={{ xs: 12, md: 8 }}>
               <Box sx={{ textAlign: "left", mb: 2 }}>
-                <Button onClick={handleOpenModal}>+ ADD NEW QUESTION</Button>
+                <Button onClick={handleOpenModal}>
+                  {t("quiz_form_add_question")}
+                </Button>
                 <QuestionModal
                   onSave={handleAddQuestion}
                   open={open}
@@ -86,7 +88,7 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
                   minWidth: "200px",
                 }}
               >
-                submit
+                {t("quiz_form_button_save")}
               </Button>
             </Grid>
           </Grid>

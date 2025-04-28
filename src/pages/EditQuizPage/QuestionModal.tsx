@@ -111,9 +111,10 @@ const QuestionModal = ({
         >
           <TextField
             margin="dense"
-            label="question"
+            label={t("QuestionModal.question")}
             variant="outlined"
             fullWidth
+            required
             sx={{ mb: 2 }}
             value={questionTitle}
             onChange={(e) => handleQuestionChange(e.target.value)}
@@ -133,10 +134,13 @@ const QuestionModal = ({
                   />
                   <TextField
                     fullWidth
-                    label={"Option " + option.ordering + " *"}
+                    label={t("QuestionModal.questionOption", {
+                      number: option.ordering,
+                    })}
                     variant="outlined"
                     size="small"
                     value={option.title}
+                    required
                     onChange={(e) =>
                       handleAnswerChange(option.ordering, e.target.value)
                     }
@@ -146,10 +150,10 @@ const QuestionModal = ({
             </RadioGroup>
             <Box display="flex" justifyContent="flex-end" gap={1} mt={2}>
               <Button onClick={onClose} variant="contained">
-                {t("question_dialog_cancel")}
+                {t("QuestionModal.cancel")}
               </Button>
               <Button onClick={handleModalSubmit} variant="contained">
-                {t("question_dialog_save")}
+                {t("QuestionModal.save")}
               </Button>
             </Box>
           </FormControl>

@@ -108,5 +108,18 @@
     "User": {
       "registered": "User registered successfully"
     }
+  },
+  "ConfirmationDialog": {
+    "defaultMessage": "Are you sure?",
+    "defaultConfirm": "Yes",
+    "defaultDecline": "No",
+    "messageDeleteQuestion": "Are you sure you want to delete this question?",
+    "messageDeleteQuiz": "Are you sure you want to delete this quiz?"
+  },
+  "QuestionModal": {
+  "question": "Question",
+  "questionOption": "Option {{number}}",
+  "cancel": "Cancel",
+  "save": "Save"
   }
 }

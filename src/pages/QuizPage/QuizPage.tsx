@@ -64,14 +64,8 @@ const QuizPage = () => {
             >
               <ImageCard alt="Quiz cover" id={quiz!.imageId} />
             </Box>
-            <Typography variant="h4" sx={{ textAlign: "left" }}>
-              {t("QuizPage.descriptionTitle")}
-            </Typography>
             <Typography variant="h5" sx={{ textAlign: "left" }}>
               {quiz?.description}
-            </Typography>
-            <Typography variant="h4" sx={{ textAlign: "left" }}>
-              {t("QuizPage.questionsTitle")}
             </Typography>
             <Typography
               component="span"

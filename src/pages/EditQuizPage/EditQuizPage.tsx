@@ -8,6 +8,7 @@ import { NewQuizRequest } from "@models/Request/NewQuizRequest";
 import { useDeleteQuiz } from "@hooks/useDeleteQuiz";
 import EditQuizForm from "./EditQuizForm";
 import ConfirmationDialog from "@components/ConfirmationDialog";
+import { useTranslation } from "react-i18next";
 
 const EditQuizPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +16,7 @@ const EditQuizPage: React.FC = () => {
   const { mutate: updateQuiz } = useUpdateQuiz();
   const { mutate: deleteQuiz } = useDeleteQuiz();
   const [openConfirmation, setOpenConfirmation] = useState(false);
+  const { t } = useTranslation();
 
   if (isLoading) return <Loader />;
   if (error instanceof Error) return <p>{error.message}</p>;
@@ -49,7 +51,7 @@ const EditQuizPage: React.FC = () => {
         open={openConfirmation}
         onClose={() => setOpenConfirmation(false)}
         onConfirm={() => handleDeleteQuiz(id!)}
-        message="Are you sure you want to delete this quiz?"
+        message={t("ConfirmationDialog.messageDeleteQuiz")}
       />
     </>
   );
