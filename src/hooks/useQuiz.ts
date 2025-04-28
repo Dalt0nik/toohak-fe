@@ -6,6 +6,7 @@ export const useQuiz = (id: string | undefined) => {
   return useQuery<QuizResponse>({
     queryKey: ["quiz", id],
     queryFn: () => fetchQuizById(id!),
-    enabled: !!id,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 };

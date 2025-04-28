@@ -86,7 +86,12 @@ export const updateQuiz = async ({
   id: string;
   data: NewQuizRequest;
 }): Promise<QuizResponse> => {
-  const response = await api.put(`/quizzes/${id}`, data);
-  console.log(response.data, "response data from update");
-  return response.data;
+  try {
+    const response = await api.put(`/quizzes/${id}`, data);
+    return response.data;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const errorMessage = axiosError.message || "Failed to update quiz";
+    throw new Error(errorMessage);
+  }
 };
