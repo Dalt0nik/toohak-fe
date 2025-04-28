@@ -2,18 +2,6 @@ import { Question } from "@models/Request/NewQuestionRequest";
 import { api } from "./Api";
 import { QuestionResponse } from "@models/Response/questionResponse";
 
-// export const deleteQuestionById = async (questionId: string): Promise<void> => {
-//   try {
-//     // Endpoint doesn't exist yet
-//     console.log(
-//       `MOCK API: DELETE call to URL: ${api.defaults.baseURL}/questions/${questionId}`,
-//     );
-
-//     return Promise.resolve();
-//   } catch (error) {
-//     console.error("Error deleting question:", error);
-//   }
-// };
 export const deleteQuestionById = async (
   quizId: string,
   id: string,
@@ -29,7 +17,6 @@ export const createQuestion = async ({
   data: Question;
 }): Promise<QuestionResponse> => {
   const response = await api.post(`/quizzes/${quizId}/questions`, data);
-  console.log("create question api");
   return response.data;
 };
 

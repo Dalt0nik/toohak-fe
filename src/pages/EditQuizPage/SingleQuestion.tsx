@@ -23,7 +23,6 @@ const SingleQuestion = ({ question, position }: SingleQuestionProps) => {
   const [openConfirmation, setOpenConfirmation] = useState(false);
 
   const handleUpdateQuestion = (question: Question) => {
-    console.log(question, "data to");
     updateQuestion({
       quizId: id!,
       id: question.id!,
