@@ -9,7 +9,6 @@ import { Question } from "@models/Request/NewQuestionRequest.ts";
 import QuestionList from "@components/quiz/QuizCreation/QuestionList";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { QuestionResponse } from "@models/Response/questionResponse";
-// import { useDeleteQuestion } from "@hooks/useDeleteQuestion";
 
 interface QuizFormProps {
   onSubmit: (data: NewQuizRequest) => void;
@@ -85,13 +84,11 @@ export const QuizForm: React.FC<QuizFormProps> = ({
     });
   };
 
-  // const deleteQuestionMutation = useDeleteQuestion();
-
   const handleDeleteQuestion = (index: number) => {
     const questionToDelete = questions[index];
 
     if (autoDeleteQuestion && questionToDelete.id) {
-      // deleteQuestionMutation.mutate(questionToDelete.id);
+      //
     }
 
     setQuestions((prevQuestions) =>
