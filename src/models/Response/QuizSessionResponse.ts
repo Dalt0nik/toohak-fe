@@ -4,4 +4,5 @@ export interface QuizSessionResponse {
   createdAt: Date;
   quizSessionId: string;
   createdBy: string;
+  quizId: string;
 }

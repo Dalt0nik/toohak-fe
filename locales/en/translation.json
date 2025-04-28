@@ -58,14 +58,19 @@
     "ValidatorJoinCodeLength": "Join code must be exactly 5 characters",
     "EnterJoinCode": "Enter Join Code",
     "Join": "Join",
-    "Start": "Start",
-    "ScanQRCode": "Scan this QR to join the session",
     "noQuestions": "There is no questions in this quiz",
     "noAnswers": "There is no answers for this question",
     "correctAnswerTooltip": "Correct answer",
     "incorrectAnswerTooltip": "Incorrect answer",
     "descriptionTitle": "Description",
-    "questionsTitle": "Questions"
+    "questionsTitle": "Questions",
+    "Host": {
+      "Start": "Start",
+      "ScanQRCode": "Scan this QR to join the session",
+      "JoinCodeTitle": "Join code",
+      "PlayerCount_one": "{{count}} player",
+      "PlayerCount_other": "{{count}} players"
+    }
   },
   "Error": {
     "Quiz": {
