@@ -82,16 +82,17 @@ const QuestionModal = ({
   };
 
   useEffect(() => {
-    if (!open) return;
-    const resetModalState = () => {
-      const title = initialData?.title ?? "";
-      const options = initialData?.questionOptions
-        ? normalizeOptions(initialData.questionOptions)
-        : getDefaultOptions();
-      setQuestionTitle(title);
-      setQuestionOptions(options);
-    };
-    resetModalState();
+    if (open) {
+      const resetModalState = () => {
+        const title = initialData?.title ?? "";
+        const options = initialData?.questionOptions
+          ? normalizeOptions(initialData.questionOptions)
+          : getDefaultOptions();
+        setQuestionTitle(title);
+        setQuestionOptions(options);
+      };
+      resetModalState();
+    }
   }, [open, initialData]);
 
   return (
