@@ -67,7 +67,14 @@ const QuestionModal = ({
       title: questionTitle,
       questionOptions: options,
     };
-    console.log("question data", questionData);
+
+    const hasEmptyOption = questionOptions.some(
+      (option) => option.title.trim() === "",
+    );
+    if (hasEmptyOption || questionData.title === "") {
+      alert("Please fill in all fields!");
+      return;
+    }
     onSave(questionData);
     onClose();
   };

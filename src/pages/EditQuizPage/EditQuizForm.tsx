@@ -9,6 +9,8 @@ import { QuizResponse } from "@models/Response/quizResponse";
 import { QuestionResponse } from "@models/Response/questionResponse";
 import QuestionsList from "./QuestionsList";
 import QuestionModal from "./QuestionModal";
+import { useCreateQuestion } from "@hooks/useCreateQuestion";
+import { useParams } from "react-router-dom";
 
 type QuizFormProps = {
   initialData: QuizResponse;
@@ -19,6 +21,8 @@ type QuizFormProps = {
 const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const { id } = useParams<{ id: string }>(); //quiz id
+  const { mutate: createQuestion } = useCreateQuestion();
 
   const transformQuestions = (
     questionResponses?: QuestionResponse[],
@@ -63,6 +67,15 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
     setOpen(true);
   };
 
+  const handleAddQuestion = (question: Question) => {
+    console.log(question, "data to");
+    question.quizId = id!;
+    createQuestion({
+      quizId: id!,
+      data: question,
+    });
+  };
+
   //fake onsubmit to cimmit changes
 
   return (
@@ -96,7 +109,7 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
               <Box sx={{ textAlign: "left", mb: 2 }}>
                 <Button onClick={handleOpenModal}>+ ADD NEW QUESTION</Button>
                 <QuestionModal
-                  onSave={alert}
+                  onSave={handleAddQuestion}
                   open={open}
                   onClose={() => setOpen(false)}
                 />

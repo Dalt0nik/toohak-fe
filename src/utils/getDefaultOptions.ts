@@ -4,6 +4,6 @@ export const getDefaultOptions = (): QuestionOption[] => {
   return Array.from({ length: 4 }, (_, index) => ({
     ordering: index + 1,
     title: "",
-    isCorrect: false,
+    isCorrect: index === 0,
   }));
 };
