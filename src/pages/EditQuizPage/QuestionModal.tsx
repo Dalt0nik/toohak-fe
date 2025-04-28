@@ -15,6 +15,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { normalizeOptions } from "@utils/normalizeOptions";
 import { getDefaultOptions } from "@utils/getDefaultOptions";
+import { showToast } from "@components/common/ui/Toast";
 
 type QuestionModalProps = {
   onSave: (question: Question) => void;
@@ -30,6 +31,7 @@ const QuestionModal = ({
   open,
 }: QuestionModalProps) => {
   const { t } = useTranslation();
+  const { showError } = showToast();
   const [questionOptions, setQuestionOptions] = useState<QuestionOption[]>(
     normalizeOptions(initialData?.questionOptions),
   );
@@ -72,7 +74,7 @@ const QuestionModal = ({
       (option) => option.title.trim() === "",
     );
     if (hasEmptyOption || questionData.title === "") {
-      alert("Please fill in all fields!");
+      showError(t("Error.Question.emptyFields"));
       return;
     }
     onSave(questionData);

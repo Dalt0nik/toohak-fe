@@ -78,7 +78,8 @@
       "couldNotFind": "Could not find question",
       "couldNotDelete": "Could not delete question",
       "couldNotUpdate": "Could not update question",
-      "couldNotCreate": "Could not create question"
+      "couldNotCreate": "Could not create question",
+      "emptyFields": "Please fill in all fields!"
     },
     "List": {
       "couldNotFind": "Could not find any quizzes"
