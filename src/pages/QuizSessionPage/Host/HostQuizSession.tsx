@@ -13,7 +13,7 @@ interface HostQuizSessionProps {
 }
 
 /**
- * Main component responsible for connecting host quiz session UI and websocket connection
+ * Main component responsible for creating websocket connection for a host to quiz session and handling session status(state) logic
  */
 const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   const { initializeHostWebSocketClient, isConnected } = useHostWebSocket({

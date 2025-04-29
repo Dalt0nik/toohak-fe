@@ -18,6 +18,11 @@ interface HostQuizSessionLobbyProps {
   onChangeSessionStatus: (newState: QuizSessionStatus) => void;
 }
 
+/**
+ * Host quiz session component that is rendered when quiz status is ACTIVE.
+ *
+ * During status ACTIVE, host can view the number of players joined and can start the session
+ */
 const HostQuizSessionLobby = ({
   playerCount,
   sessionData,
