@@ -11,6 +11,7 @@ import QuizSessionPage from "@pages/QuizSessionPage/QuizSessionPage";
 import JoinQuizSessionPage from "@pages/JoinQuizSessionPage";
 import JoinDirectlyPage from "@pages/JoinDirectlyPage";
 import QuizPage from "@pages/QuizPage/QuizPage";
+import EditQuizPage from "@pages/EditQuizPage/EditQuizPage";
 
 function App() {
   return (
@@ -40,6 +41,10 @@ function App() {
         <Route
           path={PrivateAppRoutes.QUIZ_SESSION_PAGE}
           element={<QuizSessionPage />}
+        />
+        <Route
+          path={PrivateAppRoutes.EDIT_QUIZ_PAGE}
+          element={<EditQuizPage />}
         />
       </Route>
     </Routes>

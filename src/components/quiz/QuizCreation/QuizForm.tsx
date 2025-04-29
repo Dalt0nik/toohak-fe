@@ -9,7 +9,6 @@ import { Question } from "@models/Request/NewQuestionRequest.ts";
 import QuestionList from "@components/quiz/QuizCreation/QuestionList";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { QuestionResponse } from "@models/Response/questionResponse";
-import { useDeleteQuestion } from "@hooks/useDeleteQuestion";
 
 interface QuizFormProps {
   onSubmit: (data: NewQuizRequest) => void;
@@ -36,7 +35,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({
     return questionResponses.map((q) => ({
       id: q.id,
       title: q.title,
-      options: q.questionOptions.map((opt) => ({
+      questionOptions: q.questionOptions.map((opt) => ({
         title: opt.title,
         isCorrect: opt.isCorrect,
         ordering: opt.ordering,
@@ -85,13 +84,11 @@ export const QuizForm: React.FC<QuizFormProps> = ({
     });
   };
 
-  const deleteQuestionMutation = useDeleteQuestion();
-
   const handleDeleteQuestion = (index: number) => {
     const questionToDelete = questions[index];
 
     if (autoDeleteQuestion && questionToDelete.id) {
-      deleteQuestionMutation.mutate(questionToDelete.id);
+      //
     }
 
     setQuestions((prevQuestions) =>
