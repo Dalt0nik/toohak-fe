@@ -4,4 +4,5 @@ export enum PublicAppRoutes {
   PAGE_NOT_FOUND = "/*",
   JOIN_SESSION = "/join",
   JOIN_SESSION_DIRECTLY = "/join/:joinId",
+  TEST = "/test",
 }

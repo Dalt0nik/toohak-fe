@@ -11,6 +11,7 @@ import QuizSessionPage from "@pages/QuizSessionPage/QuizSessionPage";
 import JoinQuizSessionPage from "@pages/JoinQuizSessionPage";
 import JoinDirectlyPage from "@pages/JoinDirectlyPage";
 import QuizPage from "@pages/QuizPage/QuizPage";
+import PlayerQuestionPage from "@pages/QuizSessionPage/PlayerQuestionPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           path={PublicAppRoutes.JOIN_SESSION}
           element={<JoinQuizSessionPage />}
         />
+        <Route path={PublicAppRoutes.TEST} element={<PlayerQuestionPage />} />
         <Route
           path={PublicAppRoutes.JOIN_SESSION_DIRECTLY}
           element={<JoinDirectlyPage />}
