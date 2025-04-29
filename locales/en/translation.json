@@ -66,6 +66,7 @@
     "questionsTitle": "Questions",
     "Host": {
       "Start": "Start",
+      "QuizTitle": "\"{{title}}\" quiz lobby",
       "ScanQRCode": "Scan this QR to join the session",
       "JoinCodeTitle": "Join code",
       "PlayerCount_one": "{{count}} player",

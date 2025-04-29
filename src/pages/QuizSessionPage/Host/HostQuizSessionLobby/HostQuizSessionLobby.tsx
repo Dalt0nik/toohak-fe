@@ -48,7 +48,7 @@ const HostQuizSessionLobby = ({
     <>
       <Stack spacing={2}>
         <Typography variant="h3" textAlign={"left"}>
-          {quizData.title}
+          {t(`${TRANSLATIONS_ROOT}.QuizTitle`, { title: quizData.title })}
         </Typography>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 4 }}>
