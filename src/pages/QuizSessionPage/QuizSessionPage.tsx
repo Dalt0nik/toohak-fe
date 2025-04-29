@@ -13,8 +13,8 @@ import { findQuizSession } from "@api/QuizSessionApi";
 import { PublicAppRoutes } from "@models/PublicRoutes";
 import { useAuth0 } from "@auth0/auth0-react";
 import PlayerQuizSession from "./PlayerQuizSession";
-import HostQuizSession from "./HostQuizSession";
 import { usePlayerJwt } from "@hooks/usePlayerJwt";
+import HostQuizSession from "./Host/HostQuizSession";
 
 const QuizSessionPage = () => {
   const { joinId } = useParams<{ joinId: string }>();

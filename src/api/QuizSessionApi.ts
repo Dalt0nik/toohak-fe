@@ -4,7 +4,6 @@ import { NewQuizSessionResponse } from "@models/Response/NewQuizSessionResponse"
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
 import { JoinQuizSessionRequest } from "@models/Request/JoinQuizSessionRequest";
 import { JoinQuizSessionResponse } from "@models/Response/JoinQuizSessionResponse";
-import { StartQuizSessionRequest } from "@models/Request/StartQuizSessionRequest";
 
 export async function createQuizSession(
   request: NewQuizSessionRequest,
@@ -36,9 +35,7 @@ export async function joinQuizSession(
   return response.data;
 }
 
-export async function startQuizSession(
-  request: StartQuizSessionRequest,
-): Promise<number> {
-  const response = await api.post("/sessions/start", request);
+export async function startQuizSession(sessionId: string): Promise<number> {
+  const response = await api.post(`/sessions/${sessionId}/start`);
   return response.status;
 }
