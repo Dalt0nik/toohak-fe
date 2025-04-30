@@ -19,9 +19,9 @@ interface HostQuizSessionLobbyProps {
 }
 
 /**
- * Host quiz session component that is rendered when quiz status is ACTIVE.
+ * Host quiz session component that is rendered when quiz status is PENDING.
  *
- * During status ACTIVE, host can view the number of players joined and can start the session
+ * During status PENDING, host can view the number of players joined and can start the session
  */
 const HostQuizSessionLobby = ({
   playerCount,
