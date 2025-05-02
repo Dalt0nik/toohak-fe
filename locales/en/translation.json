@@ -58,14 +58,20 @@
     "ValidatorJoinCodeLength": "Join code must be exactly 5 characters",
     "EnterJoinCode": "Enter Join Code",
     "Join": "Join",
-    "Start": "Start",
-    "ScanQRCode": "Scan this QR to join the session",
     "noQuestions": "There is no questions in this quiz",
     "noAnswers": "There is no answers for this question",
     "correctAnswerTooltip": "Correct answer",
     "incorrectAnswerTooltip": "Incorrect answer",
     "descriptionTitle": "Description",
     "questionsTitle": "Questions",
+    "Host": {
+      "Start": "Start",
+      "QuizTitle": "\"{{title}}\" quiz lobby",
+      "ScanQRCode": "Scan this QR to join the session",
+      "JoinCodeTitle": "Join code",
+      "PlayerCount_one": "{{count}} player",
+      "PlayerCount_other": "{{count}} players"
+    },
     "waitingForOthers": "WAITING FOR OTHERS",
     "answerSelected": "ANSWER SELECTED"
   },
@@ -80,7 +86,8 @@
       "couldNotFind": "Could not find question",
       "couldNotDelete": "Could not delete question",
       "couldNotUpdate": "Could not update question",
-      "couldNotCreate": "Could not create question"
+      "couldNotCreate": "Could not create question",
+      "emptyFields": "Please fill in all fields!"
     },
     "List": {
       "couldNotFind": "Could not find any quizzes"
@@ -109,5 +116,18 @@
     "User": {
       "registered": "User registered successfully"
     }
+  },
+  "ConfirmationDialog": {
+    "defaultMessage": "Are you sure?",
+    "defaultConfirm": "Yes",
+    "defaultDecline": "No",
+    "messageDeleteQuestion": "Are you sure you want to delete this question?",
+    "messageDeleteQuiz": "Are you sure you want to delete this quiz?"
+  },
+  "QuestionModal": {
+  "question": "Question",
+  "questionOption": "Option {{number}}",
+  "cancel": "Cancel",
+  "save": "Save"
   }
 }

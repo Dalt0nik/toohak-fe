@@ -1,32 +1,28 @@
 import { Box, Button, Grid, Stack, Typography, useTheme } from "@mui/material";
 import { CARD_BACKGROUND_PURPLE } from "../../assets/styles/constants";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import { fetchQuizById } from "@api/QuizApi";
+import { generatePath, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { QuizResponse } from "@models/Response/quizResponse";
 import Loader from "@components/Loader";
 import ImageCard from "@components/common/ui/ImageCard";
 import OptionsList from "./OptionsList";
 import QuizPageSettings from "./QuizPageSettings";
 import { showToast } from "@ui/Toast.tsx";
 import PageNotFound from "@pages/PageNotFound.tsx";
+import { useQuiz } from "@hooks/useQuiz";
+import { PrivateAppRoutes } from "@models/PrivateRoutes";
 
 const QuizPage = () => {
   const theme = useTheme();
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const { handleError } = showToast();
+  const navigate = useNavigate();
+  const { data: quiz, isLoading, error } = useQuiz(id);
 
-  const {
-    data: quiz,
-    isLoading,
-    error,
-  } = useQuery<QuizResponse>({
-    queryKey: ["quiz", id],
-    queryFn: () => fetchQuizById(id!),
-    enabled: !!id,
-  });
+  const handleEditButton = () => {
+    const path = generatePath(PrivateAppRoutes.EDIT_QUIZ_PAGE, { id: id! });
+    navigate(path);
+  };
 
   if (isLoading) return <Loader />;
   if (error instanceof Error) {
@@ -52,7 +48,9 @@ const QuizPage = () => {
           {quiz?.title}
         </Typography>
         <Box sx={{ display: "flex", gap: theme.spacing(1) }}>
-          <Button variant="contained">{t("QuizPage.editButton")}</Button>
+          <Button variant="contained" onClick={handleEditButton}>
+            {t("QuizPage.editButton")}
+          </Button>
         </Box>
       </Box>
       <Grid container spacing={2}>
@@ -66,14 +64,8 @@ const QuizPage = () => {
             >
               <ImageCard alt="Quiz cover" id={quiz!.imageId} />
             </Box>
-            <Typography variant="h4" sx={{ textAlign: "left" }}>
-              {t("QuizPage.descriptionTitle")}
-            </Typography>
             <Typography variant="h5" sx={{ textAlign: "left" }}>
               {quiz?.description}
-            </Typography>
-            <Typography variant="h4" sx={{ textAlign: "left" }}>
-              {t("QuizPage.questionsTitle")}
             </Typography>
             <Typography
               component="span"

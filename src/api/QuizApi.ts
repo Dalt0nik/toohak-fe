@@ -76,3 +76,20 @@ export const fetchImageById = async (id: string): Promise<string> => {
     throw new Error(errorMessage);
   }
 };
+
+export const updateQuiz = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: NewQuizRequest;
+}): Promise<QuizResponse> => {
+  try {
+    const response = await api.put(`/quizzes/${id}`, data);
+    return response.data;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const errorMessage = axiosError.message || "Failed to update quiz";
+    throw new Error(errorMessage);
+  }
+};

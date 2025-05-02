@@ -41,8 +41,8 @@ export default function AddQuestionDialog({
   useEffect(() => {
     if (initialData) {
       setQuestion(initialData.title);
-      setOptions(initialData.options.map((opt) => opt.title));
-      const idx = initialData.options.findIndex((opt) => opt.isCorrect);
+      setOptions(initialData.questionOptions.map((opt) => opt.title));
+      const idx = initialData.questionOptions.findIndex((opt) => opt.isCorrect);
       setCorrectAnswer(idx.toString());
     } else {
       setQuestion("");
@@ -93,7 +93,7 @@ export default function AddQuestionDialog({
 
     const questionData: Question = {
       title: question,
-      options: questionOptions,
+      questionOptions: questionOptions,
     };
 
     onSave(questionData);
