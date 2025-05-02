@@ -65,7 +65,9 @@
     "correctAnswerTooltip": "Correct answer",
     "incorrectAnswerTooltip": "Incorrect answer",
     "descriptionTitle": "Description",
-    "questionsTitle": "Questions"
+    "questionsTitle": "Questions",
+    "waitingForOthers": "WAITING FOR OTHERS",
+    "answerSelected": "ANSWER SELECTED"
   },
   "Error": {
     "Quiz": {
