@@ -64,6 +64,7 @@
     "incorrectAnswerTooltip": "Incorrect answer",
     "descriptionTitle": "Description",
     "questionsTitle": "Questions",
+    "Question": "Question {{number}}",
     "Host": {
       "Start": "Start",
       "QuizTitle": "\"{{title}}\" quiz lobby",

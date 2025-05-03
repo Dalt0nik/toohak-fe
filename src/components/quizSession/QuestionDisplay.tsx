@@ -1,5 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 import ImageCard from "@components/common/ui/ImageCard";
+import { useTranslation } from "react-i18next";
 
 interface DisplayProps {
   questionTitle: string;
@@ -14,6 +15,7 @@ const QuestionDisplay = ({
   questionImage,
   isMobile = false,
 }: DisplayProps) => {
+  const { t } = useTranslation();
   return (
     <>
       {!isMobile ? (
@@ -57,7 +59,9 @@ const QuestionDisplay = ({
                 fontSize: 35,
               }}
             >
-              {"Question " + questionNumber}
+              {t("QuizSession.Question", {
+                number: questionNumber,
+              })}
             </Typography>
           </Paper>
         </>
