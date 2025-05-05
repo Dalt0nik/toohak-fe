@@ -1,11 +1,12 @@
 import { Box, Grid, Typography, CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AnswerButton from "@components/quizSession/AnswerButton";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import { useTranslation } from "react-i18next";
-import { QuestionResponse } from "@models/Response/questionResponse";
+import { QuestionResponse } from "@models/Response/ws/player/QuestionSessionResponse";
+import { useAnswerQuestion } from "@hooks/useAnswerQuestion";
 
 const PlayerQuizSessionQuestion = ({
   question,
@@ -18,9 +19,17 @@ const PlayerQuizSessionQuestion = ({
 
   const [selectedAnswer, setSelectedAnswer] = useState("");
 
+  useEffect(() => {
+    setSelectedAnswer("");
+  }, [question.id]);
+
+  const { mutate: handleQuestionAnswerer } = useAnswerQuestion();
+
   const handleClick = (id: string) => {
-    if (selectedAnswer != "") return console.log("Already Selected");
-    setSelectedAnswer(id);
+    if (!selectedAnswer) {
+      setSelectedAnswer(id);
+      handleQuestionAnswerer(id);
+    }
   };
 
   const theme = useTheme();

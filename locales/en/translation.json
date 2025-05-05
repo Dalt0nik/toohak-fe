@@ -125,10 +125,8 @@
     "messageDeleteQuestion": "Are you sure you want to delete this question?",
     "messageDeleteQuiz": "Are you sure you want to delete this quiz?"
   },
-  "QuestionModal": {
-  "question": "Question",
-  "questionOption": "Option {{number}}",
-  "cancel": "Cancel",
-  "save": "Save"
+  "AnswerQuestion": {
+    "answerSentSuccessfully": "Answer sent successfully",
+    "errorSendingAnswer": "Answer could not be sent"
   }
 }
