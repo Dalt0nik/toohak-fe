@@ -26,7 +26,10 @@ const PlayerQuizSession = () => {
   });
 
   useEffect(() => {
-    if (playerJwt) initializePlayerWebSocketClient(playerJwt);
+    if (playerJwt) {
+      initializePlayerWebSocketClient(playerJwt);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerJwt]);
 
   return (
