@@ -6,7 +6,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import { useTranslation } from "react-i18next";
 import { QuestionResponse } from "@models/Response/ws/player/QuestionSessionResponse";
-import { answerQuestionOption } from "@api/QuizSessionApi";
+import { useAnswerQuestion } from "@hooks/useAnswerQuestion";
 
 const PlayerQuizSessionQuestion = ({
   question,
@@ -23,15 +23,12 @@ const PlayerQuizSessionQuestion = ({
     setSelectedAnswer("");
   }, [question.id]);
 
-  const handleClick = async (id: string) => {
-    if (selectedAnswer != "") return console.log("Already Selected");
+  const { mutate } = useAnswerQuestion();
+
+  const handleClick = (id: string) => {
+    if (selectedAnswer !== "") return;
     setSelectedAnswer(id);
-    try {
-      await answerQuestionOption(id);
-      console.log("Answer sent successfully");
-    } catch (error) {
-      console.error("Error sending answer:", error);
-    }
+    mutate(id);
   };
 
   const theme = useTheme();
