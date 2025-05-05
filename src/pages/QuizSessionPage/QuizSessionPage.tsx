@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { findQuizSession } from "@api/QuizSessionApi";
 import { PublicAppRoutes } from "@models/PublicRoutes";
 import { useAuth0 } from "@auth0/auth0-react";
-import PlayerQuizSession from "./PlayerQuizSession";
+import PlayerQuizSession from "./Player/PlayerQuizSession";
 import { usePlayerJwt } from "@hooks/usePlayerJwt";
 import HostQuizSession from "./Host/HostQuizSession";
 

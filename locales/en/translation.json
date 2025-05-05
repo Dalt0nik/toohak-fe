@@ -64,6 +64,7 @@
     "incorrectAnswerTooltip": "Incorrect answer",
     "descriptionTitle": "Description",
     "questionsTitle": "Questions",
+    "Question": "Question {{number}}",
     "Host": {
       "Start": "Start",
       "QuizTitle": "\"{{title}}\" quiz lobby",
@@ -71,7 +72,9 @@
       "JoinCodeTitle": "Join code",
       "PlayerCount_one": "{{count}} player",
       "PlayerCount_other": "{{count}} players"
-    }
+    },
+    "waitingForOthers": "WAITING FOR OTHERS",
+    "answerSelected": "ANSWER SELECTED"
   },
   "Error": {
     "Quiz": {
