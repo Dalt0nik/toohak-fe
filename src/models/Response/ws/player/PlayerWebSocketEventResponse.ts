@@ -1,7 +1,7 @@
 import { GenericWebSocketEventResponse } from "../GenericWebSocketEventResponse";
 
 export enum PlayerEventType {
-  TEMP_PLACEHOLDER = "",
+  NEW_QUESTION = "new_question",
 }
 
 export type PlayerWebSocketEventResponse =
