@@ -12,6 +12,7 @@ const PlayerQuizSession = () => {
   const playerJwt = usePlayerJwt();
   const [currentQuestion, setCurrentQuestion] =
     useState<QuestionResponse | null>(null);
+  const [questionNumber, setQuestionNumber] = useState(0);
 
   const {
     initializePlayerWebSocketClient,
@@ -22,6 +23,7 @@ const PlayerQuizSession = () => {
     onHostDisconnectedEvent: () => {},
     onNewQuestionEvent: (question) => {
       setCurrentQuestion(question);
+      setQuestionNumber((prev) => prev + 1);
     },
   });
 
@@ -57,7 +59,7 @@ const PlayerQuizSession = () => {
       {currentQuestion && (
         <PlayerQuizSessionQuestion
           question={currentQuestion}
-          questionNumber={1}
+          questionNumber={questionNumber}
         />
       )}
     </Container>

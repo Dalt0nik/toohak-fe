@@ -23,12 +23,13 @@ const PlayerQuizSessionQuestion = ({
     setSelectedAnswer("");
   }, [question.id]);
 
-  const { mutate } = useAnswerQuestion();
+  const { mutate: handleQuestionAnswerer } = useAnswerQuestion();
 
   const handleClick = (id: string) => {
-    if (selectedAnswer !== "") return;
-    setSelectedAnswer(id);
-    mutate(id);
+    if (!selectedAnswer) {
+      setSelectedAnswer(id);
+      handleQuestionAnswerer(id);
+    }
   };
 
   const theme = useTheme();
