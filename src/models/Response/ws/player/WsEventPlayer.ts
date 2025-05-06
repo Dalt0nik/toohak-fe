@@ -1,3 +1,7 @@
-export enum PlayerEventType {}
+import { WsEventPlayerNewQuestion } from "./WsEventPlayerNewQuestion";
 
-export type WsEventPlayer = never;
+export enum PlayerEventTypes {
+  NEW_QUESTION = "new_question",
+}
+
+export type WsEventPlayer = WsEventPlayerNewQuestion;

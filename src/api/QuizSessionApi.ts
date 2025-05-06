@@ -5,6 +5,7 @@ import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
 import { JoinQuizSessionRequest } from "@models/Request/JoinQuizSessionRequest";
 import { JoinQuizSessionResponse } from "@models/Response/JoinQuizSessionResponse";
 import { Cookies } from "react-cookie";
+import { apiPlayer } from "./ApiPlayer";
 
 export async function createQuizSession(
   request: NewQuizSessionRequest,
@@ -49,5 +50,12 @@ export async function fetchConnectedUsers(): Promise<string[]> {
       Authorization: `Bearer ${token}`,
     },
   });
+  return response.data;
+}
+
+export async function answerQuestionOption(
+  questionOptionId: string,
+): Promise<void> {
+  const response = await apiPlayer.post(`/sessions/answer/${questionOptionId}`);
   return response.data;
 }

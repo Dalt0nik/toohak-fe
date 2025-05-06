@@ -3,13 +3,18 @@ import { AllEventTypes, WsEventAll } from "@models/Response/ws/all/WsEventAll";
 import { WsEventHostDisconnected } from "@models/Response/ws/all/WsEventHostDisconnected";
 import { WsEventPlayerDisconnected } from "@models/Response/ws/all/WsEventPlayerDisconnected";
 import { WsEventPlayerJoined } from "@models/Response/ws/all/WsEventPlayerJoined";
-import { WsEventPlayer } from "@models/Response/ws/player/WsEventPlayer";
+import {
+  PlayerEventTypes,
+  WsEventPlayer,
+} from "@models/Response/ws/player/WsEventPlayer";
+import { WsEventPlayerNewQuestion } from "@models/Response/ws/player/WsEventPlayerNewQuestion";
 import { Cookies } from "react-cookie";
 
 interface Handlers {
   onPlayerJoined: (evt: WsEventPlayerJoined) => void;
   onPlayerDisconnected: (evt: WsEventPlayerDisconnected) => void;
   onHostDisconnected: (evt: WsEventHostDisconnected) => void;
+  onNewQuestion: (evt: WsEventPlayerNewQuestion) => void;
 }
 
 const usePlayerWebSocket = (handlers: Handlers) => {
@@ -32,7 +37,12 @@ const usePlayerWebSocket = (handlers: Handlers) => {
     }
   };
 
-  const dispatchForWsPlayer = () => {};
+  const dispatchForWsPlayer = (event: WsEventPlayer) => {
+    switch (event.event) {
+      case PlayerEventTypes.NEW_QUESTION:
+        return handlers.onNewQuestion(event);
+    }
+  };
 
   const subscribeToAllTopics = (sessionId: string) => {
     subscribeToTopic<WsEventAll>(
