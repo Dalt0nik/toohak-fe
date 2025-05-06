@@ -11,36 +11,17 @@ const TextColor = "#000000";
 const IconColor = "#f5f3ff";
 
 interface AnswerProps extends React.PropsWithChildren {
-  onClick: () => void;
+  onClick?: () => void;
   ordering: number;
-  disabled: boolean;
-  isMobile: boolean;
+  disabled?: boolean;
+  isMobile?: boolean;
+  hostView?: boolean;
 }
 
-const ButtonStyling = [
-  {
-    bgcolor: "#00b7f3",
-    "&.MuiButtonBase-root:hover": { bgcolor: "#008ed0", color: TextColor },
-    "&.Mui-disabled": {
-      bgcolor: "#008ed0",
-      color: TextColor,
-      outlineColor: IconColor,
-      outlineOpacity: 0.5,
-    },
-  },
-  {
-    bgcolor: "#f30000",
-    "&.MuiButtonBase-root:hover": { bgcolor: "#d30000", color: TextColor },
-  },
-  {
-    bgcolor: "#41d61a",
-    "&.MuiButtonBase-root:hover": { bgcolor: "#2e9014", color: TextColor },
-  },
-  {
-    bgcolor: "#f3cc00",
-    "&.MuiButtonBase-root:hover": { bgcolor: "#DFBB00", color: TextColor },
-  },
-];
+interface ButtonStyleInfo {
+  color: string;
+  bgcolor: string;
+}
 
 const IconStyling = {
   color: IconColor,
@@ -61,22 +42,43 @@ const AnswerButton = ({
   disabled,
   isMobile,
   onClick,
+  hostView, // Changes button look for host
   children,
 }: AnswerProps) => {
   const tlen = typeof children === "string" ? children.length : 0;
   const AnswerText = !isMobile ? children : "";
+
+  const ButtonStyling: ButtonStyleInfo[] = [
+    { color: "#00B7F3", bgcolor: "#008ED0" },
+    { color: "#F30000", bgcolor: "#D30000" },
+    { color: "#41D61A", bgcolor: "#2E9014" },
+    { color: "#F3CC00", bgcolor: "#DFBB00" },
+  ];
+
   return (
     <Button
       disabled={disabled}
       sx={{
-        ...ButtonStyling[ordering - 1],
+        bgcolor: ButtonStyling[ordering - 1].color,
+        "&.MuiButtonBase-root:hover": {
+          bgcolor: ButtonStyling[ordering - 1].bgcolor,
+          color: TextColor,
+        },
+        "&.Mui-disabled": {
+          bgcolor: hostView
+            ? ButtonStyling[ordering - 1].color
+            : ButtonStyling[ordering - 1].bgcolor,
+          color: TextColor,
+          outline: hostView ? 0 : 5,
+          outlineColor: IconColor,
+          outlineOpacity: 0.5,
+        },
         color: TextColor,
         borderRadius: 3,
         height: { xs: "30vh", md: 150 },
         width: { xs: "37vw", md: 500 },
         m: { xs: 0.5, md: 2 },
         wordBreak: "break-word",
-        outline: disabled ? 5 : 0,
       }}
       disableElevation
       disableRipple
