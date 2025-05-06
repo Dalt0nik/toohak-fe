@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Box, Typography, Paper } from "@mui/material";
 import { CARD_BACKGROUND_PURPLE } from "@assets/styles/constants";
 import { AnimatePresence, motion, LayoutGroup } from "framer-motion";
@@ -10,12 +10,25 @@ interface LeaderboardProps {
 }
 
 const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
-  const sortedOldPoints = [...oldPoints].sort((a, b) => b.score - a.score);
-  const sortedNewPoints = [...newPoints].sort((a, b) => b.score - a.score);
+  const sortedOldPoints = useMemo(
+    () => [...oldPoints].sort((a, b) => b.score - a.score),
+    [oldPoints],
+  );
 
-  const [displayState, setDisplayState] = useState<
-    "initial" | "new" | "sorted"
-  >("initial");
+  const sortedNewPoints = useMemo(
+    () => [...newPoints].sort((a, b) => b.score - a.score),
+    [newPoints],
+  );
+
+  const enum animationStates {
+    INITIAL,
+    NEW,
+    SORTED,
+  }
+
+  const [displayState, setDisplayState] = useState<animationStates>(
+    animationStates.INITIAL,
+  );
   const [displayPoints, setDisplayPoints] = useState(sortedOldPoints);
 
   const [scoreChanges, setScoreChanges] = useState<
@@ -29,19 +42,19 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
   >({});
 
   useEffect(() => {
-    setDisplayState("initial");
+    setDisplayState(animationStates.INITIAL);
     setDisplayPoints(sortedOldPoints);
 
     const changes: Record<string, { oldScore: number; newScore: number }> = {};
 
     const allPlayerIds = new Set([
-      ...oldPoints.map((p) => p.playerId),
-      ...newPoints.map((p) => p.playerId),
+      ...oldPoints.map((p) => p.id),
+      ...newPoints.map((p) => p.id),
     ]);
 
     allPlayerIds.forEach((id) => {
-      const oldPlayer = oldPoints.find((p) => p.playerId === id);
-      const newPlayer = newPoints.find((p) => p.playerId === id);
+      const oldPlayer = oldPoints.find((p) => p.id === id);
+      const newPlayer = newPoints.find((p) => p.id === id);
 
       const oldScore = oldPlayer?.score ?? 0;
       const newScore = newPlayer?.score ?? 0;
@@ -55,11 +68,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
     setScoreChanges(changes);
 
     const scoreUpdateTimeout = setTimeout(() => {
-      setDisplayState("new");
+      setDisplayState(animationStates.NEW);
 
       const reorderTimeout = setTimeout(() => {
         setDisplayPoints(sortedNewPoints);
-        setDisplayState("sorted");
+        setDisplayState(animationStates.SORTED);
       }, 1000); // Delay before sorting
 
       return () => clearTimeout(reorderTimeout);
@@ -68,16 +81,16 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
     return () => clearTimeout(scoreUpdateTimeout);
   }, [oldPoints, newPoints]);
 
-  const getDisplayScore = (playerId: string) => {
-    if (displayState === "initial") {
-      return scoreChanges[playerId]?.oldScore ?? 0;
+  const getDisplayScore = (id: string) => {
+    if (displayState === animationStates.INITIAL) {
+      return scoreChanges[id]?.oldScore ?? 0;
     } else {
-      return scoreChanges[playerId]?.newScore ?? 0;
+      return scoreChanges[id]?.newScore ?? 0;
     }
   };
 
-  const hasScoreChanged = (playerId: string) => {
-    const change = scoreChanges[playerId];
+  const hasScoreChanged = (id: string) => {
+    const change = scoreChanges[id];
     return change && change.oldScore !== change.newScore;
   };
 
@@ -99,9 +112,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
           <AnimatePresence mode="popLayout">
             {displayPoints.slice(0, 5).map((player, index) => (
               <motion.div
-                key={player.playerId}
+                key={player.id}
                 layout
-                layoutId={player.playerId}
+                layoutId={player.id}
                 initial={false}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -128,7 +141,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
                     overflow: "hidden",
                   }}
                 >
-                  {displayState === "sorted" && (
+                  {displayState === animationStates.SORTED && (
                     <Box
                       sx={{
                         position: "absolute",
@@ -148,10 +161,10 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
                     />
                   )}
 
-                  <Typography variant="h6">{player.playerName}</Typography>
+                  <Typography variant="h6">{player.nickname}</Typography>
 
-                  {hasScoreChanged(player.playerId) &&
-                  displayState !== "initial" ? (
+                  {hasScoreChanged(player.id) &&
+                  displayState !== animationStates.INITIAL ? (
                     <motion.div
                       initial={{ scale: 1 }}
                       animate={{
@@ -167,7 +180,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
                           minWidth: "40px",
                         }}
                       >
-                        {getDisplayScore(player.playerId)}
+                        {getDisplayScore(player.id)}
                       </Typography>
                     </motion.div>
                   ) : (
@@ -179,7 +192,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
                         minWidth: "40px",
                       }}
                     >
-                      {getDisplayScore(player.playerId)}
+                      {getDisplayScore(player.id)}
                     </Typography>
                   )}
                 </Paper>
