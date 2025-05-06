@@ -4,6 +4,7 @@ import { NewQuizSessionResponse } from "@models/Response/NewQuizSessionResponse"
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
 import { JoinQuizSessionRequest } from "@models/Request/JoinQuizSessionRequest";
 import { JoinQuizSessionResponse } from "@models/Response/JoinQuizSessionResponse";
+import { Cookies } from "react-cookie";
 
 export async function createQuizSession(
   request: NewQuizSessionRequest,
@@ -38,4 +39,15 @@ export async function joinQuizSession(
 export async function startQuizSession(sessionId: string): Promise<number> {
   const response = await api.post(`/sessions/${sessionId}/start`);
   return response.status;
+}
+
+export async function fetchConnectedUsers(): Promise<string[]> {
+  const cookies = new Cookies();
+  const token = cookies.get("QuizSessionJwt");
+  const response = await api.get<string[]>("/sessions/users", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
 }

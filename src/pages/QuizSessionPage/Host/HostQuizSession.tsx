@@ -16,32 +16,23 @@ interface HostQuizSessionProps {
  * Main component responsible for creating websocket connection for a host to quiz session and handling session status(state) logic
  */
 const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
-  const { initializeHostWebSocketClient, isConnected } = useHostWebSocket({
-    onHostDisconnectedEvent: () => {},
-    onPlayerDisconnectedEvent: () => {
-      setPlayerCount((prev) => prev - 1);
-    },
-    onPlayerJoinedEvent: () => {
-      setPlayerCount((prev) => prev + 1);
-    },
+  const { init, isConnected, deactivateConnection } = useHostWebSocket({
+    onHostDisconnected: () => deactivateConnection(),
+    onPlayerJoined: () => setPlayerCount((prev) => prev + 1),
+    onPlayerDisconnected: () => setPlayerCount((prev) => Math.max(0, prev - 1)),
   });
 
-  const queryClient = useQueryClient();
-
+  const qc = useQueryClient();
   //get from cache with an assumption that QuizSessionPage fetches session data
-  const session = queryClient.getQueryData([
-    "session",
-    joinId,
-  ]) as QuizSessionResponse;
-
+  const session = qc.getQueryData<QuizSessionResponse>(["session", joinId])!;
   const { data: quizData, isLoading: isQuizLoading } = useQuiz(session.quizId);
-
-  const [currentSessionStatus, setCurrentSessionStatus] =
-    useState<QuizSessionStatus>(session.status);
   const [playerCount, setPlayerCount] = useState(0);
+  const [status, setStatus] = useState<QuizSessionStatus>(session.status);
 
   useEffect(() => {
-    initializeHostWebSocketClient(session.quizSessionId);
+    init(session.quizSessionId);
+    // Init if included makes too many calls
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.quizSessionId]);
 
   if (isQuizLoading && !isConnected) {
@@ -49,12 +40,12 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   }
 
   const handleCurrentSessionStateChange = (newState: QuizSessionStatus) => {
-    setCurrentSessionStatus(newState);
+    setStatus(newState);
   };
 
   return (
     <Container>
-      {currentSessionStatus === QuizSessionStatus.PENDING && (
+      {status === QuizSessionStatus.PENDING && (
         <HostQuizSessionLobby
           playerCount={playerCount}
           sessionData={session}

@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
@@ -86,18 +79,6 @@ const QuizSessionPage = () => {
           padding: "20px",
         }}
       >
-        {/* Temporary UI */}
-        <Typography variant="h6" sx={{ marginBottom: "10px" }}>
-          Joined Users
-        </Typography>
-        <List>
-          <ListItem key={0}>
-            <ListItemText primary="SomeDude" />
-          </ListItem>
-          <ListItem key={1}>
-            <ListItemText primary="SomeOtheDude" />
-          </ListItem>
-        </List>
         <PlayerQuizSession />
       </Box>
     );

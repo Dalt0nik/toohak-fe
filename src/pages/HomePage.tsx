@@ -1,6 +1,7 @@
 import React from "react";
 import { Typography, Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
@@ -21,7 +22,8 @@ const HomePage: React.FC = () => {
       <Typography variant="h5" gutterBottom sx={{ mt: 2 }}>
         {t("homepage_description")}
       </Typography>
-      <Button variant="outlined" sx={{ mt: 3 }}>
+
+      <Button component={Link} to="/join" variant="outlined" sx={{ mt: 3 }}>
         {t("homepage_joingame")}
       </Button>
     </Box>
