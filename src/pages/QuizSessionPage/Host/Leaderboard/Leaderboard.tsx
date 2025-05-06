@@ -9,6 +9,12 @@ interface LeaderboardProps {
   newPoints: PlayerScoreResponse[];
 }
 
+const enum AnimationStates {
+  INITIAL,
+  NEW,
+  SORTED,
+}
+
 const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
   const sortedOldPoints = useMemo(
     () => [...oldPoints].sort((a, b) => b.score - a.score),
@@ -20,31 +26,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
     [newPoints],
   );
 
-  const enum animationStates {
-    INITIAL,
-    NEW,
-    SORTED,
-  }
-
-  const [displayState, setDisplayState] = useState<animationStates>(
-    animationStates.INITIAL,
+  const [displayState, setDisplayState] = useState<AnimationStates>(
+    AnimationStates.INITIAL,
   );
   const [displayPoints, setDisplayPoints] = useState(sortedOldPoints);
 
-  const [scoreChanges, setScoreChanges] = useState<
-    Record<
-      string,
-      {
-        oldScore: number;
-        newScore: number;
-      }
-    >
-  >({});
-
-  useEffect(() => {
-    setDisplayState(animationStates.INITIAL);
-    setDisplayPoints(sortedOldPoints);
-
+  const scoreChanges = useMemo(() => {
     const changes: Record<string, { oldScore: number; newScore: number }> = {};
 
     const allPlayerIds = new Set([
@@ -65,24 +52,29 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
       };
     });
 
-    setScoreChanges(changes);
+    return changes;
+  }, [oldPoints, newPoints]);
+
+  useEffect(() => {
+    setDisplayState(AnimationStates.INITIAL);
+    setDisplayPoints(sortedOldPoints);
 
     const scoreUpdateTimeout = setTimeout(() => {
-      setDisplayState(animationStates.NEW);
+      setDisplayState(AnimationStates.NEW);
 
       const reorderTimeout = setTimeout(() => {
         setDisplayPoints(sortedNewPoints);
-        setDisplayState(animationStates.SORTED);
+        setDisplayState(AnimationStates.SORTED);
       }, 1000); // Delay before sorting
 
       return () => clearTimeout(reorderTimeout);
     }, 800); // Short delay before showing new scores
 
     return () => clearTimeout(scoreUpdateTimeout);
-  }, [oldPoints, newPoints]);
+  }, [oldPoints, newPoints, sortedOldPoints, sortedNewPoints]);
 
   const getDisplayScore = (id: string) => {
-    if (displayState === animationStates.INITIAL) {
+    if (displayState === AnimationStates.INITIAL) {
       return scoreChanges[id]?.oldScore ?? 0;
     } else {
       return scoreChanges[id]?.newScore ?? 0;
@@ -96,10 +88,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
 
   return (
     <Box sx={{ width: "100%", maxWidth: 600, mx: "auto", px: 2 }}>
-      <Typography variant="h4" sx={{ color: "white", mb: 3 }}>
-        Leaderboar
-      </Typography>
-
       <LayoutGroup>
         <Box
           sx={{
@@ -141,7 +129,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
                     overflow: "hidden",
                   }}
                 >
-                  {displayState === animationStates.SORTED && (
+                  {displayState === AnimationStates.SORTED && (
                     <Box
                       sx={{
                         position: "absolute",
@@ -164,7 +152,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
                   <Typography variant="h6">{player.nickname}</Typography>
 
                   {hasScoreChanged(player.id) &&
-                  displayState !== animationStates.INITIAL ? (
+                  displayState !== AnimationStates.INITIAL ? (
                     <motion.div
                       initial={{ scale: 1 }}
                       animate={{
