@@ -1,26 +1,23 @@
 import { useWebSocket } from "@hooks/ws/useWebSocket";
-import { PlayerJwtInfo } from "@models/PlayerJwtInfo";
-import { AllWebSocketEventResponse } from "@models/Response/ws/all/AllWebSocketEventResponse";
-import { HostDisconnectedEventResponse } from "@models/Response/ws/all/HostDisconnectedEventResponse";
+import { AllEventTypes, WsEventAll } from "@models/Response/ws/all/WsEventAll";
+import { WsEventHostDisconnected } from "@models/Response/ws/all/WsEventHostDisconnected";
+import { WsEventPlayerDisconnected } from "@models/Response/ws/all/WsEventPlayerDisconnected";
+import { WsEventPlayerJoined } from "@models/Response/ws/all/WsEventPlayerJoined";
 import {
-  PlayerWebSocketEventResponse,
-  PlayerEventType,
-} from "@models/Response/ws/player/PlayerWebSocketEventResponse";
+  PlayerEventTypes,
+  WsEventPlayer,
+} from "@models/Response/ws/player/WsEventPlayer";
+import { WsEventPlayerNewQuestion } from "@models/Response/ws/player/WsEventPlayerNewQuestion";
 import { Cookies } from "react-cookie";
-import { QuestionResponse } from "@models/Response/ws/player/QuestionSessionResponse";
-import { PlayerNewQuestionEventResponse } from "@models/Response/ws/player/PlayerNewQuestionEventResponse";
 
-interface PlayerWebSocketConfig {
-  onHostDisconnectedEvent: (
-    eventResponse: HostDisconnectedEventResponse,
-  ) => void;
-  onNewQuestionEvent?: (question: QuestionResponse) => void;
+interface Handlers {
+  onPlayerJoined: (evt: WsEventPlayerJoined) => void;
+  onPlayerDisconnected: (evt: WsEventPlayerDisconnected) => void;
+  onHostDisconnected: (evt: WsEventHostDisconnected) => void;
+  onNewQuestion: (evt: WsEventPlayerNewQuestion) => void;
 }
 
-const usePlayerWebSocket = ({
-  onHostDisconnectedEvent,
-  onNewQuestionEvent,
-}: PlayerWebSocketConfig) => {
+const usePlayerWebSocket = (handlers: Handlers) => {
   const {
     initializeWebSocketClient,
     subscribeToTopic,
@@ -29,56 +26,53 @@ const usePlayerWebSocket = ({
     deactivateConnection,
   } = useWebSocket();
 
-  const subscribeToPlayerTopics = (playerJwt: PlayerJwtInfo) => {
-    subscribeToTopic<PlayerWebSocketEventResponse>(
-      `/topic/session/${playerJwt.quizSessionId}/players`,
-      (eventResponse) => {
-        switch (eventResponse.event) {
-          case PlayerEventType.NEW_QUESTION: {
-            const { question } =
-              eventResponse as PlayerNewQuestionEventResponse;
-            onNewQuestionEvent?.(question);
-            break;
-          }
-          default:
-            console.warn(
-              `Unhandled broker event ${eventResponse.event} - ${eventResponse.timestamp}`,
-            );
-        }
-      },
-    );
+  const dispatchForWsAll = (event: WsEventAll) => {
+    switch (event.event) {
+      case AllEventTypes.PLAYER_JOINED:
+        return handlers.onPlayerJoined(event);
+      case AllEventTypes.PLAYER_DISCONNECTED:
+        return handlers.onPlayerDisconnected(event);
+      case AllEventTypes.HOST_DISCONNECTED:
+        return handlers.onHostDisconnected(event);
+    }
+  };
 
-    subscribeToTopic<AllWebSocketEventResponse>(
-      `/topic/session/${playerJwt.quizSessionId}/all`,
-      (eventResponse) => {
-        switch (eventResponse.event) {
-          case "host_disconnected": {
-            onHostDisconnectedEvent(eventResponse);
-            break;
-          }
-          default:
-            console.warn(
-              `Unhandled broker event ${eventResponse.event} - ${eventResponse.timestamp}`,
-            );
-        }
-      },
+  const dispatchForWsPlayer = (event: WsEventPlayer) => {
+    switch (event.event) {
+      case PlayerEventTypes.NEW_QUESTION:
+        return handlers.onNewQuestion(event);
+    }
+  };
+
+  const subscribeToAllTopics = (sessionId: string) => {
+    subscribeToTopic<WsEventAll>(
+      `/topic/session/${sessionId}/all`,
+      dispatchForWsAll,
     );
   };
 
-  const initializePlayerWebSocketClient = (playerJwt: PlayerJwtInfo) => {
+  const subscribeToPlayerTopics = (sessionId: string) => {
+    subscribeToTopic<WsEventPlayer>(
+      `/topic/session/${sessionId}/players`,
+      dispatchForWsPlayer,
+    );
+  };
+
+  const init = async (sessionId: string) => {
     const cookies = new Cookies();
     const authorizationHeader = cookies.get("QuizSessionJwt");
-    initializeWebSocketClient(
+    return initializeWebSocketClient(
       `Bearer ${authorizationHeader}`,
       () => {
-        subscribeToPlayerTopics(playerJwt);
+        subscribeToAllTopics(sessionId);
+        subscribeToPlayerTopics(sessionId);
       },
       () => {},
     );
   };
 
   return {
-    initializePlayerWebSocketClient,
+    init,
     isConnected,
     messages,
     deactivateConnection,

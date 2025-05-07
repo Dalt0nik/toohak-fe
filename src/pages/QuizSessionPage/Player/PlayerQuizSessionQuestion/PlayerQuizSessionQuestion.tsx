@@ -5,14 +5,14 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import { useTranslation } from "react-i18next";
-import { QuestionResponse } from "@models/Response/ws/player/QuestionSessionResponse";
 import { useAnswerQuestion } from "@hooks/useAnswerQuestion";
+import { WsQuestion } from "@models/Response/ws/player/WsQuestionOption";
 
 const PlayerQuizSessionQuestion = ({
   question,
   questionNumber,
 }: {
-  question: QuestionResponse;
+  question: WsQuestion;
   questionNumber: number;
 }) => {
   const { t } = useTranslation();

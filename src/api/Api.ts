@@ -12,7 +12,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use(async (config) => {
-  const excludedPaths = ["/sessions/find", "/sessions/join"];
+  const excludedPaths = ["/sessions/find", "/sessions/join", "/sessions/users"];
   const shouldExclude = excludedPaths.some((path) =>
     config.url?.startsWith(path),
   );
