@@ -6,7 +6,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import { useTranslation } from "react-i18next";
 import { useAnswerQuestion } from "@hooks/useAnswerQuestion";
-import { WsQuestion } from "@models/Response/ws/player/WsQuestionOption";
+import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
 
 const PlayerQuizSessionQuestion = ({
   question,
