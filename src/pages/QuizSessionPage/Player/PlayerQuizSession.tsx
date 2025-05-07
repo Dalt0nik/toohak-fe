@@ -1,16 +1,6 @@
 import { usePlayerJwt } from "@hooks/usePlayerJwt";
 import usePlayerWebSocket from "@hooks/ws/usePlayerWebSocket";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Container,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import PlayerQuizSessionQuestion from "@pages/QuizSessionPage/Player/PlayerQuizSessionQuestion/PlayerQuizSessionQuestion";
 import { WsEventPlayerJoined } from "@models/Response/ws/all/WsEventPlayerJoined";
@@ -19,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchConnectedUsers } from "@api/QuizSessionApi";
 import { WsEventPlayerNewQuestion } from "@models/Response/ws/player/WsEventPlayerNewQuestion";
 import { WsQuestion } from "@models/Response/ws/player/WsQuestionOption";
+import PlayerJoinedList from "./PlayerQuizSessionQuestion/PlayerJoinedList";
 
 /**
  * Main component responsible for connecting player quiz session UI and websocket connection
@@ -26,6 +17,11 @@ import { WsQuestion } from "@models/Response/ws/player/WsQuestionOption";
 const PlayerQuizSession = () => {
   const playerJwt = usePlayerJwt();
   const [players, setPlayers] = useState<string[]>([]);
+  const [currentQuestion, setCurrentQuestion] = useState<WsQuestion | null>(
+    null,
+  );
+  const [questionNumber, setQuestionNumber] = useState(0);
+
   const { init, messages, isConnected, deactivateConnection } =
     usePlayerWebSocket({
       onHostDisconnected: () => {},
@@ -52,10 +48,6 @@ const PlayerQuizSession = () => {
     // Make sure not to cache the data on reload
     refetchOnMount: "always",
   });
-  const [currentQuestion, setCurrentQuestion] = useState<WsQuestion | null>(
-    null,
-  );
-  const [questionNumber, setQuestionNumber] = useState(0);
 
   useEffect(() => {
     if (playerJwt) {
@@ -71,64 +63,25 @@ const PlayerQuizSession = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerJwt, connectedPlayers]);
 
-  const handleDeactivateConnection = () => {
+  const handleDisconnect = () => {
     deactivateConnection();
     setPlayers([]);
   };
 
+  const handleReconnect = () => {
+    init(playerJwt!.quizSessionId);
+  };
+
   return (
-    <Container maxWidth="sm" sx={{ mt: 4 }}>
-      <Card
-        elevation={3}
-        sx={{ bgcolor: "primary.main", color: "primary.contrastText" }}
-      >
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Joined Players
-          </Typography>
-
-          <List>
-            {players.length > 0 ? (
-              players.map((nickname) => (
-                <ListItem
-                  key={nickname}
-                  sx={{
-                    mb: 1,
-                    borderRadius: 1,
-                    boxShadow: 1,
-                  }}
-                >
-                  <ListItemText primary={nickname} />
-                </ListItem>
-              ))
-            ) : (
-              <Typography color="text.secondary">
-                No one has joined yet
-              </Typography>
-            )}
-          </List>
-        </CardContent>
-
-        <CardActions sx={{ justifyContent: "flex-end", p: 2 }}>
-          {isConnected ? (
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleDeactivateConnection}
-            >
-              Disconnect
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => init(playerJwt!.quizSessionId)}
-            >
-              Reconnect
-            </Button>
-          )}
-        </CardActions>
-      </Card>
+    <Container>
+      {!currentQuestion && (
+        <PlayerJoinedList
+          players={players}
+          isConnected={isConnected}
+          onDisconnect={handleDisconnect}
+          onReconnect={handleReconnect}
+        />
+      )}
 
       {/* TODO: Remove in the long run. Temporary for testing */}
       {isConnected && messages.length
