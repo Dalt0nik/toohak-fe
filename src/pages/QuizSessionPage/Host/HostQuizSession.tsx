@@ -58,7 +58,7 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
         />
       )}
 
-      {currentQuestion && currentSessionStatus == QuizSessionStatus.ACTIVE && (
+      {currentQuestion && status == QuizSessionStatus.ACTIVE && (
         <HostQuizSessionQuestion
           question={currentQuestion}
           questionNumber={questionNumber}

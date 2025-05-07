@@ -3,7 +3,7 @@ import AnswerButton from "@components/quizSession/AnswerButton";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
-import { QuestionResponse } from "@models/Response/ws/player/QuestionSessionResponse";
+import { QuestionResponse } from "@models/Response/questionResponse";
 
 const HostQuizSessionQuestion = ({
   question,
