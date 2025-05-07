@@ -134,5 +134,9 @@
   "AnswerQuestion": {
     "answerSentSuccessfully": "Answer sent successfully",
     "errorSendingAnswer": "Answer could not be sent"
+  },
+  "Score": {
+    "score": "Your score is {{score}}",
+    "position": "Your position is {{position}}"
   }
 }
