@@ -7,6 +7,7 @@ import { Container } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import HostQuizSessionLobby from "./HostQuizSessionLobby/HostQuizSessionLobby";
+import HostQuizSessionQuestion from "@pages/QuizSessionPage/Host/HostQuizSessionQuestion/HostQuizSessionQuestion";
 
 interface HostQuizSessionProps {
   joinId: string;
@@ -43,6 +44,9 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
     setStatus(newState);
   };
 
+  //TEMP
+  const currentQuestion = quizData!.questions[0];
+  const questionNumber = 1;
   return (
     <Container>
       {status === QuizSessionStatus.PENDING && (
@@ -51,6 +55,13 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
           sessionData={session}
           quizData={quizData!}
           onChangeSessionStatus={handleCurrentSessionStateChange}
+        />
+      )}
+
+      {currentQuestion && currentSessionStatus == QuizSessionStatus.ACTIVE && (
+        <HostQuizSessionQuestion
+          question={currentQuestion}
+          questionNumber={questionNumber}
         />
       )}
     </Container>
