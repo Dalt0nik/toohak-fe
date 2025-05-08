@@ -1,10 +1,15 @@
 import { useState } from "react";
 import song from "/background_song.mp3";
-import { Button } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
 
 const MusicBar = () => {
   const { t } = useTranslation();
+  const theme = useTheme();
   const [audio] = useState(() => {
     const newAudio = new Audio(song);
     newAudio.loop = true;
@@ -30,15 +35,19 @@ const MusicBar = () => {
   };
 
   return (
-    <div>
-      <Button onClick={handlePlay} disabled={isPlaying}>
-        ▶ {t("MusicBar.play")}
+    <Box
+      sx={{ display: "flex", gap: theme.spacing(1), justifyContent: "center" }}
+    >
+      <Button size="small" onClick={handlePlay} disabled={isPlaying}>
+        <PlayArrowIcon /> {t("MusicBar.play")}
       </Button>
-      <Button onClick={handlePause} disabled={!isPlaying}>
-        ⏸ {t("MusicBar.pause")}
+      <Button size="small" onClick={handlePause} disabled={!isPlaying}>
+        <PauseIcon /> {t("MusicBar.pause")}
       </Button>
-      <Button onClick={toggleMute}>{isMuted ? "🔊" : "🔇"}</Button>
-    </div>
+      <Button size="small" onClick={toggleMute}>
+        {isMuted ? <VolumeUpIcon /> : <VolumeOffIcon />}
+      </Button>
+    </Box>
   );
 };
 
