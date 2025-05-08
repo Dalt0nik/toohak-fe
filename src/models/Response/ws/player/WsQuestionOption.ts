@@ -1,9 +1,5 @@
-import { WsQuestionOption } from "./WsQuestion";
-
-export interface WsQuestion {
+export interface WsQuestionOption {
   id: string;
-  quizId: string;
-  imageId: string;
   title: string;
-  questionOptions: WsQuestionOption[];
+  ordering: number;
 }
