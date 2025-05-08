@@ -3,6 +3,7 @@ import { Box, Typography, Paper } from "@mui/material";
 import { motion, useAnimate } from "framer-motion";
 import { PlayerScoreResponse } from "@models/Response/PlayerScoreResponse";
 import { CARD_BACKGROUND_PURPLE } from "@assets/styles/constants";
+import confetti from "canvas-confetti";
 
 interface PodiumProps {
   newPoints: PlayerScoreResponse[];
@@ -58,7 +59,20 @@ const Podium: React.FC<PodiumProps> = ({ newPoints }) => {
         { y: 0, opacity: 1, scale: 1 },
         { type: "spring", stiffness: 300, damping: 20, at: "<" },
       ],
-    ]);
+    ]).then(() => {
+      confetti({
+        particleCount: 150,
+        angle: 60,
+        spread: 70,
+        origin: { x: 0, y: 0.6 },
+      });
+      confetti({
+        particleCount: 150,
+        angle: 120,
+        spread: 70,
+        origin: { x: 1, y: 0.6 },
+      });
+    });
   }, [animate]);
 
   const getMedalEmoji = (position: number) => {
