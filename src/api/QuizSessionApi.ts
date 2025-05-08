@@ -59,3 +59,8 @@ export async function answerQuestionOption(
   const response = await apiPlayer.post(`/sessions/answer/${questionOptionId}`);
   return response.data;
 }
+
+export async function nextQuestion(sessionId: string) {
+  const response = await api.post(`/sessions/${sessionId}/nextQuestion`);
+  return response.status;
+}

@@ -2,14 +2,18 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useWebSocket } from "@hooks/ws/useWebSocket";
 import { AllEventTypes, WsEventAll } from "@models/Response/ws/all/WsEventAll";
 import { WsEventHostDisconnected } from "@models/Response/ws/all/WsEventHostDisconnected";
+import { WsEventNewQuestion } from "@models/Response/ws/all/WsEventNewQuestion";
 import { WsEventPlayerDisconnected } from "@models/Response/ws/all/WsEventPlayerDisconnected";
 import { WsEventPlayerJoined } from "@models/Response/ws/all/WsEventPlayerJoined";
+import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd";
 import { WsEventHost } from "@models/Response/ws/host/WsEventHost";
 
 interface Handlers {
   onPlayerJoined: (evt: WsEventPlayerJoined) => void;
   onPlayerDisconnected: (evt: WsEventPlayerDisconnected) => void;
   onHostDisconnected: (evt: WsEventHostDisconnected) => void;
+  onRoundEnd: (evt: WsEventRoundEnd) => void;
+  onNewQuestion: (evt: WsEventNewQuestion) => void;
 }
 
 const useHostWebSocket = (handlers: Handlers) => {
@@ -30,6 +34,10 @@ const useHostWebSocket = (handlers: Handlers) => {
         return handlers.onPlayerJoined(event);
       case AllEventTypes.HOST_DISCONNECTED:
         return handlers.onHostDisconnected(event);
+      case AllEventTypes.ROUND_END:
+        return handlers.onRoundEnd(event);
+      case AllEventTypes.NEW_QUESTION:
+        return handlers.onNewQuestion(event);
     }
   };
 

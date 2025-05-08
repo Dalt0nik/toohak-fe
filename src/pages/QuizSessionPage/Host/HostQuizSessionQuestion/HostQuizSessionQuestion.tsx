@@ -2,15 +2,15 @@ import { Box, Grid } from "@mui/material";
 import AnswerButton from "@components/quizSession/AnswerButton";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import QuestionDisplay from "@components/quizSession/QuestionDisplay";
-import { QuestionResponse } from "@models/Response/questionResponse";
+import QuestionDisplay from "@components/quizSession/QuestionDisplay"
 import CountdownTimer from "@components/CountdownTimer";
+import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
 
 const HostQuizSessionQuestion = ({
   question,
   questionNumber,
 }: {
-  question: QuestionResponse;
+  question: WsQuestion;
   questionNumber: number;
 }) => {
   const theme = useTheme();
@@ -23,7 +23,6 @@ const HostQuizSessionQuestion = ({
         flexDirection: "column",
         alignContent: "flex-start",
         alignItems: "center",
-        mt: "10vh",
       }}
     >
       <Box sx={{ width: "100%", mb: 2 }}>
