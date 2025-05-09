@@ -39,7 +39,7 @@ const QuestionDisplay = ({
               {questionTitle}
             </Typography>
           </Paper>
-          <ImageCard id={questionImage} />
+          {questionImage ? <ImageCard id={questionImage} /> : ""}
         </>
       ) : (
         <>
