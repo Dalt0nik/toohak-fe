@@ -134,9 +134,5 @@
   "AnswerQuestion": {
     "answerSentSuccessfully": "Answer sent successfully",
     "errorSendingAnswer": "Answer could not be sent"
-  },
-  "MusicBar":{
-    "play": "Play",
-    "pause": "Pause"
   }
 }
