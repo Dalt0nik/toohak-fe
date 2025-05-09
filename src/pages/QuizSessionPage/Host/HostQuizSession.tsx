@@ -5,16 +5,16 @@ import { QuizSessionStatus } from "@models/QuizSessionState";
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
 import { Box, Container } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import HostQuizSessionLobby from "./HostQuizSessionLobby/HostQuizSessionLobby";
 import HostQuizSessionQuestion from "@pages/QuizSessionPage/Host/HostQuizSessionQuestion/HostQuizSessionQuestion";
 import MusicBar from "@components/MusicBar";
 import HostQuizSessionAnswered from "./HostQuizSessionAnswered/HostQuizSessionAnswered";
 import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd";
 import { WsEventPlayerJoined } from "@models/Response/ws/all/WsEventPlayerJoined";
-import { WsPlayer } from "@models/Response/ws/all/WsPlayer";
 import { WsEventPlayerDisconnected } from "@models/Response/ws/all/WsEventPlayerDisconnected";
-import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
+import { HostSessionActionTypes } from "@models/HostSessionActionTypes";
+import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
 
 interface HostQuizSessionProps {
   joinId: string;
@@ -24,38 +24,27 @@ interface HostQuizSessionProps {
  * Main component responsible for creating websocket connection for a host to quiz session and handling session status(state) logic
  */
 const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
+  const [
+    {
+      correctQuestionOption,
+      currentQuestion,
+      newScores,
+      oldScores,
+      questionNumber,
+      status,
+    },
+    dispatch,
+  ] = useHostSessionContext();
   const { init, isConnected, deactivateConnection } = useHostWebSocket({
     onHostDisconnected: () => deactivateConnection(),
     onPlayerJoined: (event: WsEventPlayerJoined) => {
-      const setInitialScores = (playerScores: WsPlayer[]) => {
-        if (
-          playerScores.some((player) => player.userId === event.player.userId)
-        )
-          return playerScores;
-        return [...playerScores, { ...event.player, score: 0 }];
-      };
-      setOldScores(setInitialScores);
-      setNewScores(setInitialScores);
+      dispatch({ payload: event });
     },
     onPlayerDisconnected: (event: WsEventPlayerDisconnected) => {
-      const filterPlayerScores = (playerScores: WsPlayer[]) => {
-        return playerScores.filter(
-          (player) => event.player.userId !== player.userId,
-        );
-      };
-      setOldScores(filterPlayerScores);
-      setNewScores(filterPlayerScores);
+      dispatch({ payload: event });
     },
     onRoundEnd: (event: WsEventRoundEnd) => {
-      setStatus(QuizSessionStatus.ROUND_END);
-      setCorrectQuestionOption(event.answer);
-      setNewScores((prev) => {
-        setOldScores(prev);
-        return event.players.map((player) => ({
-          ...player,
-          userId: player.userId,
-        }));
-      });
+      dispatch({ payload: event });
     },
   });
 
@@ -64,18 +53,6 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   const session = qc.getQueryData<QuizSessionResponse>(["session", joinId])!;
   const { data: quizData, isLoading: isQuizLoading } = useQuiz(session.quizId);
 
-  const [questionNumber, setQuestionNumber] = useState(0);
-
-  const [status, setStatus] = useState<QuizSessionStatus>(session.status);
-
-  const [currentQuestion, setCurrentQuestion] = useState<WsQuestion | null>(
-    null,
-  );
-  const [correctQuestionOption, setCorrectQuestionOption] =
-    useState<string>("");
-
-  const [newScores, setNewScores] = useState<WsPlayer[]>([]);
-  const [oldScores, setOldScores] = useState<WsPlayer[]>([]);
   useEffect(() => {
     // Init if included makes too many calls
     init(session.quizSessionId);
@@ -90,10 +67,12 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   }
 
   const handleNewQuestion = () => {
-    setCurrentQuestion(quizData!.questions[questionNumber]);
-    setStatus(QuizSessionStatus.ACTIVE);
-    setQuestionNumber((prev) => prev + 1);
-    setCorrectQuestionOption("");
+    dispatch({
+      payload: {
+        questions: quizData!.questions,
+        event: HostSessionActionTypes.NEW_QUESTION,
+      },
+    });
   };
 
   return (
@@ -121,6 +100,7 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
             sessionId={session.quizSessionId}
             question={currentQuestion}
             questionNumber={questionNumber}
+            numberOfQuestions={quizData!.questions.length}
             oldScores={oldScores.map((playerScore) => ({
               id: playerScore.userId,
               nickname: playerScore.nickname,

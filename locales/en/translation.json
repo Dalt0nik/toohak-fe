@@ -79,7 +79,8 @@
       "PlayerCount_one": "{{count}} player",
       "PlayerCount_other": "{{count}} players",
       "LoadingQuestion": "Loading next question...",
-      "LoadNextQuestionButtonLabel": "Next question"
+      "LoadNextQuestionButtonLabel": "Next question",
+      "FinishQuizButtonLabel": "Finish quiz"
     },
     "waitingForOthers": "Waiting For Others...",
     "answerSelected": "ANSWER SELECTED"

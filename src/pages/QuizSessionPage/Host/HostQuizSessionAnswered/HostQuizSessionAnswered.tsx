@@ -16,6 +16,7 @@ interface HostQuizSessionAnsweredProps {
   sessionId: string;
   question: WsQuestion;
   questionNumber: number;
+  numberOfQuestions: number;
   oldScores: PlayerScoreResponse[];
   newScores: PlayerScoreResponse[];
   onNextQuestionSuccess: () => void;
@@ -31,6 +32,7 @@ const TRANSLATION_ROOT = "QuizSession.Host";
 const HostQuizSessionAnswered = ({
   correctQuestionOption,
   sessionId,
+  numberOfQuestions,
   question,
   questionNumber,
   oldScores,
@@ -74,6 +76,8 @@ const HostQuizSessionAnswered = ({
       </>
     );
 
+  const isQuizOver = numberOfQuestions === questionNumber;
+
   return (
     <Box sx={{ overflow: "hidden", p: 1 }}>
       {animationState === SessionAnsweredAnimationState.LEADERBOARD && (
@@ -91,7 +95,9 @@ const HostQuizSessionAnswered = ({
               variant="contained"
               onClick={handleNewQuestionClick}
             >
-              {t(`${TRANSLATION_ROOT}.LoadNextQuestionButtonLabel`)}
+              {isQuizOver
+                ? t(`${TRANSLATION_ROOT}.FinishQuizButtonLabel`)
+                : t(`${TRANSLATION_ROOT}.LoadNextQuestionButtonLabel`)}
             </Button>
           </Stack>
         </motion.div>
