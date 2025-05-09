@@ -54,15 +54,13 @@ const Navbar: React.FC = () => {
       <AppBar position="fixed">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Box sx={{ display: "flex", alignItems: "center", mr: 4 }}>
-              <Box
-                component="img"
-                src="/logo.png"
-                alt="Logo"
-                sx={{ height: 60, cursor: "pointer" }}
-                onClick={handleClickLogo}
-              />
-            </Box>
+            <Box
+              component="img"
+              src="/logo.png"
+              alt="Logo"
+              sx={{ height: 60, cursor: "pointer" }}
+              onClick={handleClickLogo}
+            />
             <Box sx={{ flexGrow: 1 }} />
             {isMobile ? (
               <>
