@@ -7,6 +7,7 @@ import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import { useTranslation } from "react-i18next";
 import { useAnswerQuestion } from "@hooks/useAnswerQuestion";
 import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
+import CountdownTimer from "@components/CountdownTimer";
 
 const PlayerQuizSessionQuestion = ({
   question,
@@ -45,6 +46,10 @@ const PlayerQuizSessionQuestion = ({
         mt: "10vh",
       }}
     >
+      <Box sx={{ width: "100%", mb: 2 }}>
+        <CountdownTimer key={question.id} duration={question.durationSeconds} />
+      </Box>
+
       <QuestionDisplay
         questionTitle={question.title}
         questionNumber={questionNumber}
