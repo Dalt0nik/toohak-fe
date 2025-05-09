@@ -4,7 +4,6 @@ import {
   Button,
   Container,
   Toolbar,
-  Typography,
   Drawer,
   IconButton,
   List,
@@ -13,7 +12,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { PublicAppRoutes } from "@models/PublicRoutes";
-import { Outlet, Link as RouterLink } from "react-router-dom";
+import { Outlet, Link as RouterLink, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "@ui/LogoutButton.tsx";
@@ -26,6 +25,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate();
   const { isAuthenticated } = useAuth0();
   const { t } = useTranslation();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -41,6 +41,9 @@ const Navbar: React.FC = () => {
   const commonNavItems: NavItem[] = [
     { label: t("navbar_joinquiz"), path: PublicAppRoutes.JOIN_SESSION },
   ];
+  const handleClickLogo = () => {
+    navigate("/");
+  };
 
   const navItems = isAuthenticated
     ? [...commonNavItems, ...userNavItems]
@@ -52,14 +55,13 @@ const Navbar: React.FC = () => {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Box sx={{ display: "flex", alignItems: "center", mr: 4 }}>
-              <Typography
-                variant="h4"
-                component={RouterLink}
-                to={PublicAppRoutes.HOME}
-                sx={{ color: "white", textDecoration: "none" }}
-              >
-                LOGO
-              </Typography>
+              <Box
+                component="img"
+                src="/logo.png"
+                alt="Logo"
+                sx={{ height: 60, cursor: "pointer" }}
+                onClick={handleClickLogo}
+              />
             </Box>
             <Box sx={{ flexGrow: 1 }} />
             {isMobile ? (
