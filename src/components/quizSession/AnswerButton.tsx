@@ -58,6 +58,12 @@ const AnswerButton = ({
     { color: "#F3CC00", bgcolor: "#DFBB00" },
   ];
 
+  const correctStyles = correct
+    ? {
+        outlineColor: `${theme.palette.success.light} !important`,
+      }
+    : {};
+
   return (
     <Button
       disabled={disabled}
@@ -83,11 +89,7 @@ const AnswerButton = ({
         m: { xs: 0.5, md: 2 },
         wordBreak: "break-word",
         "&": {
-          ...(correct
-            ? {
-                outlineColor: `${theme.palette.success.light} !important`,
-              }
-            : {}),
+          ...correctStyles,
         },
       }}
       disableElevation
