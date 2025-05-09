@@ -9,11 +9,11 @@ import { useEffect, useState } from "react";
 import HostQuizSessionLobby from "./HostQuizSessionLobby/HostQuizSessionLobby";
 import HostQuizSessionQuestion from "@pages/QuizSessionPage/Host/HostQuizSessionQuestion/HostQuizSessionQuestion";
 import MusicBar from "@components/MusicBar";
-import { WsEventNewQuestion } from "@models/Response/ws/all/WsEventNewQuestion";
 import HostQuizSessionAnswered from "./HostQuizSessionAnswered/HostQuizSessionAnswered";
 import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd";
 import { WsEventPlayerJoined } from "@models/Response/ws/all/WsEventPlayerJoined";
 import { WsPlayer } from "@models/Response/ws/all/WsPlayer";
+import { WsEventPlayerDisconnected } from "@models/Response/ws/all/WsEventPlayerDisconnected";
 import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
 
 interface HostQuizSessionProps {
@@ -27,7 +27,6 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   const { init, isConnected, deactivateConnection } = useHostWebSocket({
     onHostDisconnected: () => deactivateConnection(),
     onPlayerJoined: (event: WsEventPlayerJoined) => {
-      setPlayerCount((prev) => prev + 1);
       const setInitialScores = (playerScores: WsPlayer[]) => {
         if (
           playerScores.some((player) => player.userId === event.player.userId)
@@ -38,20 +37,25 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
       setOldScores(setInitialScores);
       setNewScores(setInitialScores);
     },
-    onPlayerDisconnected: () => setPlayerCount((prev) => Math.max(0, prev - 1)),
+    onPlayerDisconnected: (event: WsEventPlayerDisconnected) => {
+      const filterPlayerScores = (playerScores: WsPlayer[]) => {
+        return playerScores.filter(
+          (player) => event.player.userId !== player.userId,
+        );
+      };
+      setOldScores(filterPlayerScores);
+      setNewScores(filterPlayerScores);
+    },
     onRoundEnd: (event: WsEventRoundEnd) => {
       setStatus(QuizSessionStatus.ROUND_END);
       setCorrectQuestionOption(event.answer);
       setNewScores((prev) => {
         setOldScores(prev);
-        return event.players;
+        return event.players.map((player) => ({
+          ...player,
+          userId: player.userId,
+        }));
       });
-    },
-    onNewQuestion: (event: WsEventNewQuestion) => {
-      setCurrentQuestion(event.question);
-      setStatus(QuizSessionStatus.ACTIVE);
-      setQuestionNumber((prev) => prev + 1);
-      setCorrectQuestionOption("");
     },
   });
 
@@ -60,7 +64,6 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   const session = qc.getQueryData<QuizSessionResponse>(["session", joinId])!;
   const { data: quizData, isLoading: isQuizLoading } = useQuiz(session.quizId);
 
-  const [playerCount, setPlayerCount] = useState(0);
   const [questionNumber, setQuestionNumber] = useState(0);
 
   const [status, setStatus] = useState<QuizSessionStatus>(session.status);
@@ -73,7 +76,6 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
 
   const [newScores, setNewScores] = useState<WsPlayer[]>([]);
   const [oldScores, setOldScores] = useState<WsPlayer[]>([]);
-
   useEffect(() => {
     // Init if included makes too many calls
     init(session.quizSessionId);
@@ -87,29 +89,31 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
     return <LoadingBackdrop />;
   }
 
-  const handleCurrentSessionStateChange = (newState: QuizSessionStatus) => {
-    setStatus(newState);
+  const handleNewQuestion = () => {
+    setCurrentQuestion(quizData!.questions[questionNumber]);
+    setStatus(QuizSessionStatus.ACTIVE);
+    setQuestionNumber((prev) => prev + 1);
+    setCorrectQuestionOption("");
   };
 
   return (
-    <>
-      <Container>
-        {status === QuizSessionStatus.PENDING && (
-          <HostQuizSessionLobby
-            playerCount={playerCount}
-            sessionData={session}
-            quizData={quizData!}
-            onChangeSessionStatus={handleCurrentSessionStateChange}
-          />
-        )}
+    <Container>
+      {status === QuizSessionStatus.PENDING && (
+        <HostQuizSessionLobby
+          playerCount={oldScores.length}
+          sessionData={session}
+          quizData={quizData!}
+          onSuccessfulStart={handleNewQuestion}
+        />
+      )}
 
-        {currentQuestion && status == QuizSessionStatus.ACTIVE && (
-          <HostQuizSessionQuestion
-            question={currentQuestion}
-            questionNumber={questionNumber}
-          />
-        )}
-        {currentQuestion &&
+      {currentQuestion && status == QuizSessionStatus.ACTIVE && (
+        <HostQuizSessionQuestion
+          question={currentQuestion}
+          questionNumber={questionNumber}
+        />
+      )}
+      {currentQuestion &&
         correctQuestionOption &&
         status == QuizSessionStatus.ROUND_END && (
           <HostQuizSessionAnswered
@@ -127,13 +131,13 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
               nickname: playerScore.nickname,
               score: playerScore.score,
             }))}
+            onNextQuestionSuccess={handleNewQuestion}
           />
         )}
-        <Box width="100%" display="flex">
-          <MusicBar />
-        </Box>
-      </Container>
-    </>
+      <Box width="100%" display="flex">
+        <MusicBar />
+      </Box>
+    </Container>
   );
 };
 

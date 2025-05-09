@@ -1,6 +1,5 @@
 import { startQuizSession } from "@api/QuizSessionApi";
 import LoadingBackdrop from "@components/common/ui/LoadingBackdrop";
-import { QuizSessionStatus } from "@models/QuizSessionState";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
 import { Stack, Typography, Grid, Box, Button } from "@mui/material";
@@ -15,7 +14,7 @@ interface HostQuizSessionLobbyProps {
   playerCount: number;
   sessionData: QuizSessionResponse;
   quizData: QuizResponse;
-  onChangeSessionStatus: (newState: QuizSessionStatus) => void;
+  onSuccessfulStart: () => void;
 }
 
 /**
@@ -27,14 +26,13 @@ const HostQuizSessionLobby = ({
   playerCount,
   sessionData,
   quizData,
-  onChangeSessionStatus,
+  onSuccessfulStart,
 }: HostQuizSessionLobbyProps) => {
   const { mutate: startGameMutation, isPending: isGameStartPending } =
     useMutation({
       mutationFn: async () => {
         const response = await startQuizSession(sessionData.quizSessionId);
-        if (response === START_GAME_SUCCESS_STATUS)
-          onChangeSessionStatus(QuizSessionStatus.ACTIVE);
+        if (response === START_GAME_SUCCESS_STATUS) onSuccessfulStart();
       },
     });
 

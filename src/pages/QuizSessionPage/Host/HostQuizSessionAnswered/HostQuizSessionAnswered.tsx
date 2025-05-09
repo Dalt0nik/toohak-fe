@@ -18,6 +18,7 @@ interface HostQuizSessionAnsweredProps {
   questionNumber: number;
   oldScores: PlayerScoreResponse[];
   newScores: PlayerScoreResponse[];
+  onNextQuestionSuccess: () => void;
 }
 
 enum SessionAnsweredAnimationState {
@@ -34,6 +35,7 @@ const HostQuizSessionAnswered = ({
   questionNumber,
   oldScores,
   newScores,
+  onNextQuestionSuccess,
 }: HostQuizSessionAnsweredProps) => {
   const { t } = useTranslation();
   const [animationState, setAnimationState] =
@@ -50,7 +52,12 @@ const HostQuizSessionAnswered = ({
   }, []);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: nextQuestion,
+    mutationFn: async (sessionId: string) => {
+      const status = await nextQuestion(sessionId);
+      if (status === 200) {
+        onNextQuestionSuccess();
+      }
+    },
   });
 
   const handleNewQuestionClick = () => {
