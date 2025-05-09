@@ -1,24 +1,18 @@
 import AnswerButton from "@components/quizSession/AnswerButton";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
-import { WsQuestion } from "@models/Response/ws/player/WsQuestionOption";
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { easeInOut, motion } from "framer-motion";
 import Leaderboard from "../Leaderboard/Leaderboard";
-import { PlayerScoreResponse } from "@models/Response/PlayerScoreResponse";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { nextQuestion } from "@api/QuizSessionApi";
 import LoadingBackdrop from "@components/common/ui/LoadingBackdrop";
 import { useTranslation } from "react-i18next";
+import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
 
 interface HostQuizSessionAnsweredProps {
-  correctQuestionOption: string;
   sessionId: string;
-  question: WsQuestion;
-  questionNumber: number;
   numberOfQuestions: number;
-  oldScores: PlayerScoreResponse[];
-  newScores: PlayerScoreResponse[];
   onNextQuestionSuccess: () => void;
 }
 
@@ -30,15 +24,19 @@ enum SessionAnsweredAnimationState {
 const TRANSLATION_ROOT = "QuizSession.Host";
 
 const HostQuizSessionAnswered = ({
-  correctQuestionOption,
   sessionId,
   numberOfQuestions,
-  question,
-  questionNumber,
-  oldScores,
-  newScores,
   onNextQuestionSuccess,
 }: HostQuizSessionAnsweredProps) => {
+  const [
+    {
+      correctQuestionOption,
+      questionNumber,
+      oldScores,
+      newScores,
+      currentQuestion,
+    },
+  ] = useHostSessionContext();
   const { t } = useTranslation();
   const [animationState, setAnimationState] =
     useState<SessionAnsweredAnimationState>(
@@ -76,6 +74,19 @@ const HostQuizSessionAnswered = ({
       </>
     );
 
+  const oldScoresMapped = oldScores.map((playerScore) => ({
+    id: playerScore.userId,
+    nickname: playerScore.nickname,
+    score: playerScore.score,
+  }));
+  const newScoresMapped = newScores.map((playerScore) => ({
+    id: playerScore.userId,
+    nickname: playerScore.nickname,
+    score: playerScore.score,
+  }));
+
+  const question = currentQuestion!;
+
   const isQuizOver = numberOfQuestions === questionNumber;
 
   return (
@@ -89,7 +100,10 @@ const HostQuizSessionAnswered = ({
           }}
         >
           <Stack spacing={2} alignItems={"center"}>
-            <Leaderboard oldPoints={oldScores} newPoints={newScores} />
+            <Leaderboard
+              oldPoints={oldScoresMapped}
+              newPoints={newScoresMapped}
+            />
             <Button
               color="primary"
               variant="contained"

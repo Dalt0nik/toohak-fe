@@ -4,18 +4,13 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay"
 import CountdownTimer from "@components/CountdownTimer";
-import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
+import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
 
-const HostQuizSessionQuestion = ({
-  question,
-  questionNumber,
-}: {
-  question: WsQuestion;
-  questionNumber: number;
-}) => {
+const HostQuizSessionQuestion = () => {
+  const [{ currentQuestion, questionNumber }] = useHostSessionContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Maybe instead of this display some kind of error if isMobile = true?
-
+  const question = currentQuestion!;
   return (
     <Box
       sx={{

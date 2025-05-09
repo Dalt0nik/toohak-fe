@@ -24,17 +24,8 @@ interface HostQuizSessionProps {
  * Main component responsible for creating websocket connection for a host to quiz session and handling session status(state) logic
  */
 const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
-  const [
-    {
-      correctQuestionOption,
-      currentQuestion,
-      newScores,
-      oldScores,
-      questionNumber,
-      status,
-    },
-    dispatch,
-  ] = useHostSessionContext();
+  const [{ correctQuestionOption, currentQuestion, status }, dispatch] =
+    useHostSessionContext();
   const { init, isConnected, deactivateConnection } = useHostWebSocket({
     onHostDisconnected: () => deactivateConnection(),
     onPlayerJoined: (event: WsEventPlayerJoined) => {
@@ -79,7 +70,6 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
     <Container>
       {status === QuizSessionStatus.PENDING && (
         <HostQuizSessionLobby
-          playerCount={oldScores.length}
           sessionData={session}
           quizData={quizData!}
           onSuccessfulStart={handleNewQuestion}
@@ -87,30 +77,14 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
       )}
 
       {currentQuestion && status == QuizSessionStatus.ACTIVE && (
-        <HostQuizSessionQuestion
-          question={currentQuestion}
-          questionNumber={questionNumber}
-        />
+        <HostQuizSessionQuestion />
       )}
       {currentQuestion &&
         correctQuestionOption &&
         status == QuizSessionStatus.ROUND_END && (
           <HostQuizSessionAnswered
-            correctQuestionOption={correctQuestionOption}
             sessionId={session.quizSessionId}
-            question={currentQuestion}
-            questionNumber={questionNumber}
             numberOfQuestions={quizData!.questions.length}
-            oldScores={oldScores.map((playerScore) => ({
-              id: playerScore.userId,
-              nickname: playerScore.nickname,
-              score: playerScore.score,
-            }))}
-            newScores={newScores.map((playerScore) => ({
-              id: playerScore.userId,
-              nickname: playerScore.nickname,
-              score: playerScore.score,
-            }))}
             onNextQuestionSuccess={handleNewQuestion}
           />
         )}
