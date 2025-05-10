@@ -48,7 +48,6 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   useEffect(() => {
     init(session.quizSessionId);
 
-    return () => deactivateConnection();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.quizSessionId]);
 
