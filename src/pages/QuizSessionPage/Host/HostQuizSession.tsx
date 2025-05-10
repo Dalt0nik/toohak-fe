@@ -3,11 +3,12 @@ import { useQuiz } from "@hooks/useQuiz";
 import useHostWebSocket from "@hooks/ws/useHostWebScoket";
 import { QuizSessionStatus } from "@models/QuizSessionState";
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import HostQuizSessionLobby from "./HostQuizSessionLobby/HostQuizSessionLobby";
 import HostQuizSessionQuestion from "@pages/QuizSessionPage/Host/HostQuizSessionQuestion/HostQuizSessionQuestion";
+import MusicBar from "@components/MusicBar";
 
 interface HostQuizSessionProps {
   joinId: string;
@@ -48,23 +49,28 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   const currentQuestion = quizData!.questions[0];
   const questionNumber = 1;
   return (
-    <Container>
-      {status === QuizSessionStatus.PENDING && (
-        <HostQuizSessionLobby
-          playerCount={playerCount}
-          sessionData={session}
-          quizData={quizData!}
-          onChangeSessionStatus={handleCurrentSessionStateChange}
-        />
-      )}
+    <>
+      <Container>
+        {status === QuizSessionStatus.PENDING && (
+          <HostQuizSessionLobby
+            playerCount={playerCount}
+            sessionData={session}
+            quizData={quizData!}
+            onChangeSessionStatus={handleCurrentSessionStateChange}
+          />
+        )}
 
-      {currentQuestion && status == QuizSessionStatus.ACTIVE && (
-        <HostQuizSessionQuestion
-          question={currentQuestion}
-          questionNumber={questionNumber}
-        />
-      )}
-    </Container>
+        {currentQuestion && status == QuizSessionStatus.ACTIVE && (
+          <HostQuizSessionQuestion
+            question={currentQuestion}
+            questionNumber={questionNumber}
+          />
+        )}
+        <Box width="100%" display="flex">
+          <MusicBar />
+        </Box>
+      </Container>
+    </>
   );
 };
 

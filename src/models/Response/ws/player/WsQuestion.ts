@@ -1,6 +1,9 @@
-export interface WsQuestionOption {
+import { WsQuestionOption } from "./WsQuestionOption";
+
+export interface WsQuestion {
   id: string;
-  questionId: string;
+  imageId: string;
   title: string;
-  ordering: number;
+  durationSeconds: number;
+  questionOptions: WsQuestionOption[];
 }

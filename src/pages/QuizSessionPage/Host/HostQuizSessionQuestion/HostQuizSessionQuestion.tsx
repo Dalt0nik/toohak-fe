@@ -4,6 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import { QuestionResponse } from "@models/Response/questionResponse";
+import CountdownTimer from "@components/CountdownTimer";
 
 const HostQuizSessionQuestion = ({
   question,
@@ -25,6 +26,10 @@ const HostQuizSessionQuestion = ({
         mt: "10vh",
       }}
     >
+      <Box sx={{ width: "100%", mb: 2 }}>
+        <CountdownTimer duration={15} />
+      </Box>
+
       <QuestionDisplay
         questionTitle={question.title}
         questionNumber={questionNumber}

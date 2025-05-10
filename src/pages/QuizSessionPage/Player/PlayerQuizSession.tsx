@@ -8,7 +8,7 @@ import { WsEventPlayerDisconnected } from "@models/Response/ws/all/WsEventPlayer
 import { useQuery } from "@tanstack/react-query";
 import { fetchConnectedUsers } from "@api/QuizSessionApi";
 import { WsEventPlayerNewQuestion } from "@models/Response/ws/player/WsEventPlayerNewQuestion";
-import { WsQuestion } from "@models/Response/ws/player/WsQuestionOption";
+import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
 import PlayerJoinedList from "./PlayerQuizSessionQuestion/PlayerJoinedList";
 import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd.ts";
 import { WsQuestionOption } from "@models/Response/ws/player/WsQuestion.ts";
