@@ -13,8 +13,9 @@ import HostQuizSessionAnswered from "./HostQuizSessionAnswered/HostQuizSessionAn
 import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd";
 import { WsEventPlayerJoined } from "@models/Response/ws/all/WsEventPlayerJoined";
 import { WsEventPlayerDisconnected } from "@models/Response/ws/all/WsEventPlayerDisconnected";
-import { HostSessionActionTypes } from "@models/HostSessionActionTypes";
+import { HostSessionActionTypes } from "@models/hostSessionTypes";
 import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
+import { HostSessionComponentEventNewQuestion } from "@models/hostSessionTypes";
 
 interface HostQuizSessionProps {
   joinId: string;
@@ -62,7 +63,7 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
       payload: {
         questions: quizData!.questions,
         event: HostSessionActionTypes.NEW_QUESTION,
-      },
+      } as HostSessionComponentEventNewQuestion,
     });
   };
 

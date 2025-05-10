@@ -1,5 +1,4 @@
 import { WsEventHostDisconnected } from "./WsEventHostDisconnected";
-import { WsEventNewQuestion } from "./WsEventNewQuestion";
 import { WsEventPlayerDisconnected } from "./WsEventPlayerDisconnected";
 import { WsEventPlayerJoined } from "./WsEventPlayerJoined";
 import { WsEventRoundEnd } from "./WsEventRoundEnd";
@@ -16,5 +15,4 @@ export type WsEventAll =
   | WsEventPlayerJoined
   | WsEventPlayerDisconnected
   | WsEventHostDisconnected
-  | WsEventRoundEnd
-  | WsEventNewQuestion;
+  | WsEventRoundEnd;

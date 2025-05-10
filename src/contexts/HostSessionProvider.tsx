@@ -1,4 +1,8 @@
-import { HostSessionActionTypes } from "@models/HostSessionActionTypes";
+import {
+  HostSessionActionTypes,
+  HostSessionComponentEventNewQuestion,
+  HostSessionComponentEvents,
+} from "@models/hostSessionTypes";
 import { QuizSessionStatus } from "@models/QuizSessionState";
 import { QuestionResponse } from "@models/Response/questionResponse";
 import { AllEventTypes } from "@models/Response/ws/all/WsEventAll";
@@ -6,41 +10,39 @@ import { WsEventPlayerDisconnected } from "@models/Response/ws/all/WsEventPlayer
 import { WsEventPlayerJoined } from "@models/Response/ws/all/WsEventPlayerJoined";
 import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd";
 import { WsPlayer } from "@models/Response/ws/all/WsPlayer";
-import { WsQuestion } from "@models/Response/ws/player/WsQuestionOption";
-import { WsEventGeneric } from "@models/Response/ws/WsEventGeneric";
 import { useReducer } from "react";
 import { HostSessionContext } from "./HostSessionContext";
+import { WsEventGeneric } from "@models/Response/ws/WsEventGeneric";
 
 export interface HostSessionState {
   questionNumber: number;
   status: QuizSessionStatus;
-  currentQuestion: WsQuestion | null;
+  currentQuestion: QuestionResponse | null;
   correctQuestionOption: string;
   newScores: WsPlayer[];
   oldScores: WsPlayer[];
 }
 
-interface HostSessionComponentEvents {
-  event: HostSessionActionTypes;
-  questions: QuestionResponse[];
-}
-
 export interface HostSessionAction {
-  payload: WsEventGeneric<string> | HostSessionComponentEvents;
+  payload: WsEventGeneric<string> | HostSessionComponentEvents<number>;
 }
 
 const hostSessionReducer = (
   state: HostSessionState,
   action: HostSessionAction,
 ): HostSessionState => {
-  if (action.payload.event === HostSessionActionTypes.NEW_QUESTION) {
-    return {
-      ...state,
-      currentQuestion: action.payload.questions[state.questionNumber],
-      status: QuizSessionStatus.ACTIVE,
-      questionNumber: state.questionNumber + 1,
-      correctQuestionOption: "",
-    };
+  switch (action.payload.event) {
+    case HostSessionActionTypes.NEW_QUESTION: {
+      const { questions } =
+        action.payload as HostSessionComponentEventNewQuestion;
+      return {
+        ...state,
+        currentQuestion: questions[state.questionNumber],
+        status: QuizSessionStatus.ACTIVE,
+        questionNumber: state.questionNumber + 1,
+        correctQuestionOption: "",
+      };
+    }
   }
 
   switch (action.payload.event) {

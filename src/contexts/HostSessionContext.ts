@@ -1,5 +1,5 @@
 import { createContext, Dispatch } from "react";
-import { HostSessionState, HostSessionAction } from "./HostSessionProvider";
+import { HostSessionAction, HostSessionState } from "./HostSessionProvider";
 
 export const HostSessionContext = createContext<
   [HostSessionState, Dispatch<HostSessionAction>] | null
