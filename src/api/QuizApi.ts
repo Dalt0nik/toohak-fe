@@ -93,3 +93,14 @@ export const updateQuiz = async ({
     throw new Error(errorMessage);
   }
 };
+
+export const deleteQuizImage = async (id: string): Promise<string> => {
+  try {
+    const response = await api.delete(`/quizzes/${id}/image`);
+    return response.data;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const errorMessage = axiosError.message || "Could not delete quiz image";
+    throw new Error(errorMessage);
+  }
+};

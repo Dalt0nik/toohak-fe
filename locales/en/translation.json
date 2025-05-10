@@ -53,6 +53,10 @@
     "form": "Form for settings",
     "noQuestions": "There is no questions in this quiz"
   },
+  "EditQuizPage": {
+    "EditQuiz": "Edit Quiz",
+    "DeleteButton": "Delete"
+  },
   "QuizSession": {
     "EnterNickname": "Enter nickname",
     "NicknamePlaceholder": "Nickname",
@@ -100,7 +104,8 @@
       "couldNotFind": "Could not find any quizzes"
     },
     "Image": {
-      "couldNotUpload": "Could not upload image"
+      "couldNotUpload": "Could not upload image",
+      "couldNotDelete": "Could not delete image"
     },
     "User": {
       "couldNotRegister": "Could not register user"
@@ -113,7 +118,8 @@
       "deleted": "Quiz deleted successfully"
     },
     "Image": {
-      "uploaded": "Image uploaded successfully"
+      "uploaded": "Image uploaded successfully",
+      "deleted": "Image deleted successfully"
     },
     "Question": {
       "created": "Question created successfully",
@@ -129,7 +135,8 @@
     "defaultConfirm": "Yes",
     "defaultDecline": "No",
     "messageDeleteQuestion": "Are you sure you want to delete this question?",
-    "messageDeleteQuiz": "Are you sure you want to delete this quiz?"
+    "messageDeleteQuiz": "Are you sure you want to delete this quiz?",
+    "deleteQuizImage": "Are you sure you want to delete this image?"
   },
   "AnswerQuestion": {
     "answerSentSuccessfully": "Answer sent successfully",

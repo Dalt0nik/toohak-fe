@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Typography, Grid, Button, Box } from "@mui/material";
-import QuizDetailsSection from "@components/quiz/QuizCreation/QuizDetailsSection";
+import QuizDetailsSection from "./EditQuizDetailsSection";
 import { NewQuizRequest } from "@models/Request/NewQuizRequest";
 import { useTranslation } from "react-i18next";
 import { FormProvider, useForm } from "react-hook-form";
@@ -25,7 +25,7 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
     defaultValues: {
       title: initialData?.title || "",
       description: initialData?.description || "",
-      imageId: initialData?.imageId || undefined,
+      imageId: initialData?.imageId || null,
     },
   });
 
