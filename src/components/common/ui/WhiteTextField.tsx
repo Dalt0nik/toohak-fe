@@ -1,6 +1,6 @@
-import { styled, TextField } from "@mui/material";
+import { styled, TextField, TextFieldProps } from "@mui/material";
 
-const WhiteTextField = styled(TextField)(({ theme }) => {
+const InputField = styled(TextField)(({ theme }) => {
   const contrastColor = theme.palette.contrast.text;
   return {
     backgroundColor: theme.palette.background.default,
@@ -35,5 +35,31 @@ const WhiteTextField = styled(TextField)(({ theme }) => {
     },
   };
 });
+
+type WhiteTextFieldProps = TextFieldProps & {
+  trimEnd?: boolean;
+  trimStart?: boolean;
+};
+
+const WhiteTextField = ({
+  trimEnd,
+  trimStart = true,
+  ...props
+}: WhiteTextFieldProps) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let modifiedValue = trimStart ? e.target.value.trimStart() : e.target.value;
+    modifiedValue = trimEnd ? modifiedValue.trimEnd() : modifiedValue;
+    const modifiedEvent = {
+      ...e,
+      target: {
+        ...e.target,
+        value: modifiedValue,
+      },
+    };
+    console.log(modifiedValue);
+    props.onChange?.(modifiedEvent);
+  };
+  return <InputField {...props} onChange={handleChange} />;
+};
 
 export default WhiteTextField;

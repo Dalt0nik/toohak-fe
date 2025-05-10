@@ -44,6 +44,7 @@ const JoinCodeController = ({ control, error }: JoinCodeControllerProps) => {
           error={Boolean(error)}
           helperText={error ? error.message : ""}
           sx={{ marginBottom: "20px", width: "300px" }}
+          trimEnd
         />
       )}
     />
