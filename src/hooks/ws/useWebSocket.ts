@@ -23,12 +23,16 @@ export const useWebSocket = () => {
     onConnect: () => void,
     onDisconnect: () => void,
   ) => {
+    if (stompClientRef.current?.connected) {
+      console.warn("Deactivate to create a new connection");
+      return;
+    }
+
     const socket = new SockJS(WS_CONFIG.url);
     const stompHeaders = new StompHeaders();
 
     if (authorizationHeader)
       stompHeaders["Authorization"] = authorizationHeader;
-
     const stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: WS_CONFIG.reconnectDelay,
@@ -62,8 +66,12 @@ export const useWebSocket = () => {
   };
 
   const deactivateConnection = () => {
-    if (!stompClientRef.current) return;
+    if (!stompClientRef.current?.connected || !stompClientRef.current) {
+      console.warn("Cannot deactivate on absent connection");
+      return;
+    }
     stompClientRef.current.deactivate();
+    stompClientRef.current = null;
   };
 
   /**

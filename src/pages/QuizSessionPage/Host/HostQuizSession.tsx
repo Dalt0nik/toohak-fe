@@ -46,11 +46,9 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   const { data: quizData, isLoading: isQuizLoading } = useQuiz(session.quizId);
 
   useEffect(() => {
-    // Init if included makes too many calls
     init(session.quizSessionId);
-    return () => {
-      deactivateConnection();
-    };
+
+    return () => deactivateConnection();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.quizSessionId]);
 
