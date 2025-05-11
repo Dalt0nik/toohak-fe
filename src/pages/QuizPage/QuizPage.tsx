@@ -60,6 +60,13 @@ const QuizPage = () => {
               sx={{
                 backgroundColor: CARD_BACKGROUND_PURPLE,
                 borderRadius: theme.borderRadius?.md,
+                display: "flex",
+                justifyContent: "center",
+                "& .MuiCardMedia-root": {
+                  maxHeight: 600,
+                  width: "auto",
+                  objectFit: "contain",
+                },
               }}
             >
               <ImageCard alt="Quiz cover" id={quiz!.imageId} />
