@@ -1,6 +1,6 @@
 import { startQuizSession } from "@api/QuizSessionApi";
 import LoadingBackdrop from "@components/common/ui/LoadingBackdrop";
-import { QuizSessionStatus } from "@models/QuizSessionState";
+import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
 import { Stack, Typography, Grid, Box, Button } from "@mui/material";
@@ -12,10 +12,9 @@ const TRANSLATIONS_ROOT = "QuizSession.Host";
 const START_GAME_SUCCESS_STATUS = 200;
 
 interface HostQuizSessionLobbyProps {
-  playerCount: number;
   sessionData: QuizSessionResponse;
   quizData: QuizResponse;
-  onChangeSessionStatus: (newState: QuizSessionStatus) => void;
+  onSuccessfulStart: () => void;
 }
 
 /**
@@ -24,17 +23,17 @@ interface HostQuizSessionLobbyProps {
  * During status PENDING, host can view the number of players joined and can start the session
  */
 const HostQuizSessionLobby = ({
-  playerCount,
   sessionData,
   quizData,
-  onChangeSessionStatus,
+  onSuccessfulStart,
 }: HostQuizSessionLobbyProps) => {
+  const [{ newScores }] = useHostSessionContext();
+
   const { mutate: startGameMutation, isPending: isGameStartPending } =
     useMutation({
       mutationFn: async () => {
         const response = await startQuizSession(sessionData.quizSessionId);
-        if (response === START_GAME_SUCCESS_STATUS)
-          onChangeSessionStatus(QuizSessionStatus.ACTIVE);
+        if (response === START_GAME_SUCCESS_STATUS) onSuccessfulStart();
       },
     });
 
@@ -43,6 +42,8 @@ const HostQuizSessionLobby = ({
   };
 
   const joinUrl = `${window.location.origin}/join/${sessionData.joinId}`;
+
+  const playerCount = newScores.length;
 
   return (
     <>

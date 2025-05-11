@@ -8,6 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import PlayerQuizSession from "./Player/PlayerQuizSession";
 import { usePlayerJwt } from "@hooks/usePlayerJwt";
 import HostQuizSession from "./Host/HostQuizSession";
+import { HostSessionProvider } from "@contexts/HostSessionProvider";
 
 const QuizSessionPage = () => {
   const { joinId } = useParams<{ joinId: string }>();
@@ -94,7 +95,9 @@ const QuizSessionPage = () => {
           padding: "20px",
         }}
       >
-        <HostQuizSession joinId={joinId!} />
+        <HostSessionProvider sessionStatus={session!.status}>
+          <HostQuizSession joinId={joinId!} />
+        </HostSessionProvider>
       </Box>
     );
   }
