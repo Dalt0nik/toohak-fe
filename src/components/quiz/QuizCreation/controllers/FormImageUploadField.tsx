@@ -54,7 +54,6 @@ export const FormImageUploadField: React.FC<FormImageUploadFieldProps> = ({
           <Typography variant="h5" align="left">
             {t("quiz_form_image_upload")}
           </Typography>
-          {console.log(field.value, "FIELD VALUE")}
           {!field.value ? (
             <ImageUpload
               onImageUpload={(image: File) =>
