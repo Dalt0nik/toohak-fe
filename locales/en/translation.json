@@ -80,7 +80,8 @@
       "PlayerCount_other": "{{count}} players"
     },
     "waitingForOthers": "Waiting For Others...",
-    "answerSelected": "ANSWER SELECTED"
+    "answerSelected": "ANSWER SELECTED",
+    "waitingForNextQuestion": "Waiting for next question..."
   },
   "Error": {
     "Quiz": {
