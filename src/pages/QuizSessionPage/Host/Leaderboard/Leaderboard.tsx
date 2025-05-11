@@ -3,8 +3,9 @@ import { Box } from "@mui/material";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import PlayerRow from "./PlayerRow";
 import { PlayerScoreResponse } from "@models/Response/PlayerScoreResponse";
+import { getMedalColor } from "@utils/gameHelpers";
 
-enum AnimationStates {
+const enum AnimationStates {
   INITIAL,
   NEW,
   SORTED,
@@ -14,6 +15,8 @@ const ANIMATION_TIMING = {
   NEW_SCORES_DELAY: 800, // Delay before showing new scores
   SORT_DELAY: 1000, // Additional delay before sorting
 };
+
+const PLAYERS_DISPLAYED = 5;
 
 interface LeaderboardProps {
   oldPoints: PlayerScoreResponse[];
@@ -91,18 +94,10 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
     [scoreChanges],
   );
 
-  const getHighlightColor = useCallback((index: number) => {
-    switch (index) {
-      case 0:
-        return "#ffd700"; // Gold
-      case 1:
-        return "#c0c0c0"; // Silver
-      case 2:
-        return "#cd7f32"; // Bronze
-      default:
-        return "transparent";
-    }
-  }, []);
+  const getHighlightColor = useCallback(
+    (index: number) => getMedalColor(index),
+    [],
+  );
 
   return (
     <Box sx={{ width: "100%", maxWidth: 600, mx: "auto", px: 2 }}>
@@ -126,7 +121,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
           then plays its exit transition.
           */}
           <AnimatePresence mode="popLayout">
-            {displayPoints.slice(0, 5).map((player, index) => {
+            {displayPoints.slice(0, PLAYERS_DISPLAYED).map((player, index) => {
               const displayScore = getDisplayScore(player.id);
               const changed =
                 hasScoreChanged(player.id) &&

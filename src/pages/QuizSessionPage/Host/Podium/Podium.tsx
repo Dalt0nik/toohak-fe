@@ -4,6 +4,9 @@ import { motion, useAnimate } from "framer-motion";
 import { PlayerScoreResponse } from "@models/Response/PlayerScoreResponse";
 import { CARD_BACKGROUND_PURPLE } from "@assets/styles/constants";
 import confetti from "canvas-confetti";
+import { getMedalColor } from "@utils/gameHelpers";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 
 interface PodiumProps {
   newPoints: PlayerScoreResponse[];
@@ -75,19 +78,6 @@ const Podium: React.FC<PodiumProps> = ({ newPoints }) => {
     });
   }, [animate]);
 
-  const getMedalEmoji = (position: number) => {
-    switch (position) {
-      case 0:
-        return "🥇";
-      case 1:
-        return "🥈";
-      case 2:
-        return "🥉";
-      default:
-        return "";
-    }
-  };
-
   const podiumSteps = useMemo(() => {
     const positions = [
       {
@@ -95,7 +85,6 @@ const Podium: React.FC<PodiumProps> = ({ newPoints }) => {
         position: 2,
         left: "25%",
         height: 200,
-        color: "#c0c0c0",
         podiumClass: "podium-2",
         infoClass: "info-2",
       },
@@ -104,7 +93,6 @@ const Podium: React.FC<PodiumProps> = ({ newPoints }) => {
         position: 1,
         left: "50%",
         height: 250,
-        color: "#ffd700",
         podiumClass: "podium-1",
         infoClass: "info-1",
       },
@@ -113,7 +101,6 @@ const Podium: React.FC<PodiumProps> = ({ newPoints }) => {
         position: 3,
         left: "75%",
         height: 150,
-        color: "#cd7f32",
         podiumClass: "podium-3",
         infoClass: "info-3",
       },
@@ -126,6 +113,7 @@ const Podium: React.FC<PodiumProps> = ({ newPoints }) => {
         steps.push({
           ...pos,
           player: topPlayers[pos.index],
+          color: getMedalColor(pos.position - 1),
         });
       }
     }
@@ -208,17 +196,29 @@ const Podium: React.FC<PodiumProps> = ({ newPoints }) => {
                     position: "relative",
                   }}
                 >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: -25,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      fontSize: 36,
-                    }}
-                  >
-                    {getMedalEmoji(position - 1)}
-                  </div>
+                  {position === 1 ? (
+                    <EmojiEventsIcon
+                      style={{
+                        position: "absolute",
+                        top: -25,
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        fontSize: 36,
+                        color: getMedalColor(position - 1),
+                      }}
+                    />
+                  ) : (
+                    <WorkspacePremiumIcon
+                      style={{
+                        position: "absolute",
+                        top: -25,
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        fontSize: 36,
+                        color: getMedalColor(position - 1),
+                      }}
+                    />
+                  )}
 
                   <Typography variant="h5" noWrap sx={{ maxWidth: 140 }}>
                     {player.nickname}
