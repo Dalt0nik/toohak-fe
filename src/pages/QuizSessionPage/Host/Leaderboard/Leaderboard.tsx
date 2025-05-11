@@ -1,13 +1,9 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { Box, Typography, Paper } from "@mui/material";
-import { CARD_BACKGROUND_PURPLE } from "@assets/styles/constants";
-import { AnimatePresence, motion, LayoutGroup } from "framer-motion";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
+import { Box } from "@mui/material";
+import { AnimatePresence, LayoutGroup } from "framer-motion";
+import PlayerRow from "./PlayerRow";
 import { PlayerScoreResponse } from "@models/Response/PlayerScoreResponse";
-
-interface LeaderboardProps {
-  oldPoints: PlayerScoreResponse[];
-  newPoints: PlayerScoreResponse[];
-}
+import { getMedalColor } from "@utils/gameHelpers";
 
 const enum AnimationStates {
   INITIAL,
@@ -15,12 +11,23 @@ const enum AnimationStates {
   SORTED,
 }
 
+const ANIMATION_TIMING = {
+  NEW_SCORES_DELAY: 800, // Delay before showing new scores
+  SORT_DELAY: 1000, // Additional delay before sorting
+};
+
+const PLAYERS_DISPLAYED = 5;
+
+interface LeaderboardProps {
+  oldPoints: PlayerScoreResponse[];
+  newPoints: PlayerScoreResponse[];
+}
+
 const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
   const sortedOldPoints = useMemo(
     () => [...oldPoints].sort((a, b) => b.score - a.score),
     [oldPoints],
   );
-
   const sortedNewPoints = useMemo(
     () => [...newPoints].sort((a, b) => b.score - a.score),
     [newPoints],
@@ -59,35 +66,45 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
     setDisplayState(AnimationStates.INITIAL);
     setDisplayPoints(sortedOldPoints);
 
-    const scoreUpdateTimeout = setTimeout(() => {
+    const t1 = setTimeout(() => {
       setDisplayState(AnimationStates.NEW);
+    }, ANIMATION_TIMING.NEW_SCORES_DELAY);
 
-      const reorderTimeout = setTimeout(() => {
-        setDisplayPoints(sortedNewPoints);
-        setDisplayState(AnimationStates.SORTED);
-      }, 1000); // Delay before sorting
+    const t2 = setTimeout(() => {
+      setDisplayPoints(sortedNewPoints);
+      setDisplayState(AnimationStates.SORTED);
+    }, ANIMATION_TIMING.NEW_SCORES_DELAY + ANIMATION_TIMING.SORT_DELAY);
 
-      return () => clearTimeout(reorderTimeout);
-    }, 800); // Short delay before showing new scores
-
-    return () => clearTimeout(scoreUpdateTimeout);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, [oldPoints, newPoints, sortedOldPoints, sortedNewPoints]);
 
-  const getDisplayScore = (id: string) => {
-    if (displayState === AnimationStates.INITIAL) {
-      return scoreChanges[id]?.oldScore ?? 0;
-    } else {
-      return scoreChanges[id]?.newScore ?? 0;
-    }
-  };
+  const getDisplayScore = useCallback(
+    (id: string) =>
+      displayState === AnimationStates.INITIAL
+        ? scoreChanges[id].oldScore
+        : scoreChanges[id].newScore,
+    [displayState, scoreChanges],
+  );
 
-  const hasScoreChanged = (id: string) => {
-    const change = scoreChanges[id];
-    return change && change.oldScore !== change.newScore;
-  };
+  const hasScoreChanged = useCallback(
+    (id: string) => scoreChanges[id].oldScore !== scoreChanges[id].newScore,
+    [scoreChanges],
+  );
+
+  const getHighlightColor = useCallback(
+    (index: number) => getMedalColor(index),
+    [],
+  );
 
   return (
     <Box sx={{ width: "100%", maxWidth: 600, mx: "auto", px: 2 }}>
+      {/* 
+      LayoutGroup synchronizes all FLIP-based layout animations
+      for its children (motion.div with `layout` props below).
+      */}
       <LayoutGroup>
         <Box
           sx={{
@@ -97,95 +114,31 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
             position: "relative",
           }}
         >
+          {/*
+          AnimatePresence enables exit animations for items
+          removed from the list. `mode="popLayout"` instant-removes
+          the item from layout (so siblings can reflow immediately),
+          then plays its exit transition.
+          */}
           <AnimatePresence mode="popLayout">
-            {displayPoints.slice(0, 5).map((player, index) => (
-              <motion.div
-                key={player.id}
-                layout
-                layoutId={player.id}
-                initial={false}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{
-                  layout: {
-                    type: "spring",
-                    bounce: 0.15,
-                    duration: 0.6,
-                  },
-                }}
-              >
-                <Paper
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    backgroundColor: CARD_BACKGROUND_PURPLE,
-                    borderRadius: "12px",
-                    boxShadow: "0 6px 16px rgba(0,0,0,0.35)",
-                    px: 4,
-                    py: 2.5,
-                    color: "white",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  {displayState === AnimationStates.SORTED && (
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
-                        width: "8px",
-                        backgroundColor:
-                          index === 0
-                            ? "#ffd700"
-                            : index === 1
-                              ? "#c0c0c0"
-                              : index === 2
-                                ? "#cd7f32"
-                                : "transparent",
-                      }}
-                    />
-                  )}
+            {displayPoints.slice(0, PLAYERS_DISPLAYED).map((player, index) => {
+              const displayScore = getDisplayScore(player.id);
+              const changed =
+                hasScoreChanged(player.id) &&
+                displayState !== AnimationStates.INITIAL;
+              const highlightColor = getHighlightColor(index);
 
-                  <Typography variant="h6">{player.nickname}</Typography>
-
-                  {hasScoreChanged(player.id) &&
-                  displayState !== AnimationStates.INITIAL ? (
-                    <motion.div
-                      initial={{ scale: 1 }}
-                      animate={{
-                        scale: [1, 1.2, 1],
-                        transition: { duration: 0.4, times: [0, 0.5, 1] },
-                      }}
-                    >
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          display: "block",
-                          textAlign: "right",
-                          minWidth: "40px",
-                        }}
-                      >
-                        {getDisplayScore(player.id)}
-                      </Typography>
-                    </motion.div>
-                  ) : (
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        display: "block",
-                        textAlign: "right",
-                        minWidth: "40px",
-                      }}
-                    >
-                      {getDisplayScore(player.id)}
-                    </Typography>
-                  )}
-                </Paper>
-              </motion.div>
-            ))}
+              return (
+                <PlayerRow
+                  key={player.id}
+                  player={player}
+                  displayScore={displayScore}
+                  hasChanged={changed}
+                  showHighlightBar={displayState === AnimationStates.SORTED}
+                  highlightedColor={highlightColor}
+                />
+              );
+            })}
           </AnimatePresence>
         </Box>
       </LayoutGroup>
