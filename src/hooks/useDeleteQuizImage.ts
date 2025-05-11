@@ -11,7 +11,6 @@ export const useDeleteQuizImage = (quizId: string) => {
   return useMutation({
     mutationFn: (quizId: string) => deleteQuizImage(quizId),
     onSuccess: (imageId) => {
-      console.log(imageId, "id in usemutation");
       queryClient.invalidateQueries({ queryKey: ["quizList"] });
       queryClient.invalidateQueries({ queryKey: ["quiz", quizId] });
       queryClient.removeQueries({ queryKey: ["coverImage", imageId] });
