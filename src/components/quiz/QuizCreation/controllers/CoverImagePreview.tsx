@@ -27,5 +27,19 @@ export const CoverImagePreview: React.FC<{ imageId: string }> = ({
     );
   }
 
-  return <CardMedia component="img" image={coverImage} alt="Cover" />;
+  return (
+    <CardMedia
+      component="img"
+      image={coverImage}
+      alt="Cover"
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        maxHeight: 600,
+        maxWidth: "100%",
+        width: "auto",
+        objectFit: "contain",
+      }}
+    />
+  );
 };
