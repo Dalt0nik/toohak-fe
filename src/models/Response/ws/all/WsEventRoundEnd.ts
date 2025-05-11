@@ -1,8 +1,9 @@
-import { WsEventGeneric } from "@models/Response/ws/WsEventGeneric.ts";
-import { AllEventTypes } from "@models/Response/ws/all/WsEventAll.ts";
-import { WsRoundEnd } from "@models/Response/ws/all/WsRoundEnd.ts";
+import { WsEventGeneric } from "../WsEventGeneric";
+import { AllEventTypes } from "./WsEventAll";
+import { WsPlayer } from "./WsPlayer";
 
 export interface WsEventRoundEnd
   extends WsEventGeneric<AllEventTypes.ROUND_END> {
-  roundEnd: WsRoundEnd;
+  players: WsPlayer[];
+  answer: string;
 }

@@ -8,6 +8,7 @@ export enum AllEventTypes {
   PLAYER_DISCONNECTED = "player_disconnected",
   HOST_DISCONNECTED = "host_disconnected",
   ROUND_END = "round_end",
+  NEW_QUESTION = "new_question",
 }
 
 export type WsEventAll =

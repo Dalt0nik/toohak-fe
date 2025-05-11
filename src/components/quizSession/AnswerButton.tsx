@@ -1,7 +1,7 @@
 // Seperated into component so it's easier to style
 // Keep actual logic in QuestionPage
 
-import { Button, SxProps, Theme, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import SquareIcon from "@mui/icons-material/Square";
 import StarIcon from "@mui/icons-material/Star";
@@ -18,7 +18,6 @@ interface AnswerProps extends React.PropsWithChildren {
   isMobile?: boolean;
   hostView?: boolean;
   correct?: boolean;
-  sx?: SxProps<Theme>;
 }
 
 interface ButtonStyleInfo {
@@ -48,7 +47,6 @@ const AnswerButton = ({
   hostView, // Changes button look for host
   children,
   correct = false,
-  sx = {},
 }: AnswerProps) => {
   const theme = useTheme();
   const tlen = typeof children === "string" ? children.length : 0;
@@ -63,7 +61,19 @@ const AnswerButton = ({
 
   const correctStyles = correct
     ? {
-        outlineColor: `${theme.palette.success.light} !important`,
+        fontWeight: "bold",
+        position: "relative",
+        boxShadow: `0 0 15px ${theme.palette.success.light}, 0 0 0 4px ${theme.palette.success.light}`,
+        animation: "bounce 0.6s ease",
+        "&::after": {
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          fontSize: "32px",
+          color: theme.palette.success.light,
+          fontWeight: "bold",
+          zIndex: 2,
+        },
       }
     : {};
 
@@ -91,10 +101,7 @@ const AnswerButton = ({
         width: { xs: "37vw", md: 500 },
         m: { xs: 0.5, md: 2 },
         wordBreak: "break-word",
-        "&": {
-          ...correctStyles,
-        },
-        ...sx,
+        ...correctStyles,
       }}
       disableElevation
       disableRipple

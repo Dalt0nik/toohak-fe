@@ -11,9 +11,8 @@ import { WsEventPlayerNewQuestion } from "@models/Response/ws/player/WsEventPlay
 import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
 import PlayerJoinedList from "./PlayerQuizSessionQuestion/PlayerJoinedList";
 import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd.ts";
-import { WsQuestionOption } from "@models/Response/ws/player/WsQuestion.ts";
-import { WsPlayer } from "@models/Response/ws/all/WsPlayer.ts";
 import ScoreBackdrop from "@components/quizSession/ScoreBackdrop";
+import PlayerQuizSessionAnswered from "@pages/QuizSessionPage/Player/PlayerQuizSessionQuestion/PlayerQuizSessionAnswered.tsx";
 
 /**
  * Main component responsible for connecting player quiz session UI and websocket connection
@@ -27,10 +26,7 @@ const PlayerQuizSession = () => {
   const [questionNumber, setQuestionNumber] = useState(0);
 
   const [isRoundEnded, setIsRoundEnded] = useState(false);
-  const [correctAnswer, setCorrectAnswer] = useState<WsQuestionOption | null>(
-    null,
-  );
-  const [roundEndPlayers, setRoundEndPlayers] = useState<WsPlayer[]>([]);
+  const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
   const [showScoreBackdrop, setShowScoreBackdrop] = useState(false);
   const [userScore, setUserScore] = useState(0);
   const [userPosition, setUserPosition] = useState(0);
@@ -49,24 +45,25 @@ const PlayerQuizSession = () => {
         setPlayers((prev) => prev.filter((p) => p !== evt.player.nickname));
       },
       onNewQuestion: (evt: WsEventPlayerNewQuestion) => {
-        setIsRoundEnded(false);
-        setCorrectAnswer(null);
         setCurrentQuestion(evt.question);
         setQuestionNumber((prev) => prev + 1);
+
+        setIsRoundEnded(false);
+        setCorrectAnswer(null);
       },
       onRoundEnd: (evt: WsEventRoundEnd) => {
         setIsRoundEnded(true);
-        setCorrectAnswer(evt.roundEnd.correctOption);
-        setRoundEndPlayers(evt.roundEnd.players);
+        setCorrectAnswer(evt.answer);
 
         if (playerJwt) {
-          const currentPlayer = roundEndPlayers.find(
+          const currentPlayer = evt.players.find(
             (player) => player.nickname === playerJwt.nickname,
           );
+
           if (currentPlayer) {
             setUserScore(currentPlayer.score);
 
-            const sortedPlayers = roundEndPlayers.sort(
+            const sortedPlayers = [...evt.players].sort(
               (a, b) => b.score - a.score,
             );
             const position =
@@ -75,11 +72,12 @@ const PlayerQuizSession = () => {
               ) + 1;
             setUserPosition(position);
 
-            setShowScoreBackdrop(true);
-
+            setTimeout(() => {
+              setShowScoreBackdrop(true);
+            }, 1000);
             setTimeout(() => {
               setShowScoreBackdrop(false);
-            }, 3000);
+            }, 3500);
           }
         }
       },
@@ -144,11 +142,10 @@ const PlayerQuizSession = () => {
       )}
 
       {isRoundEnded && correctAnswer && currentQuestion && (
-        <PlayerQuizSessionQuestion
-          question={currentQuestion}
+        <PlayerQuizSessionAnswered
+          question={currentQuestion!}
           questionNumber={questionNumber}
-          isRoundEnd={isRoundEnded}
-          correctOptionId={correctAnswer.id}
+          correctAnswer={correctAnswer}
         />
       )}
       {showScoreBackdrop && (
