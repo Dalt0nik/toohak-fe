@@ -80,7 +80,8 @@
       "PlayerCount_other": "{{count}} players",
       "LoadingQuestion": "Loading next question...",
       "LoadNextQuestionButtonLabel": "Next question",
-      "FinishQuizButtonLabel": "Finish quiz"
+      "FinishQuizButtonLabel": "Finish quiz",
+      "DurationLabel": "Duration (seconds)"
     },
     "waitingForOthers": "Waiting For Others...",
     "answerSelected": "ANSWER SELECTED"

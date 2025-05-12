@@ -3,9 +3,10 @@ import LoadingBackdrop from "@components/common/ui/LoadingBackdrop";
 import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
-import { Stack, Typography, Grid, Box, Button } from "@mui/material";
+import { Stack, Typography, Grid, Box, Button, TextField } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { t } from "i18next";
+import { useState } from "react";
 import QRCode from "react-qr-code";
 
 const TRANSLATIONS_ROOT = "QuizSession.Host";
@@ -32,7 +33,9 @@ const HostQuizSessionLobby = ({
   const { mutate: startGameMutation, isPending: isGameStartPending } =
     useMutation({
       mutationFn: async () => {
-        const response = await startQuizSession(sessionData.quizSessionId);
+        const response = await startQuizSession(sessionData.quizSessionId, {
+          durationSeconds: duration,
+        });
         if (response === START_GAME_SUCCESS_STATUS) onSuccessfulStart();
       },
     });
@@ -44,6 +47,8 @@ const HostQuizSessionLobby = ({
   const joinUrl = `${window.location.origin}/join/${sessionData.joinId}`;
 
   const playerCount = newScores.length;
+
+  const [duration, setDuration] = useState<number>(15);
 
   return (
     <>
@@ -91,6 +96,19 @@ const HostQuizSessionLobby = ({
               <Typography variant="h5">
                 {t(`${TRANSLATIONS_ROOT}.PlayerCount`, { count: playerCount })}
               </Typography>
+              <Box>
+                <TextField
+                  label={t(`${TRANSLATIONS_ROOT}.DurationLabel`)}
+                  type="number"
+                  value={duration}
+                  onChange={(e) => setDuration(Number(e.target.value))}
+                  sx={{ width: "150px" }}
+                  inputProps={{
+                    min: 10,
+                    max: 60,
+                  }}
+                />
+              </Box>
               <Box>
                 <Button
                   variant="contained"
