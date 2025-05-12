@@ -72,7 +72,7 @@ export const useWebSocket = () => {
   };
 
   const deactivateConnection = () => {
-    if (!stompClientRef.current || !stompClientRef.current.active) {
+    if (!stompClientRef.current?.active) {
       console.warn("Cannot deactivate on absent connection");
       return;
     }
