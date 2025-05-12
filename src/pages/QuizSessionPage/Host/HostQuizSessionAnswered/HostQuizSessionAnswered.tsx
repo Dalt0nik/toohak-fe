@@ -9,6 +9,7 @@ import { nextQuestion } from "@api/QuizSessionApi";
 import LoadingBackdrop from "@components/common/ui/LoadingBackdrop";
 import { useTranslation } from "react-i18next";
 import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
+import { TRANSLATION_ROOT } from "../HostQuizSession";
 
 interface HostQuizSessionAnsweredProps {
   sessionId: string;
@@ -20,8 +21,6 @@ enum SessionAnsweredAnimationState {
   ANSWER,
   LEADERBOARD,
 }
-
-const TRANSLATION_ROOT = "QuizSession.Host";
 
 const HostQuizSessionAnswered = ({
   sessionId,
@@ -54,7 +53,7 @@ const HostQuizSessionAnswered = ({
   const { mutate, isPending } = useMutation({
     mutationFn: async (sessionId: string) => {
       const status = await nextQuestion(sessionId);
-      if (status === 200) {
+      if (status === 200 && !isQuizOver) {
         onNextQuestionSuccess();
       }
     },
