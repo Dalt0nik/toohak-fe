@@ -65,7 +65,7 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
             </Grid>
             <Grid size={{ xs: 12, md: 8 }}>
               <Box sx={{ textAlign: "left", mb: 2 }}>
-                <Button onClick={handleOpenModal}>
+                <Button variant="outlined" onClick={handleOpenModal}>
                   {t("quiz_form_add_question")}
                 </Button>
                 <QuestionModal

@@ -63,6 +63,7 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
             m: 2,
             mb: 0,
             borderRadius: 3,
+            overflow: "hidden",
           }}
         >
           {quiz.coverImageId ? (
@@ -73,7 +74,16 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
                 sx={{ fontSize: 80, color: "black" }}
               />
             ) : (
-              <CardMedia component="img" image={coverImage} alt="Quiz Cover" />
+              <CardMedia
+                component="img"
+                image={coverImage}
+                alt="Quiz Cover"
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
             )
           ) : (
             <ImageNotSupportedOutlinedIcon
