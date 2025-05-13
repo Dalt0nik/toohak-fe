@@ -41,6 +41,7 @@ const HostQuizSessionLobby = ({
     });
 
   const handleStartQuiz = () => {
+    if (duration < 10) return;
     startGameMutation();
   };
 
@@ -92,8 +93,8 @@ const HostQuizSessionLobby = ({
           </Grid>
 
           <Grid size={{ xs: 12, md: 8 }} justifyContent={"space-between"}>
-            <Stack spacing={2}>
-              <Typography variant="h5">
+            <Stack spacing={3}>
+              <Typography variant="h3">
                 {t(`${TRANSLATIONS_ROOT}.PlayerCount`, { count: playerCount })}
               </Typography>
               <Box>
@@ -102,11 +103,20 @@ const HostQuizSessionLobby = ({
                   type="number"
                   value={duration}
                   onChange={(e) => setDuration(Number(e.target.value))}
-                  sx={{ width: "150px" }}
+                  sx={{
+                    width: "200px",
+                    mt: 5,
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                    },
+                  }}
                   inputProps={{
                     min: 10,
-                    max: 60,
                   }}
+                  error={duration < 10}
+                  helperText={
+                    duration < 10 ? t(`${TRANSLATIONS_ROOT}.DurationError`) : ""
+                  }
                 />
               </Box>
               <Box>
