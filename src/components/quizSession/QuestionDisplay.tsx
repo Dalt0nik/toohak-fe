@@ -1,4 +1,4 @@
-import { Paper, Typography } from "@mui/material";
+import { Paper, Typography, useMediaQuery, useTheme } from "@mui/material";
 import ImageCard from "@components/common/ui/ImageCard";
 import { useTranslation } from "react-i18next";
 
@@ -6,16 +6,17 @@ interface DisplayProps {
   questionTitle: string;
   questionNumber: number;
   questionImage: string;
-  isMobile: boolean;
 }
 
 const QuestionDisplay = ({
   questionTitle,
   questionNumber,
   questionImage,
-  isMobile = false,
 }: DisplayProps) => {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Maybe instead of this display some kind of error if isMobile = true?
+
   return (
     <>
       {!isMobile ? (

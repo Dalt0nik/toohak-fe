@@ -90,6 +90,18 @@
       "DurationLabel": "Question duration (seconds)",
       "DurationError": "Duration must be at least 10 seconds"
     },
+    "Player": {
+      "Placed": "You have placed",
+      "Place_one": "{{count}}st",
+      "Place_two": "{{count}}nd",
+      "Place_few": "{{count}}rd",
+      "Place_other": "{{count}}th",
+      "OutOf_one": "Out of {{count}} player",
+      "OutOf_other": "Out of {{count}} players",
+      "Score_one": "Your score: {{count}} point",
+      "Score_other": "Your score: {{count}} points",
+      "ReturnHome": "Return Home"
+    },
     "waitingForOthers": "Waiting For Others...",
     "answerSelected": "ANSWER SELECTED",
     "waitingForNextQuestion": "Waiting for next question..."

@@ -10,6 +10,7 @@ import {
 import { WsEventPlayerNewQuestion } from "@models/Response/ws/player/WsEventPlayerNewQuestion";
 import { Cookies } from "react-cookie";
 import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd.ts";
+import { WsEventQuizCompleted } from "@models/Response/ws/all/WsEventQuizCompleted";
 
 interface Handlers {
   onPlayerJoined: (evt: WsEventPlayerJoined) => void;
@@ -17,6 +18,7 @@ interface Handlers {
   onHostDisconnected: (evt: WsEventHostDisconnected) => void;
   onNewQuestion: (evt: WsEventPlayerNewQuestion) => void;
   onRoundEnd: (evt: WsEventRoundEnd) => void;
+  onQuizCompleted: (evt: WsEventQuizCompleted) => void;
 }
 
 const usePlayerWebSocket = (handlers: Handlers) => {
@@ -38,6 +40,8 @@ const usePlayerWebSocket = (handlers: Handlers) => {
         return handlers.onHostDisconnected(event);
       case AllEventTypes.ROUND_END:
         return handlers.onRoundEnd(event);
+      case AllEventTypes.QUIZ_COMPLETED:
+        return handlers.onQuizCompleted(event);
     }
   };
 
