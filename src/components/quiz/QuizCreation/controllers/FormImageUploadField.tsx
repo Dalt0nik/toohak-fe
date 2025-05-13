@@ -49,10 +49,12 @@ export const FormImageUploadField: React.FC<FormImageUploadFieldProps> = ({
               mt={2}
               display="flex"
               flexDirection="column"
-              alignItems="flex-start"
+              alignItems="center"
+              width="100%"
             >
               <CoverImagePreview imageId={field.value} />
               <Button
+                sx={{ mt: 2 }}
                 variant="outlined"
                 color="error"
                 onClick={() => field.onChange(undefined)}

@@ -95,6 +95,14 @@ const PlayerQuizSession = () => {
     if (playerJwt) {
       init(playerJwt.quizSessionId);
     }
+
+    return () => {
+      deactivateConnection();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerJwt]);
+
+  useEffect(() => {
     if (connectedPlayers && connectedPlayers.length > 0) {
       setPlayers((prev) => [
         ...prev,
@@ -102,8 +110,7 @@ const PlayerQuizSession = () => {
       ]);
     }
     // Init if included makes too many calls
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerJwt, connectedPlayers]);
+  }, [connectedPlayers]);
 
   const handleDisconnect = () => {
     deactivateConnection();

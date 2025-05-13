@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Client,
   IMessage,
@@ -18,17 +18,27 @@ export const useWebSocket = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<IMessage[]>([]);
 
+  useEffect(() => {
+    return () => deactivateConnection();
+  }, []);
+
   const initializeWebSocketClient = (
     authorizationHeader: string,
     onConnect: () => void,
     onDisconnect: () => void,
   ) => {
+    if (stompClientRef.current?.active) {
+      console.warn(
+        "WebSocket connection is already established. Deactivate to create a new connection",
+      );
+      return;
+    }
+
     const socket = new SockJS(WS_CONFIG.url);
     const stompHeaders = new StompHeaders();
 
     if (authorizationHeader)
       stompHeaders["Authorization"] = authorizationHeader;
-
     const stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: WS_CONFIG.reconnectDelay,
@@ -62,8 +72,17 @@ export const useWebSocket = () => {
   };
 
   const deactivateConnection = () => {
-    if (!stompClientRef.current) return;
-    stompClientRef.current.deactivate();
+    if (!stompClientRef.current?.active) {
+      console.warn("Cannot deactivate on absent connection");
+      return;
+    }
+    try {
+      stompClientRef.current.deactivate();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      stompClientRef.current = null;
+    }
   };
 
   /**

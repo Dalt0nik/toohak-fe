@@ -77,7 +77,12 @@
       "ScanQRCode": "Scan this QR to join the session",
       "JoinCodeTitle": "Join code",
       "PlayerCount_one": "{{count}} player",
-      "PlayerCount_other": "{{count}} players"
+      "PlayerCount_other": "{{count}} players",
+      "LoadingQuestion": "Loading next question...",
+      "LoadNextQuestionButtonLabel": "Next question",
+      "FinishQuizButtonLabel": "Finish quiz",
+      "DurationLabel": "Question duration (seconds)",
+      "DurationError": "Duration must be at least 10 seconds"
     },
     "waitingForOthers": "Waiting For Others...",
     "answerSelected": "ANSWER SELECTED",

@@ -46,7 +46,12 @@ const PlayerQuizSessionQuestion = ({
       }}
     >
       <Box sx={{ width: "100%", mb: 2 }}>
-        <CountdownTimer key={question.id} duration={question.durationSeconds} />
+        {!selectedAnswer && (
+          <CountdownTimer
+            key={question.id}
+            duration={question.durationSeconds}
+          />
+        )}
       </Box>
 
       <QuestionDisplay
