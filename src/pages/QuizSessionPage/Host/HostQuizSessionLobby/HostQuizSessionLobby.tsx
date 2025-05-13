@@ -1,21 +1,21 @@
 import { startQuizSession } from "@api/QuizSessionApi";
 import LoadingBackdrop from "@components/common/ui/LoadingBackdrop";
-import { QuizSessionStatus } from "@models/QuizSessionState";
+import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
 import { QuizResponse } from "@models/Response/quizResponse";
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
-import { Stack, Typography, Grid, Box, Button } from "@mui/material";
+import { Stack, Typography, Grid, Box, Button, TextField } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { t } from "i18next";
+import { useState } from "react";
 import QRCode from "react-qr-code";
 
 const TRANSLATIONS_ROOT = "QuizSession.Host";
 const START_GAME_SUCCESS_STATUS = 200;
 
 interface HostQuizSessionLobbyProps {
-  playerCount: number;
   sessionData: QuizSessionResponse;
   quizData: QuizResponse;
-  onChangeSessionStatus: (newState: QuizSessionStatus) => void;
+  onSuccessfulStart: () => void;
 }
 
 /**
@@ -24,25 +24,32 @@ interface HostQuizSessionLobbyProps {
  * During status PENDING, host can view the number of players joined and can start the session
  */
 const HostQuizSessionLobby = ({
-  playerCount,
   sessionData,
   quizData,
-  onChangeSessionStatus,
+  onSuccessfulStart,
 }: HostQuizSessionLobbyProps) => {
+  const [{ newScores }] = useHostSessionContext();
+
   const { mutate: startGameMutation, isPending: isGameStartPending } =
     useMutation({
       mutationFn: async () => {
-        const response = await startQuizSession(sessionData.quizSessionId);
-        if (response === START_GAME_SUCCESS_STATUS)
-          onChangeSessionStatus(QuizSessionStatus.ACTIVE);
+        const response = await startQuizSession(sessionData.quizSessionId, {
+          durationSeconds: duration,
+        });
+        if (response === START_GAME_SUCCESS_STATUS) onSuccessfulStart();
       },
     });
 
   const handleStartQuiz = () => {
+    if (duration < 10) return;
     startGameMutation();
   };
 
   const joinUrl = `${window.location.origin}/join/${sessionData.joinId}`;
+
+  const playerCount = newScores.length;
+
+  const [duration, setDuration] = useState<number>(15);
 
   return (
     <>
@@ -86,10 +93,32 @@ const HostQuizSessionLobby = ({
           </Grid>
 
           <Grid size={{ xs: 12, md: 8 }} justifyContent={"space-between"}>
-            <Stack spacing={2}>
-              <Typography variant="h5">
+            <Stack spacing={3}>
+              <Typography variant="h3">
                 {t(`${TRANSLATIONS_ROOT}.PlayerCount`, { count: playerCount })}
               </Typography>
+              <Box>
+                <TextField
+                  label={t(`${TRANSLATIONS_ROOT}.DurationLabel`)}
+                  type="number"
+                  value={duration}
+                  onChange={(e) => setDuration(Number(e.target.value))}
+                  sx={{
+                    width: "200px",
+                    mt: 5,
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                    },
+                  }}
+                  inputProps={{
+                    min: 10,
+                  }}
+                  error={duration < 10}
+                  helperText={
+                    duration < 10 ? t(`${TRANSLATIONS_ROOT}.DurationError`) : ""
+                  }
+                />
+              </Box>
               <Box>
                 <Button
                   variant="contained"

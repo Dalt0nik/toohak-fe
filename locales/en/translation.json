@@ -81,10 +81,16 @@
       "ScanQRCode": "Scan this QR to join the session",
       "JoinCodeTitle": "Join code",
       "PlayerCount_one": "{{count}} player",
-      "PlayerCount_other": "{{count}} players"
+      "PlayerCount_other": "{{count}} players",
+      "LoadingQuestion": "Loading next question...",
+      "LoadNextQuestionButtonLabel": "Next question",
+      "FinishQuizButtonLabel": "Finish quiz",
+      "DurationLabel": "Question duration (seconds)",
+      "DurationError": "Duration must be at least 10 seconds"
     },
     "waitingForOthers": "Waiting For Others...",
-    "answerSelected": "ANSWER SELECTED"
+    "answerSelected": "ANSWER SELECTED",
+    "waitingForNextQuestion": "Waiting for next question..."
   },
   "Error": {
     "Quiz": {
@@ -141,5 +147,9 @@
   "AnswerQuestion": {
     "answerSentSuccessfully": "Answer sent successfully",
     "errorSendingAnswer": "Answer could not be sent"
+  },
+  "Score": {
+    "score": "Your score is {{score}}",
+    "position": "Your position is {{position}}"
   }
 }

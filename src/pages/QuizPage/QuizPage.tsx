@@ -58,8 +58,18 @@ const QuizPage = () => {
           <Stack spacing={2}>
             <Box
               sx={{
-                backgroundColor: CARD_BACKGROUND_PURPLE,
+                backgroundColor: quiz?.imageId
+                  ? "transparent"
+                  : CARD_BACKGROUND_PURPLE,
                 borderRadius: theme.borderRadius?.md,
+                display: "flex",
+                justifyContent: "center",
+                "& .MuiCardMedia-root": {
+                  maxHeight: 600,
+                  maxWidth: "100%",
+                  width: "auto",
+                  objectFit: "contain",
+                },
               }}
             >
               <ImageCard alt="Quiz cover" id={quiz!.imageId} />

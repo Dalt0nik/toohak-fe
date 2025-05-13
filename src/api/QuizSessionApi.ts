@@ -4,6 +4,7 @@ import { NewQuizSessionResponse } from "@models/Response/NewQuizSessionResponse"
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
 import { JoinQuizSessionRequest } from "@models/Request/JoinQuizSessionRequest";
 import { JoinQuizSessionResponse } from "@models/Response/JoinQuizSessionResponse";
+import { StartQuizSessionRequest } from "@models/Request/StartQuizSessionRequest";
 import { Cookies } from "react-cookie";
 import { apiPlayer } from "./ApiPlayer";
 
@@ -37,8 +38,11 @@ export async function joinQuizSession(
   return response.data;
 }
 
-export async function startQuizSession(sessionId: string): Promise<number> {
-  const response = await api.post(`/sessions/${sessionId}/start`);
+export async function startQuizSession(
+  sessionId: string,
+  data: StartQuizSessionRequest,
+): Promise<number> {
+  const response = await api.post(`/sessions/${sessionId}/start`, data);
   return response.status;
 }
 
@@ -58,4 +62,9 @@ export async function answerQuestionOption(
 ): Promise<void> {
   const response = await apiPlayer.post(`/sessions/answer/${questionOptionId}`);
   return response.data;
+}
+
+export async function nextQuestion(sessionId: string) {
+  const response = await api.post(`/sessions/${sessionId}/nextQuestion`);
+  return response.status;
 }
