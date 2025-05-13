@@ -1,6 +1,7 @@
 FROM harbor.devbridge.net/sourcery-academy/node:20 AS builder
 
 COPY . /code
+COPY .env.production .
 WORKDIR /code
 RUN npm ci
 RUN npm run build

@@ -10,6 +10,9 @@ import { fetchConnectedUsers } from "@api/QuizSessionApi";
 import { WsEventPlayerNewQuestion } from "@models/Response/ws/player/WsEventPlayerNewQuestion";
 import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
 import PlayerJoinedList from "./PlayerQuizSessionQuestion/PlayerJoinedList";
+import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd.ts";
+import ScoreBackdrop from "@components/quizSession/ScoreBackdrop";
+import PlayerQuizSessionAnswered from "@pages/QuizSessionPage/Player/PlayerQuizSessionQuestion/PlayerQuizSessionAnswered.tsx";
 
 /**
  * Main component responsible for connecting player quiz session UI and websocket connection
@@ -21,6 +24,12 @@ const PlayerQuizSession = () => {
     null,
   );
   const [questionNumber, setQuestionNumber] = useState(0);
+
+  const [isRoundEnded, setIsRoundEnded] = useState(false);
+  const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
+  const [showScoreBackdrop, setShowScoreBackdrop] = useState(false);
+  const [userScore, setUserScore] = useState(0);
+  const [userPosition, setUserPosition] = useState(0);
 
   const { init, messages, isConnected, deactivateConnection } =
     usePlayerWebSocket({
@@ -38,6 +47,39 @@ const PlayerQuizSession = () => {
       onNewQuestion: (evt: WsEventPlayerNewQuestion) => {
         setCurrentQuestion(evt.question);
         setQuestionNumber((prev) => prev + 1);
+
+        setIsRoundEnded(false);
+        setCorrectAnswer(null);
+      },
+      onRoundEnd: (evt: WsEventRoundEnd) => {
+        setIsRoundEnded(true);
+        setCorrectAnswer(evt.answer);
+
+        if (playerJwt) {
+          const currentPlayer = evt.players.find(
+            (player) => player.nickname === playerJwt.nickname,
+          );
+
+          if (currentPlayer) {
+            setUserScore(currentPlayer.score);
+
+            const sortedPlayers = [...evt.players].sort(
+              (a, b) => b.score - a.score,
+            );
+            const position =
+              sortedPlayers.findIndex(
+                (player) => player.nickname === playerJwt.nickname,
+              ) + 1;
+            setUserPosition(position);
+
+            setTimeout(() => {
+              setShowScoreBackdrop(true);
+            }, 1000);
+            setTimeout(() => {
+              setShowScoreBackdrop(false);
+            }, 3500);
+          }
+        }
       },
     });
 
@@ -81,7 +123,7 @@ const PlayerQuizSession = () => {
 
   return (
     <Container>
-      {!currentQuestion && (
+      {!currentQuestion && !isRoundEnded && (
         <PlayerJoinedList
           players={players}
           isConnected={isConnected}
@@ -99,11 +141,22 @@ const PlayerQuizSession = () => {
           ))
         : "No messages"}
 
-      {currentQuestion && (
+      {currentQuestion && !isRoundEnded && (
         <PlayerQuizSessionQuestion
           question={currentQuestion}
           questionNumber={questionNumber}
         />
+      )}
+
+      {isRoundEnded && correctAnswer && currentQuestion && (
+        <PlayerQuizSessionAnswered
+          question={currentQuestion!}
+          questionNumber={questionNumber}
+          correctAnswer={correctAnswer}
+        />
+      )}
+      {showScoreBackdrop && (
+        <ScoreBackdrop score={userScore} position={userPosition} />
       )}
     </Container>
   );
