@@ -4,6 +4,7 @@ import { AllEventTypes, WsEventAll } from "@models/Response/ws/all/WsEventAll";
 import { WsEventHostDisconnected } from "@models/Response/ws/all/WsEventHostDisconnected";
 import { WsEventPlayerDisconnected } from "@models/Response/ws/all/WsEventPlayerDisconnected";
 import { WsEventPlayerJoined } from "@models/Response/ws/all/WsEventPlayerJoined";
+import { WsEventQuizCompleted } from "@models/Response/ws/all/WsEventQuizCompleted";
 import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd";
 import { WsEventHost } from "@models/Response/ws/host/WsEventHost";
 
@@ -12,6 +13,7 @@ interface Handlers {
   onPlayerDisconnected: (evt: WsEventPlayerDisconnected) => void;
   onHostDisconnected: (evt: WsEventHostDisconnected) => void;
   onRoundEnd: (evt: WsEventRoundEnd) => void;
+  onQuizCompleted: (evt: WsEventQuizCompleted) => void;
 }
 
 const useHostWebSocket = (handlers: Handlers) => {
@@ -34,6 +36,8 @@ const useHostWebSocket = (handlers: Handlers) => {
         return handlers.onHostDisconnected(event);
       case AllEventTypes.ROUND_END:
         return handlers.onRoundEnd(event);
+      case AllEventTypes.QUIZ_COMPLETED:
+        return handlers.onQuizCompleted(event);
     }
   };
 

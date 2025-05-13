@@ -71,34 +71,14 @@ const QuizSessionPage = () => {
   const isValidSessionJwt = session?.quizSessionId === playerJwt?.quizSessionId;
 
   if (isValidSessionJwt) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "20px",
-        }}
-      >
-        <PlayerQuizSession />
-      </Box>
-    );
+    return <PlayerQuizSession />;
   }
 
   if (isSessionOwner) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "20px",
-        }}
-      >
-        <HostSessionProvider sessionStatus={session!.status}>
-          <HostQuizSession joinId={joinId!} />
-        </HostSessionProvider>
-      </Box>
+      <HostSessionProvider sessionStatus={session!.status}>
+        <HostQuizSession joinId={joinId!} />
+      </HostSessionProvider>
     );
   }
 };
