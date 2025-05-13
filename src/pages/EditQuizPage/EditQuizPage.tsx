@@ -34,7 +34,7 @@ const EditQuizPage: React.FC = () => {
     <>
       <Box display={"flex"} gap={2}>
         <Typography variant="h3" align="left">
-          Edit Quiz
+          {t("EditQuizPage.EditQuiz")}
         </Typography>
         <Box display="flex" justifyContent="center" alignItems="center">
           <Button
@@ -42,7 +42,7 @@ const EditQuizPage: React.FC = () => {
             variant="contained"
             onClick={() => setOpenConfirmation(true)}
           >
-            Delete
+            {t("EditQuizPage.DeleteButton")}
           </Button>
         </Box>
       </Box>

@@ -25,7 +25,7 @@ const EditQuizForm = ({ initialData, onSubmit }: QuizFormProps) => {
     defaultValues: {
       title: initialData?.title || "",
       description: initialData?.description || "",
-      imageId: initialData?.imageId || undefined,
+      imageId: initialData?.imageId || null,
     },
   });
 
