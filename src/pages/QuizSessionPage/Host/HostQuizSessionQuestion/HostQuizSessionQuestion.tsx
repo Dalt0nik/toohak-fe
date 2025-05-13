@@ -2,7 +2,7 @@ import { Box, Grid } from "@mui/material";
 import AnswerButton from "@components/quizSession/AnswerButton";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import QuestionDisplay from "@components/quizSession/QuestionDisplay"
+import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import CountdownTimer from "@components/CountdownTimer";
 import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
 

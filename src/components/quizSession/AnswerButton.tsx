@@ -1,11 +1,12 @@
 // Seperated into component so it's easier to style
 // Keep actual logic in QuestionPage
 
-import { Button, Typography, useTheme } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import SquareIcon from "@mui/icons-material/Square";
 import StarIcon from "@mui/icons-material/Star";
 import PentagonIcon from "@mui/icons-material/Pentagon";
+import { useTheme } from "@mui/material/styles";
 
 const TextColor = "#000000";
 const IconColor = "#f5f3ff";
@@ -60,7 +61,19 @@ const AnswerButton = ({
 
   const correctStyles = correct
     ? {
-        outlineColor: `${theme.palette.success.light} !important`,
+        fontWeight: "bold",
+        position: "relative",
+        boxShadow: `0 0 15px ${theme.palette.success.light}, 0 0 0 4px ${theme.palette.success.light}`,
+        animation: "bounce 0.6s ease",
+        "&::after": {
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          fontSize: "32px",
+          color: theme.palette.success.light,
+          fontWeight: "bold",
+          zIndex: 2,
+        },
       }
     : {};
 
@@ -79,8 +92,8 @@ const AnswerButton = ({
             : ButtonStyling[ordering - 1].bgcolor,
           color: TextColor,
           outline: hostView ? 0 : 5,
-          outlineOpacity: 0.5,
           outlineColor: IconColor,
+          outlineOpacity: 0.5,
         },
         color: TextColor,
         borderRadius: 3,
@@ -88,9 +101,7 @@ const AnswerButton = ({
         width: { xs: "37vw", md: 500 },
         m: { xs: 0.5, md: 2 },
         wordBreak: "break-word",
-        "&": {
-          ...correctStyles,
-        },
+        ...correctStyles,
       }}
       disableElevation
       disableRipple

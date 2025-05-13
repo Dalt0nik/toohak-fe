@@ -85,7 +85,8 @@
       "DurationError": "Duration must be at least 10 seconds"
     },
     "waitingForOthers": "Waiting For Others...",
-    "answerSelected": "ANSWER SELECTED"
+    "answerSelected": "ANSWER SELECTED",
+    "waitingForNextQuestion": "Waiting for next question..."
   },
   "Error": {
     "Quiz": {
@@ -139,5 +140,9 @@
   "AnswerQuestion": {
     "answerSentSuccessfully": "Answer sent successfully",
     "errorSendingAnswer": "Answer could not be sent"
+  },
+  "Score": {
+    "score": "Your score is {{score}}",
+    "position": "Your position is {{position}}"
   }
 }

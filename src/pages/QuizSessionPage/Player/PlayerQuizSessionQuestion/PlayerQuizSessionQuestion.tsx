@@ -43,7 +43,6 @@ const PlayerQuizSessionQuestion = ({
         flexDirection: "column",
         alignContent: "flex-start",
         alignItems: "center",
-        mt: "10vh",
       }}
     >
       <Box sx={{ width: "100%", mb: 2 }}>
@@ -62,13 +61,13 @@ const PlayerQuizSessionQuestion = ({
         isMobile={isMobile}
       />
       <Grid>
-        {selectedAnswer == "" ? (
+        {selectedAnswer === "" ? (
           <>
             {question.questionOptions.map((option, index) => (
               <AnswerButton
                 onClick={() => handleClick(option.id)}
                 ordering={index + 1}
-                disabled={selectedAnswer == option.id}
+                disabled={selectedAnswer === option.id}
                 isMobile={isMobile}
                 key={option.id}
               >
