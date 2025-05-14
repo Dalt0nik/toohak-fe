@@ -15,7 +15,7 @@ import AnswersContainer from "@pages/QuizSessionPage/AnswersContainer";
 interface HostQuizSessionAnsweredProps {
   sessionId: string;
   numberOfQuestions: number;
-  onNextQuestionSuccess: () => void;
+  onNextQuestionSuccess: (duration: number) => void;
 }
 
 enum SessionAnsweredAnimationState {
@@ -53,9 +53,11 @@ const HostQuizSessionAnswered = ({
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (sessionId: string) => {
-      const status = await nextQuestion(sessionId);
+      return await nextQuestion(sessionId);
+    },
+    onSuccess: ({ status, data }) => {
       if (status === 200 && !isQuizOver) {
-        onNextQuestionSuccess();
+        onNextQuestionSuccess(data.durationSeconds);
       }
     },
   });

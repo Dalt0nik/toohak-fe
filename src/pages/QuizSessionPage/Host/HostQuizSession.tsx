@@ -5,7 +5,7 @@ import { QuizSessionStatus } from "@models/QuizSessionState";
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
 import { Box, Stack } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import HostQuizSessionLobby from "./HostQuizSessionLobby/HostQuizSessionLobby";
 import HostQuizSessionQuestion from "@pages/QuizSessionPage/Host/HostQuizSessionQuestion/HostQuizSessionQuestion";
 import MusicBar from "@components/MusicBar";
@@ -51,6 +51,7 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   //get from cache with an assumption that QuizSessionPage fetches session data
   const session = qc.getQueryData<QuizSessionResponse>(["session", joinId])!;
   const { data: quizData, isLoading: isQuizLoading } = useQuiz(session.quizId);
+  const [timerDuration, setTimerDuration] = useState<number>(15);
 
   useEffect(() => {
     if (status !== QuizSessionStatus.INACTIVE) init(session.quizSessionId);
@@ -62,7 +63,8 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
     return <LoadingBackdrop />;
   }
 
-  const handleNewQuestion = () => {
+  const handleNewQuestion = (duration: number) => {
+    setTimerDuration(duration);
     dispatch({
       payload: {
         questions: quizData!.questions,
@@ -84,7 +86,9 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
         />
       )}
 
-      {status == QuizSessionStatus.ACTIVE && <HostQuizSessionQuestion />}
+      {status == QuizSessionStatus.ACTIVE && (
+        <HostQuizSessionQuestion duration={timerDuration} />
+      )}
       {status == QuizSessionStatus.ROUND_END && (
         <HostQuizSessionAnswered
           sessionId={session.quizSessionId}
