@@ -3,7 +3,6 @@ import { Box, Typography, Button } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { findQuizSession, joinQuizSession } from "@api/QuizSessionApi";
 import { PublicAppRoutes } from "@models/PublicRoutes";
-import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import WhiteTextField from "@components/common/ui/WhiteTextField";
 import { useState } from "react";
 import { JoinQuizSessionRequest } from "@models/Request/JoinQuizSessionRequest";
@@ -34,10 +33,7 @@ const JoinDirectlyPage = () => {
       if (session?.joinId) {
         cookies.set("QuizSessionJwt", res.accessToken);
         navigate(
-          PrivateAppRoutes.QUIZ_SESSION_PAGE.replace(
-            ":joinId",
-            session?.joinId,
-          ),
+          PublicAppRoutes.QUIZ_SESSION_PAGE.replace(":joinId", session?.joinId),
         );
       }
     },

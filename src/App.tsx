@@ -32,18 +32,18 @@ function App() {
           path={PublicAppRoutes.JOIN_SESSION_DIRECTLY}
           element={<JoinDirectlyPage />}
         />
-        {/* PRIVATE ROUTES */}
+        <Route
+          path={PublicAppRoutes.QUIZ_SESSION_PAGE}
+          element={<QuizSessionPage />}
+        />
 
+        {/* PRIVATE ROUTES */}
         <Route element={<RequireAuth />}>
           <Route path={PrivateAppRoutes.USER_QUIZZES} element={<QuizList />} />
           <Route path={PrivateAppRoutes.QUIZ_PAGE} element={<QuizPage />} />
           <Route
             path={PrivateAppRoutes.CREATE_QUIZ}
             element={<CreateQuizPage />}
-          />
-          <Route
-            path={PrivateAppRoutes.QUIZ_SESSION_PAGE}
-            element={<QuizSessionPage />}
           />
           <Route
             path={PrivateAppRoutes.EDIT_QUIZ_PAGE}
