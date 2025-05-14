@@ -64,3 +64,8 @@ export async function nextQuestion(sessionId: string) {
   const response = await api.post(`/sessions/${sessionId}/nextQuestion`);
   return response.status;
 }
+
+export async function getSessionCode(): Promise<string> {
+  const response = await apiPlayer.get(`/sessions/code`);
+  return response.data;
+}

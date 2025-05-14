@@ -13,6 +13,7 @@
   "navbar_logout": "LOG OUT",
   "navbar_myquizzes": "MY QUIZZES",
   "navbar_joinquiz": "JOIN QUIZ",
+  "navbar_rejoin": "REJOIN",
   "question_dialog_question": "Question",
   "question_dialog_question_option": "Option {{number}}",
   "question_dialog_cancel": "Cancel",

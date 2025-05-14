@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { PublicAppRoutes } from "@models/PublicRoutes";
 import { Outlet, Link as RouterLink, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "@ui/LogoutButton.tsx";
 import LoginButton from "@ui/LoginButton.tsx";
@@ -23,15 +23,36 @@ import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Cookies from "universal-cookie";
+import { getSessionCode } from "@api/QuizSessionApi";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth0();
   const { t } = useTranslation();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rejoinCode, setRejoinCode] = useState<string | null>(null);
+  const cookies = new Cookies();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  useEffect(() => {
+    if (
+      !isAuthenticated &&
+      !location.pathname.startsWith("/session/") &&
+      cookies.get("QuizSessionJwt")
+    ) {
+      getSessionCode()
+        .then((code) => {
+          setRejoinCode(code);
+        })
+        .catch(() => {
+          cookies.remove("QuizSessionJwt");
+          setRejoinCode(null);
+        });
+    }
+  }, [isAuthenticated, location.pathname]);
 
   const guestNavItems: NavItem[] = [];
   const userNavItems: NavItem[] = [
@@ -43,6 +64,11 @@ const Navbar: React.FC = () => {
   ];
   const handleClickLogo = () => {
     navigate("/");
+  };
+  const handleRejoin = () => {
+    if (rejoinCode) {
+      navigate(`/session/${rejoinCode}`);
+    }
   };
 
   const navItems = isAuthenticated
@@ -96,6 +122,20 @@ const Navbar: React.FC = () => {
                         </ListItemButton>
                       </ListItem>
                     ))}
+                    {rejoinCode && (
+                      <ListItem disablePadding>
+                        <ListItemButton
+                          onClick={() => {
+                            setDrawerOpen(false);
+                            handleRejoin();
+                          }}
+                        >
+                          {/* TODO: i18n */}
+                          {rejoinCode}
+                          <ListItemText primary={t("navbar_rejoin")} />
+                        </ListItemButton>
+                      </ListItem>
+                    )}
                     <ListItem sx={{ mt: 2 }}>
                       {isAuthenticated ? <LogoutButton /> : <LoginButton />}
                     </ListItem>
