@@ -53,9 +53,7 @@ const HostQuizSessionAnswered = ({
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (sessionId: string) => {
-      return await nextQuestion(sessionId);
-    },
-    onSuccess: ({ status, data }) => {
+      const { status, data } = await nextQuestion(sessionId);
       if (status === 200 && !isQuizOver) {
         onNextQuestionSuccess(data.durationSeconds);
       }
