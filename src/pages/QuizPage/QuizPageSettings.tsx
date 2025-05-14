@@ -2,10 +2,10 @@ import { Button, Grid, Stack, Typography } from "@mui/material";
 import { createQuizSession } from "@api/QuizSessionApi";
 import { NewQuizSessionRequest } from "@models/Request/NewQuizSessionRequest";
 import { NewQuizSessionResponse } from "@models/Response/NewQuizSessionResponse";
-import { PrivateAppRoutes } from "@models/PrivateRoutes";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useMutation } from "@tanstack/react-query";
+import { PublicAppRoutes } from "@models/PublicRoutes";
 
 type QuizPageSettingsProps = {
   quizId?: string;
@@ -18,7 +18,7 @@ const QuizPageSettings: React.FC<QuizPageSettingsProps> = ({ quizId }) => {
     mutationFn: (req: NewQuizSessionRequest) => createQuizSession(req),
     onSuccess: (res: NewQuizSessionResponse) => {
       navigate(
-        PrivateAppRoutes.QUIZ_SESSION_PAGE.replace(":joinId", res.joinId),
+        PublicAppRoutes.QUIZ_SESSION_PAGE.replace(":joinId", res.joinId),
         { state: res },
       );
     },
