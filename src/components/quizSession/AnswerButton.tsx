@@ -1,11 +1,13 @@
 // Seperated into component so it's easier to style
 // Keep actual logic in QuestionPage
 
-import { Button, Typography, useTheme } from "@mui/material";
+import { Button, Typography, useMediaQuery } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import SquareIcon from "@mui/icons-material/Square";
 import StarIcon from "@mui/icons-material/Star";
 import PentagonIcon from "@mui/icons-material/Pentagon";
+import { useTheme } from "@mui/material/styles";
+import { easeInOut, motion } from "framer-motion";
 
 const TextColor = "#000000";
 const IconColor = "#f5f3ff";
@@ -14,7 +16,6 @@ interface AnswerProps extends React.PropsWithChildren {
   onClick?: () => void;
   ordering: number;
   disabled?: boolean;
-  isMobile?: boolean;
   hostView?: boolean;
   correct?: boolean;
 }
@@ -41,7 +42,6 @@ const ButtonIcon = [
 const AnswerButton = ({
   ordering,
   disabled,
-  isMobile,
   onClick,
   hostView, // Changes button look for host
   children,
@@ -49,6 +49,7 @@ const AnswerButton = ({
 }: AnswerProps) => {
   const theme = useTheme();
   const tlen = typeof children === "string" ? children.length : 0;
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const AnswerText = !isMobile ? children : "";
 
   const ButtonStyling: ButtonStyleInfo[] = [
@@ -60,53 +61,77 @@ const AnswerButton = ({
 
   const correctStyles = correct
     ? {
-        outlineColor: `${theme.palette.success.light} !important`,
+        fontWeight: "bold",
+        position: "relative",
+        boxShadow: `0 0 15px ${theme.palette.success.light}, 0 0 0 4px ${theme.palette.success.light}`,
+        "&::after": {
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          fontSize: "32px",
+          color: theme.palette.success.light,
+          fontWeight: "bold",
+          zIndex: 2,
+        },
       }
     : {};
 
   return (
-    <Button
-      disabled={disabled}
-      sx={{
-        bgcolor: ButtonStyling[ordering - 1].color,
-        "&.MuiButtonBase-root:hover": {
-          bgcolor: ButtonStyling[ordering - 1].bgcolor,
-          color: TextColor,
-        },
-        "&.Mui-disabled": {
-          bgcolor: hostView
-            ? ButtonStyling[ordering - 1].color
-            : ButtonStyling[ordering - 1].bgcolor,
-          color: TextColor,
-          outline: hostView ? 0 : 5,
-          outlineOpacity: 0.5,
-          outlineColor: IconColor,
-        },
-        color: TextColor,
-        borderRadius: 3,
-        height: { xs: "30vh", md: 150 },
-        width: { xs: "37vw", md: 500 },
-        m: { xs: 0.5, md: 2 },
-        wordBreak: "break-word",
-        "&": {
-          ...correctStyles,
-        },
-      }}
-      disableElevation
-      disableRipple
-      disableFocusRipple
-      onClick={onClick}
+    <motion.div
+      initial={{ scale: 1 }}
+      animate={
+        correct && {
+          scale: [1, 1.1, 1],
+          transition: {
+            repeat: Infinity,
+            duration: 0.5,
+            times: [0, 0.5, 1],
+            easings: easeInOut,
+          },
+        }
+      }
     >
-      {ButtonIcon[ordering - 1]}
-      <Typography
+      <Button
+        disabled={disabled}
         sx={{
-          fontSize: tlen <= 15 ? 40 : tlen <= 54 ? 30 : 16, // Is there a better way to do this?
-          zIndex: 1,
+          bgcolor: ButtonStyling[ordering - 1].color,
+          "&.MuiButtonBase-root:hover": {
+            bgcolor: ButtonStyling[ordering - 1].bgcolor,
+            color: TextColor,
+          },
+          "&.Mui-disabled": {
+            bgcolor: hostView
+              ? ButtonStyling[ordering - 1].color
+              : ButtonStyling[ordering - 1].bgcolor,
+            color: TextColor,
+            outline: hostView ? 0 : 5,
+            outlineColor: IconColor,
+            outlineOpacity: 0.5,
+          },
+          color: TextColor,
+          borderRadius: 3,
+          height: { xs: "30vh", md: 150 },
+          width: { xs: "37vw", md: 500 },
+          m: { xs: 0.5, md: 2 },
+          wordBreak: "break-word",
+          ...correctStyles,
         }}
+        disableElevation
+        disableRipple
+        disableFocusRipple
+        onClick={onClick}
       >
-        {AnswerText}
-      </Typography>
-    </Button>
+        {ButtonIcon[ordering - 1]}
+        <Typography
+          sx={{
+            fontSize: tlen <= 15 ? 40 : tlen <= 54 ? 30 : 16, // Is there a better way to do this?
+            zIndex: 1,
+          }}
+        >
+          {AnswerText}
+        </Typography>
+      </Button>
+    </motion.div>
   );
 };
 

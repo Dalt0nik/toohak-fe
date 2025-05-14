@@ -3,7 +3,7 @@ import { useQuiz } from "@hooks/useQuiz";
 import useHostWebSocket from "@hooks/ws/useHostWebSocket";
 import { QuizSessionStatus } from "@models/QuizSessionState";
 import { QuizSessionResponse } from "@models/Response/QuizSessionResponse";
-import { Box, Container } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import HostQuizSessionLobby from "./HostQuizSessionLobby/HostQuizSessionLobby";
@@ -16,17 +16,20 @@ import { WsEventPlayerDisconnected } from "@models/Response/ws/all/WsEventPlayer
 import { HostSessionActionTypes } from "@models/hostSessionTypes";
 import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
 import { HostSessionComponentEventNewQuestion } from "@models/hostSessionTypes";
+import HostQuizSessionEnd from "./HostQuizSessionEnd/HostQuizSessionEnd";
+import { WsEventQuizCompleted } from "@models/Response/ws/all/WsEventQuizCompleted";
 
 interface HostQuizSessionProps {
   joinId: string;
 }
 
+export const TRANSLATION_ROOT = "QuizSession.Host";
+
 /**
  * Main component responsible for creating websocket connection for a host to quiz session and handling session status(state) logic
  */
 const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
-  const [{ correctQuestionOption, currentQuestion, status }, dispatch] =
-    useHostSessionContext();
+  const [{ status }, dispatch] = useHostSessionContext();
   const { init, isConnected, deactivateConnection } = useHostWebSocket({
     onHostDisconnected: () => deactivateConnection(),
     onPlayerJoined: (event: WsEventPlayerJoined) => {
@@ -38,6 +41,10 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
     onRoundEnd: (event: WsEventRoundEnd) => {
       dispatch({ payload: event });
     },
+    onQuizCompleted: (event: WsEventQuizCompleted) => {
+      dispatch({ payload: event });
+      deactivateConnection();
+    },
   });
 
   const qc = useQueryClient();
@@ -46,7 +53,7 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   const { data: quizData, isLoading: isQuizLoading } = useQuiz(session.quizId);
 
   useEffect(() => {
-    init(session.quizSessionId);
+    if (status !== QuizSessionStatus.INACTIVE) init(session.quizSessionId);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.quizSessionId]);
@@ -65,7 +72,10 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
   };
 
   return (
-    <Container>
+    <Stack spacing={2}>
+      <Box width="100%" display="flex" justifyContent="end">
+        <MusicBar />
+      </Box>
       {status === QuizSessionStatus.PENDING && (
         <HostQuizSessionLobby
           sessionData={session}
@@ -74,22 +84,18 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
         />
       )}
 
-      {currentQuestion && status == QuizSessionStatus.ACTIVE && (
-        <HostQuizSessionQuestion />
+      {status == QuizSessionStatus.ACTIVE && <HostQuizSessionQuestion />}
+      {status == QuizSessionStatus.ROUND_END && (
+        <HostQuizSessionAnswered
+          sessionId={session.quizSessionId}
+          numberOfQuestions={quizData!.questions.length}
+          onNextQuestionSuccess={handleNewQuestion}
+        />
       )}
-      {currentQuestion &&
-        correctQuestionOption &&
-        status == QuizSessionStatus.ROUND_END && (
-          <HostQuizSessionAnswered
-            sessionId={session.quizSessionId}
-            numberOfQuestions={quizData!.questions.length}
-            onNextQuestionSuccess={handleNewQuestion}
-          />
-        )}
-      <Box width="100%" display="flex">
-        <MusicBar />
-      </Box>
-    </Container>
+      {status == QuizSessionStatus.INACTIVE && (
+        <HostQuizSessionEnd quizData={quizData!} />
+      )}
+    </Stack>
   );
 };
 

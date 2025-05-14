@@ -1,13 +1,12 @@
 import { Box, Grid, Typography, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import AnswerButton from "@components/quizSession/AnswerButton";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import { useTranslation } from "react-i18next";
 import { useAnswerQuestion } from "@hooks/useAnswerQuestion";
 import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
 import CountdownTimer from "@components/CountdownTimer";
+import AnswersContainer from "@pages/QuizSessionPage/AnswersContainer";
 
 const PlayerQuizSessionQuestion = ({
   question,
@@ -33,9 +32,6 @@ const PlayerQuizSessionQuestion = ({
     }
   };
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
   return (
     <Box
       sx={{
@@ -43,34 +39,36 @@ const PlayerQuizSessionQuestion = ({
         flexDirection: "column",
         alignContent: "flex-start",
         alignItems: "center",
-        mt: "10vh",
       }}
     >
       <Box sx={{ width: "100%", mb: 2 }}>
-        <CountdownTimer key={question.id} duration={question.durationSeconds} />
+        {!selectedAnswer && (
+          <CountdownTimer
+            key={question.id}
+            duration={question.durationSeconds}
+          />
+        )}
       </Box>
 
       <QuestionDisplay
         questionTitle={question.title}
         questionNumber={questionNumber}
         questionImage={question.imageId != null ? question.imageId : ""}
-        isMobile={isMobile}
       />
       <Grid>
-        {selectedAnswer == "" ? (
-          <>
+        {selectedAnswer === "" ? (
+          <AnswersContainer>
             {question.questionOptions.map((option, index) => (
               <AnswerButton
                 onClick={() => handleClick(option.id)}
                 ordering={index + 1}
-                disabled={selectedAnswer == option.id}
-                isMobile={isMobile}
+                disabled={selectedAnswer === option.id}
                 key={option.id}
               >
                 {option.title}
               </AnswerButton>
             ))}
-          </>
+          </AnswersContainer>
         ) : (
           <>
             <Typography

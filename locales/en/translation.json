@@ -53,6 +53,10 @@
     "form": "Form for settings",
     "noQuestions": "There is no questions in this quiz"
   },
+  "EditQuizPage": {
+    "EditQuiz": "Edit Quiz",
+    "DeleteButton": "Delete"
+  },
   "QuizSession": {
     "EnterNickname": "Enter nickname",
     "NicknamePlaceholder": "Nickname",
@@ -80,10 +84,27 @@
       "PlayerCount_other": "{{count}} players",
       "LoadingQuestion": "Loading next question...",
       "LoadNextQuestionButtonLabel": "Next question",
-      "FinishQuizButtonLabel": "Finish quiz"
+      "FinishQuizButtonLabel": "Finish quiz",
+      "QuizEndTitle": "Results for \"{{title}}\" quiz",
+      "Leave": "Leave",
+      "DurationLabel": "Question duration (seconds)",
+      "DurationError": "Duration must be at least 10 seconds"
+    },
+    "Player": {
+      "Placed": "You have placed",
+      "Place_one": "{{count}}st",
+      "Place_two": "{{count}}nd",
+      "Place_few": "{{count}}rd",
+      "Place_other": "{{count}}th",
+      "OutOf_one": "Out of {{count}} player",
+      "OutOf_other": "Out of {{count}} players",
+      "Score_one": "Your score: {{count}} point",
+      "Score_other": "Your score: {{count}} points",
+      "ReturnHome": "Return Home"
     },
     "waitingForOthers": "Waiting For Others...",
-    "answerSelected": "ANSWER SELECTED"
+    "answerSelected": "ANSWER SELECTED",
+    "waitingForNextQuestion": "Waiting for next question..."
   },
   "Error": {
     "Quiz": {
@@ -103,7 +124,8 @@
       "couldNotFind": "Could not find any quizzes"
     },
     "Image": {
-      "couldNotUpload": "Could not upload image"
+      "couldNotUpload": "Could not upload image",
+      "couldNotDelete": "Could not delete image"
     },
     "User": {
       "couldNotRegister": "Could not register user"
@@ -116,7 +138,8 @@
       "deleted": "Quiz deleted successfully"
     },
     "Image": {
-      "uploaded": "Image uploaded successfully"
+      "uploaded": "Image uploaded successfully",
+      "deleted": "Image deleted successfully"
     },
     "Question": {
       "created": "Question created successfully",
@@ -132,10 +155,15 @@
     "defaultConfirm": "Yes",
     "defaultDecline": "No",
     "messageDeleteQuestion": "Are you sure you want to delete this question?",
-    "messageDeleteQuiz": "Are you sure you want to delete this quiz?"
+    "messageDeleteQuiz": "Are you sure you want to delete this quiz?",
+    "deleteQuizImage": "Are you sure you want to delete this image?"
   },
   "AnswerQuestion": {
     "answerSentSuccessfully": "Answer sent successfully",
     "errorSendingAnswer": "Answer could not be sent"
+  },
+  "Score": {
+    "score": "Your score is {{score}}",
+    "position": "Your position is {{position}}"
   }
 }
