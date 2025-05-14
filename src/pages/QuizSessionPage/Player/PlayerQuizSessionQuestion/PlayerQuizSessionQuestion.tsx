@@ -1,13 +1,12 @@
 import { Box, Grid, Typography, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import AnswerButton from "@components/quizSession/AnswerButton";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import { useTranslation } from "react-i18next";
 import { useAnswerQuestion } from "@hooks/useAnswerQuestion";
 import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
 import CountdownTimer from "@components/CountdownTimer";
+import AnswersContainer from "@pages/QuizSessionPage/AnswersContainer";
 
 const PlayerQuizSessionQuestion = ({
   question,
@@ -33,9 +32,6 @@ const PlayerQuizSessionQuestion = ({
     }
   };
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
   return (
     <Box
       sx={{
@@ -58,23 +54,21 @@ const PlayerQuizSessionQuestion = ({
         questionTitle={question.title}
         questionNumber={questionNumber}
         questionImage={question.imageId != null ? question.imageId : ""}
-        isMobile={isMobile}
       />
       <Grid>
         {selectedAnswer === "" ? (
-          <>
+          <AnswersContainer>
             {question.questionOptions.map((option, index) => (
               <AnswerButton
                 onClick={() => handleClick(option.id)}
                 ordering={index + 1}
                 disabled={selectedAnswer === option.id}
-                isMobile={isMobile}
                 key={option.id}
               >
                 {option.title}
               </AnswerButton>
             ))}
-          </>
+          </AnswersContainer>
         ) : (
           <>
             <Typography

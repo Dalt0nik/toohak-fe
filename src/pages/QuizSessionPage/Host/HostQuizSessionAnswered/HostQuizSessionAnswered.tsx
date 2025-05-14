@@ -1,7 +1,7 @@
 import AnswerButton from "@components/quizSession/AnswerButton";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
-import { Box, Button, Grid, Stack, Typography } from "@mui/material";
-import { easeInOut, motion } from "framer-motion";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { motion } from "framer-motion";
 import Leaderboard from "../Leaderboard/Leaderboard";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import LoadingBackdrop from "@components/common/ui/LoadingBackdrop";
 import { useTranslation } from "react-i18next";
 import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
 import { TRANSLATION_ROOT } from "../HostQuizSession";
+import AnswersContainer from "@pages/QuizSessionPage/AnswersContainer";
 
 interface HostQuizSessionAnsweredProps {
   sessionId: string;
@@ -135,7 +136,6 @@ const HostQuizSessionAnswered = ({
                 questionImage={question.imageId ?? ""}
                 questionNumber={questionNumber}
                 questionTitle={question.title}
-                isMobile={false}
               />
             </Box>
           </motion.div>
@@ -145,44 +145,21 @@ const HostQuizSessionAnswered = ({
               transition: { duration: 2, delay: 2, type: "spring" },
             }}
           >
-            <Grid
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "auto auto",
-              }}
-            >
+            <AnswersContainer>
               {question.questionOptions.map((option) => {
                 const isCorrect = option.id === correctQuestionOption;
                 return (
-                  <motion.div
+                  <AnswerButton
                     key={option.id}
-                    initial={{ scale: 1 }}
-                    animate={
-                      isCorrect
-                        ? {
-                            scale: [1, 1.1, 1],
-                            transition: {
-                              repeat: Infinity,
-                              duration: 0.5,
-                              times: [0, 0.5, 1],
-                              easings: easeInOut,
-                            },
-                          }
-                        : {}
-                    }
+                    ordering={option.ordering}
+                    disabled
+                    correct={isCorrect}
                   >
-                    <AnswerButton
-                      ordering={option.ordering}
-                      disabled
-                      correct={isCorrect}
-                      isMobile={false}
-                    >
-                      {option.title}
-                    </AnswerButton>
-                  </motion.div>
+                    {option.title}
+                  </AnswerButton>
                 );
               })}
-            </Grid>
+            </AnswersContainer>
           </motion.div>
         </>
       )}

@@ -1,16 +1,14 @@
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import AnswerButton from "@components/quizSession/AnswerButton";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import CountdownTimer from "@components/CountdownTimer";
 import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
+import AnswersContainer from "@pages/QuizSessionPage/AnswersContainer";
 
 const HostQuizSessionQuestion = () => {
   const [{ currentQuestion, questionNumber }] = useHostSessionContext();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Maybe instead of this display some kind of error if isMobile = true?
   const question = currentQuestion!;
+
   return (
     <Box
       sx={{
@@ -28,21 +26,14 @@ const HostQuizSessionQuestion = () => {
         questionTitle={question.title}
         questionNumber={questionNumber}
         questionImage={question.imageId != null ? question.imageId : ""}
-        isMobile={isMobile}
       />
-      <Grid>
+      <AnswersContainer>
         {question.questionOptions.map((option, index) => (
-          <AnswerButton
-            ordering={index + 1}
-            disabled
-            hostView
-            isMobile={isMobile}
-            key={option.id}
-          >
+          <AnswerButton ordering={index + 1} disabled hostView key={option.id}>
             {option.title}
           </AnswerButton>
         ))}
-      </Grid>
+      </AnswersContainer>
     </Box>
   );
 };
