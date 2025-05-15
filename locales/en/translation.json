@@ -8,6 +8,8 @@
   "homepage_description_player": "Check your knowledge!",
   "homepage_joingame": "JOIN A GAME",
   "homepage_rejoin": "REJOIN",
+  "homepage_rejoin_checking": "Checking...",
+  "homepage_error_rejoin": "Game is not available for rejoin",
   "navbar_create": "CREATE",
   "navbar_browse": "BROWSE",
   "navbar_yourquizzes": "YOUR QUIZZES",
