@@ -9,10 +9,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
   const [rejoinCode, setRejoinCode] = useState<string | null>(null);
-  const cookies = new Cookies();
   const { isAuthenticated } = useAuth0();
 
   useEffect(() => {
+    const cookies = new Cookies();
     if (!isAuthenticated && cookies.get("QuizSessionJwt")) {
       getSessionCode()
         .then((code) => {
@@ -25,7 +25,7 @@ const HomePage: React.FC = () => {
     } else {
       setRejoinCode(null);
     }
-  }, [isAuthenticated, cookies]);
+  }, [isAuthenticated]);
 
   return (
     <Box
