@@ -12,6 +12,7 @@ import JoinQuizSessionPage from "@pages/JoinQuizSessionPage";
 import JoinDirectlyPage from "@pages/JoinDirectlyPage";
 import QuizPage from "@pages/QuizPage/QuizPage";
 import EditQuizPage from "@pages/EditQuizPage/EditQuizPage";
+import RequireAuth from "@components/RequireAuth";
 
 function App() {
   return (
@@ -31,21 +32,24 @@ function App() {
           path={PublicAppRoutes.JOIN_SESSION_DIRECTLY}
           element={<JoinDirectlyPage />}
         />
-        {/* PRIVATE ROUTES */}
-        <Route path={PrivateAppRoutes.USER_QUIZZES} element={<QuizList />} />
-        <Route path={PrivateAppRoutes.QUIZ_PAGE} element={<QuizPage />} />
         <Route
-          path={PrivateAppRoutes.CREATE_QUIZ}
-          element={<CreateQuizPage />}
-        />
-        <Route
-          path={PrivateAppRoutes.QUIZ_SESSION_PAGE}
+          path={PublicAppRoutes.QUIZ_SESSION_PAGE}
           element={<QuizSessionPage />}
         />
-        <Route
-          path={PrivateAppRoutes.EDIT_QUIZ_PAGE}
-          element={<EditQuizPage />}
-        />
+
+        {/* PRIVATE ROUTES */}
+        <Route element={<RequireAuth />}>
+          <Route path={PrivateAppRoutes.USER_QUIZZES} element={<QuizList />} />
+          <Route path={PrivateAppRoutes.QUIZ_PAGE} element={<QuizPage />} />
+          <Route
+            path={PrivateAppRoutes.CREATE_QUIZ}
+            element={<CreateQuizPage />}
+          />
+          <Route
+            path={PrivateAppRoutes.EDIT_QUIZ_PAGE}
+            element={<EditQuizPage />}
+          />
+        </Route>
       </Route>
     </Routes>
   );

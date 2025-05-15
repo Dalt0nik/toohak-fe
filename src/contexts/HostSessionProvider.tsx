@@ -88,6 +88,12 @@ const hostSessionReducer = (
         newScores: players,
       };
     }
+    case AllEventTypes.QUIZ_COMPLETED: {
+      return {
+        ...state,
+        status: QuizSessionStatus.INACTIVE,
+      };
+    }
   }
   return state;
 };

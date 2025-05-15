@@ -1,3 +1,4 @@
+//💀
 import { usePlayerJwt } from "@hooks/usePlayerJwt";
 import usePlayerWebSocket from "@hooks/ws/usePlayerWebSocket";
 import { Container } from "@mui/material";
@@ -10,36 +11,76 @@ import { fetchConnectedUsers } from "@api/QuizSessionApi";
 import { WsEventPlayerNewQuestion } from "@models/Response/ws/player/WsEventPlayerNewQuestion";
 import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
 import PlayerJoinedList from "./PlayerQuizSessionQuestion/PlayerJoinedList";
+import { WsEventRoundEnd } from "@models/Response/ws/all/WsEventRoundEnd.ts";
+import PlayerQuizSessionAnswered from "@pages/QuizSessionPage/Player/PlayerQuizSessionQuestion/PlayerQuizSessionAnswered.tsx";
+import { QuizSessionStatus } from "@models/QuizSessionState";
+import PlayerQuizSessionEnd from "./PlayerQuizSessionEnd/PlayerQuizSessionEnd";
+
+export const TRANSLATION_ROOT = "QuizSession.Player";
 
 /**
  * Main component responsible for connecting player quiz session UI and websocket connection
  */
 const PlayerQuizSession = () => {
   const playerJwt = usePlayerJwt();
+
+  const [status, setStatus] = useState(QuizSessionStatus.PENDING);
   const [players, setPlayers] = useState<string[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState<WsQuestion | null>(
     null,
   );
   const [questionNumber, setQuestionNumber] = useState(0);
+  const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
+  const [userScore, setUserScore] = useState(0);
+  const [userPosition, setUserPosition] = useState(0);
 
-  const { init, messages, isConnected, deactivateConnection } =
-    usePlayerWebSocket({
-      onHostDisconnected: () => {},
-      onPlayerJoined: (evt: WsEventPlayerJoined) => {
-        setPlayers((prev) =>
-          prev.includes(evt.player.nickname)
-            ? prev
-            : [...prev, evt.player.nickname],
+  const { init, isConnected, deactivateConnection } = usePlayerWebSocket({
+    onHostDisconnected: () => {},
+    onPlayerJoined: (evt: WsEventPlayerJoined) => {
+      setPlayers((prev) =>
+        prev.includes(evt.player.nickname)
+          ? prev
+          : [...prev, evt.player.nickname],
+      );
+    },
+    onPlayerDisconnected: (evt: WsEventPlayerDisconnected) => {
+      setPlayers((prev) => prev.filter((p) => p !== evt.player.nickname));
+    },
+    onNewQuestion: (evt: WsEventPlayerNewQuestion) => {
+      setCurrentQuestion(evt.question);
+      setQuestionNumber((prev) => prev + 1);
+
+      setStatus(QuizSessionStatus.ACTIVE);
+      setCorrectAnswer(null);
+    },
+    onRoundEnd: (evt: WsEventRoundEnd) => {
+      setStatus(QuizSessionStatus.ROUND_END);
+      setCorrectAnswer(evt.answer);
+
+      if (playerJwt) {
+        const currentPlayer = evt.players.find(
+          (player) => player.nickname === playerJwt.nickname,
         );
-      },
-      onPlayerDisconnected: (evt: WsEventPlayerDisconnected) => {
-        setPlayers((prev) => prev.filter((p) => p !== evt.player.nickname));
-      },
-      onNewQuestion: (evt: WsEventPlayerNewQuestion) => {
-        setCurrentQuestion(evt.question);
-        setQuestionNumber((prev) => prev + 1);
-      },
-    });
+
+        if (currentPlayer) {
+          setUserScore(currentPlayer.score);
+
+          const sortedPlayers = [...evt.players].sort(
+            (a, b) => b.score - a.score,
+          );
+          const position =
+            sortedPlayers.findIndex(
+              (player) => player.nickname === playerJwt.nickname,
+            ) + 1;
+          setUserPosition(position);
+        }
+      }
+    },
+    onQuizCompleted: () => {
+      setStatus(QuizSessionStatus.INACTIVE);
+      deactivateConnection();
+    },
+  });
 
   const { data: connectedPlayers } = useQuery<string[]>({
     queryKey: ["sessionPlayers", playerJwt?.quizSessionId],
@@ -50,13 +91,10 @@ const PlayerQuizSession = () => {
   });
 
   useEffect(() => {
-    if (playerJwt) {
+    if (playerJwt && status !== QuizSessionStatus.INACTIVE) {
       init(playerJwt.quizSessionId);
     }
 
-    return () => {
-      deactivateConnection();
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerJwt]);
 
@@ -81,7 +119,7 @@ const PlayerQuizSession = () => {
 
   return (
     <Container>
-      {!currentQuestion && (
+      {status === QuizSessionStatus.PENDING && (
         <PlayerJoinedList
           players={players}
           isConnected={isConnected}
@@ -89,20 +127,27 @@ const PlayerQuizSession = () => {
           onReconnect={handleReconnect}
         />
       )}
-
-      {/* TODO: Remove in the long run. Temporary for testing */}
-      {isConnected && messages.length
-        ? messages.map((message, idx) => (
-            <pre key={idx} style={{ whiteSpace: "wrap" }}>
-              {JSON.stringify(message.body, null, 2)}
-            </pre>
-          ))
-        : "No messages"}
-
-      {currentQuestion && (
+      {status === QuizSessionStatus.ACTIVE && (
         <PlayerQuizSessionQuestion
-          question={currentQuestion}
+          question={currentQuestion!}
           questionNumber={questionNumber}
+        />
+      )}
+
+      {status === QuizSessionStatus.ROUND_END && (
+        <PlayerQuizSessionAnswered
+          question={currentQuestion!}
+          questionNumber={questionNumber}
+          correctAnswer={correctAnswer}
+          userScore={userScore}
+          userPosition={userPosition}
+        />
+      )}
+      {status === QuizSessionStatus.INACTIVE && (
+        <PlayerQuizSessionEnd
+          playerCount={players.length}
+          score={userScore}
+          place={userPosition}
         />
       )}
     </Container>
