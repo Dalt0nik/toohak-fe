@@ -12,7 +12,12 @@ import {
   ListItemText,
 } from "@mui/material";
 import { PublicAppRoutes } from "@models/PublicRoutes";
-import { Outlet, Link as RouterLink, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  Link as RouterLink,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "@ui/LogoutButton.tsx";
@@ -33,6 +38,7 @@ const Navbar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rejoinCode, setRejoinCode] = useState<string | null>(null);
   const cookies = new Cookies();
+  const location = useLocation();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -51,8 +57,10 @@ const Navbar: React.FC = () => {
           cookies.remove("QuizSessionJwt");
           setRejoinCode(null);
         });
+    } else {
+      setRejoinCode(null);
     }
-  }, [isAuthenticated, location.pathname]);
+  }, [isAuthenticated, location.pathname, cookies]);
 
   const guestNavItems: NavItem[] = [];
   const userNavItems: NavItem[] = [
@@ -130,8 +138,6 @@ const Navbar: React.FC = () => {
                             handleRejoin();
                           }}
                         >
-                          {/* TODO: i18n */}
-                          {rejoinCode}
                           <ListItemText primary={t("navbar_rejoin")} />
                         </ListItemButton>
                       </ListItem>
