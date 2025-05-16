@@ -5,7 +5,13 @@ import CountdownTimer from "@components/CountdownTimer";
 import { useHostSessionContext } from "@hooks/context/useHostSessionContext";
 import AnswersContainer from "@pages/QuizSessionPage/AnswersContainer";
 
-const HostQuizSessionQuestion = () => {
+interface HostQuizSessionQuestionProps {
+  duration: number;
+}
+
+const HostQuizSessionQuestion: React.FC<HostQuizSessionQuestionProps> = ({
+  duration,
+}) => {
   const [{ currentQuestion, questionNumber }] = useHostSessionContext();
   const question = currentQuestion!;
 
@@ -19,7 +25,7 @@ const HostQuizSessionQuestion = () => {
       }}
     >
       <Box sx={{ width: "100%", mb: 2 }}>
-        <CountdownTimer duration={15} />
+        <CountdownTimer duration={duration} />
       </Box>
 
       <QuestionDisplay

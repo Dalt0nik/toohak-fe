@@ -15,7 +15,7 @@ const START_GAME_SUCCESS_STATUS = 200;
 interface HostQuizSessionLobbyProps {
   sessionData: QuizSessionResponse;
   quizData: QuizResponse;
-  onSuccessfulStart: () => void;
+  onSuccessfulStart: (duration: number) => void;
 }
 
 /**
@@ -36,7 +36,7 @@ const HostQuizSessionLobby = ({
         const response = await startQuizSession(sessionData.quizSessionId, {
           durationSeconds: duration,
         });
-        if (response === START_GAME_SUCCESS_STATUS) onSuccessfulStart();
+        if (response === START_GAME_SUCCESS_STATUS) onSuccessfulStart(duration);
       },
     });
 

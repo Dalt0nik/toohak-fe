@@ -7,6 +7,7 @@ import { JoinQuizSessionResponse } from "@models/Response/JoinQuizSessionRespons
 import { StartQuizSessionRequest } from "@models/Request/StartQuizSessionRequest";
 import { Cookies } from "react-cookie";
 import { apiPlayer } from "./ApiPlayer";
+import { QuizSessionProgress } from "@models/Response/QuizSessionProgress";
 
 export async function createQuizSession(
   request: NewQuizSessionRequest,
@@ -64,7 +65,12 @@ export async function answerQuestionOption(
   return response.data;
 }
 
-export async function nextQuestion(sessionId: string) {
+export async function nextQuestion(
+  sessionId: string,
+): Promise<{ data: QuizSessionProgress; status: number }> {
   const response = await api.post(`/sessions/${sessionId}/nextQuestion`);
-  return response.status;
+  return {
+    data: response.data,
+    status: response.status,
+  };
 }
