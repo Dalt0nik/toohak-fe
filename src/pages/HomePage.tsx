@@ -1,46 +1,20 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React from "react";
 import { Typography, Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
-import { getSessionCode } from "@api/QuizSessionApi";
 import { useAuth0 } from "@auth0/auth0-react";
 import { showToast } from "@components/common/ui/Toast";
+import { useSessionRejoin } from "@contexts/SessionRejoinProvider";
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
   const { showError } = showToast();
   const { isAuthenticated } = useAuth0();
   const navigate = useNavigate();
-  const cookies = useMemo(() => new Cookies(), []);
-
-  const [rejoinCode, setRejoinCode] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const fetchRejoinCode = useCallback(async () => {
-    try {
-      const code = await getSessionCode();
-      setRejoinCode(code);
-      return code;
-    } catch {
-      cookies.remove("QuizSessionJwt");
-      setRejoinCode(null);
-      return null;
-    }
-  }, [cookies]);
-
-  useEffect(() => {
-    if (!isAuthenticated && cookies.get("QuizSessionJwt")) {
-      fetchRejoinCode();
-    } else {
-      setRejoinCode(null);
-    }
-  }, [isAuthenticated, cookies, fetchRejoinCode]);
+  const { rejoinCode, refreshRejoinCode } = useSessionRejoin();
 
   const handleRejoinClick = async () => {
-    setLoading(true);
-    const code = await fetchRejoinCode();
-    setLoading(false);
+    const code = await refreshRejoinCode();
 
     if (code) {
       navigate(`/session/${code}`);
@@ -78,12 +52,9 @@ const HomePage: React.FC = () => {
         <Button
           variant="outlined"
           onClick={handleRejoinClick}
-          disabled={loading}
           sx={{ mt: 3, ml: 2 }}
         >
-          {loading
-            ? t("homepage_rejoin_checking")
-            : t("homepage_rejoin", { code: rejoinCode })}
+          {t("homepage_rejoin", { code: rejoinCode })}
         </Button>
       )}
     </Box>
