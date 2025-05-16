@@ -67,6 +67,7 @@ const QuestionModal = ({
     const questionData: Question = {
       id: initialData?.id,
       title: questionTitle,
+      imageId: null, // TEMP
       questionOptions: options,
     };
 

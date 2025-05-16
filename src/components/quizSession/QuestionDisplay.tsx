@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 interface DisplayProps {
   questionTitle: string;
   questionNumber: number;
-  questionImage: string;
+  questionImage: string | null;
 }
 
 const QuestionDisplay = ({

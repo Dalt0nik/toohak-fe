@@ -53,7 +53,7 @@ const PlayerQuizSessionQuestion = ({
       <QuestionDisplay
         questionTitle={question.title}
         questionNumber={questionNumber}
-        questionImage={question.imageId != null ? question.imageId : ""}
+        questionImage={null}
       />
       <Grid>
         {selectedAnswer === "" ? (

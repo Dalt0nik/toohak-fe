@@ -15,6 +15,9 @@ import {
   QuestionOption,
 } from "@models/Request/NewQuestionRequest.ts";
 import { useTranslation } from "react-i18next";
+import ImageUpload from "@components/common/ui/ImageUpload";
+import { NewQuestionImageResponse } from "@models/Response/NewQuestionImageResponse";
+import { useUploadQuestionImage } from "@hooks/useUploadQuestionImage";
 
 interface AddQuestionDialogProps {
   onSave: (question: Question) => void;
@@ -34,9 +37,13 @@ export default function AddQuestionDialog({
 
   const { t } = useTranslation();
 
+  const uploadQuestionImageMutation = useUploadQuestionImage();
+
   const [question, setQuestion] = useState("");
+  const [imageId, setImageId] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState("0");
+  // const [isNewImage, setIsNewImage] = useState(false); TEMP
 
   useEffect(() => {
     if (initialData) {
@@ -93,11 +100,27 @@ export default function AddQuestionDialog({
 
     const questionData: Question = {
       title: question,
+      imageId: imageId,
       questionOptions: questionOptions,
     };
 
     onSave(questionData);
     handleClose();
+  };
+
+  // If this dialog is closed without pressing save it should automatically delete the image
+  // Right now it just keeps it in the database forever
+  const handleImageUpload = async (
+    image: File,
+    // TEMP
+    //onChange: (value: string | undefined) => void,
+  ) => {
+    const data: NewQuestionImageResponse =
+      await uploadQuestionImageMutation.mutateAsync({
+        image: image,
+      });
+    setImageId(data.imageId);
+    //setIsNewImage(true); TEMP
   };
 
   return (
@@ -114,13 +137,16 @@ export default function AddQuestionDialog({
             autoFocus
             margin="dense"
             id="question"
-            label={t("question")}
+            label={t("question_dialog_question")}
             type="text"
             fullWidth
             variant="outlined"
             value={question}
             onChange={handleQuestionChange}
             required
+          />
+          <ImageUpload
+            onImageUpload={(image: File) => handleImageUpload(image)}
           />
           <FormControl component="fieldset" sx={{ mt: 2 }} fullWidth>
             <RadioGroup
