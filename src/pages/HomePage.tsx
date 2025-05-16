@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { showToast } from "@components/common/ui/Toast";
-import { useSessionRejoin } from "@contexts/SessionRejoinProvider";
+import { useSessionRejoin } from "@contexts/SessionRejoinContext";
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();

@@ -1,27 +1,9 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Cookies from "universal-cookie";
 import { getSessionCode } from "@api/QuizSessionApi";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation } from "react-router-dom";
-
-interface SessionRejoinContextValue {
-  rejoinCode: string | null;
-  refreshRejoinCode: () => Promise<string | null>;
-}
-
-const SessionRejoinContext = createContext<SessionRejoinContextValue>({
-  rejoinCode: null,
-  refreshRejoinCode: async () => null,
-});
-
-export const useSessionRejoin = () => useContext(SessionRejoinContext);
+import { SessionRejoinContext } from "./SessionRejoinContext";
 
 export const SessionRejoinProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
