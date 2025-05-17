@@ -74,3 +74,8 @@ export async function nextQuestion(
     status: response.status,
   };
 }
+
+export async function getSessionCode(): Promise<string> {
+  const response = await apiPlayer.get(`/sessions/code`);
+  return response.data;
+}

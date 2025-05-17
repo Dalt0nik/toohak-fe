@@ -15,6 +15,7 @@ import { AuthProvider } from "@contexts/AuthProvider.tsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { SessionRejoinProvider } from "@contexts/SessionRejoinProvider.tsx";
 
 const queryClient = new QueryClient();
 
@@ -40,7 +41,9 @@ createRoot(document.getElementById("root")!).render(
                 <ThemeProvider theme={theme}>
                   <CssBaseline />
                   <ErrorBoundary>
-                    <App />
+                    <SessionRejoinProvider>
+                      <App />
+                    </SessionRejoinProvider>
                     <ToastContainer />
                   </ErrorBoundary>
                 </ThemeProvider>
