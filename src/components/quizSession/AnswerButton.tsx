@@ -1,13 +1,15 @@
 // Seperated into component so it's easier to style
 // Keep actual logic in QuestionPage
 
-import { Button, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import SquareIcon from "@mui/icons-material/Square";
 import StarIcon from "@mui/icons-material/Star";
 import PentagonIcon from "@mui/icons-material/Pentagon";
 import { useTheme } from "@mui/material/styles";
 import { easeInOut, motion } from "framer-motion";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const TextColor = "#000000";
 const IconColor = "#f5f3ff";
@@ -45,7 +47,7 @@ const AnswerButton = ({
   onClick,
   hostView, // Changes button look for host
   children,
-  correct = false,
+  correct,
 }: AnswerProps) => {
   const theme = useTheme();
   const tlen = typeof children === "string" ? children.length : 0;
@@ -59,31 +61,36 @@ const AnswerButton = ({
     { color: "#F3CC00", bgcolor: "#DFBB00" },
   ];
 
-  const correctStyles = correct
-    ? {
+  const getCorrectStyles = (correct: boolean | undefined) => {
+    if (correct == null) return {};
+
+    const color = correct
+      ? theme.palette.success.light
+      : theme.palette.error.light;
+
+    return {
+      "&.Mui-disabled": {
         fontWeight: "bold",
         position: "relative",
-        boxShadow: `0 0 15px ${theme.palette.success.light}, 0 0 0 4px ${theme.palette.success.light}`,
-        "&::after": {
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          fontSize: "32px",
-          color: theme.palette.success.light,
-          fontWeight: "bold",
-          zIndex: 2,
-        },
-      }
-    : {};
+        boxShadow: `0 0 15px ${color}, 0 0 0 4px ${color}`,
+        outline: `3px ${color}`,
+        color: TextColor,
+      },
+    };
+  };
+
+  const correctStyles = getCorrectStyles(correct);
 
   return (
     <motion.div
+      style={{ position: "relative" }}
       initial={{ scale: 1 }}
       animate={
         correct && {
           scale: [1, 1.1, 1],
           transition: {
-            repeat: Infinity,
+            repeat: 4,
+            repeatType: "loop",
             duration: 0.5,
             times: [0, 0.5, 1],
             easings: easeInOut,
@@ -112,7 +119,6 @@ const AnswerButton = ({
           borderRadius: 3,
           height: { xs: "30vh", md: 150 },
           width: { xs: "37vw", md: 500 },
-          m: { xs: 0.5, md: 2 },
           wordBreak: "break-word",
           ...correctStyles,
         }}
@@ -131,6 +137,11 @@ const AnswerButton = ({
           {AnswerText}
         </Typography>
       </Button>
+      {correct != null && (
+        <Box sx={{ position: "absolute", top: "5px", right: "5px" }}>
+          {correct ? <CheckCircleIcon /> : <CancelIcon />}
+        </Box>
+      )}
     </motion.div>
   );
 };

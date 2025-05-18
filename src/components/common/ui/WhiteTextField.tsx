@@ -56,7 +56,6 @@ const WhiteTextField = ({
         value: modifiedValue,
       },
     };
-    console.log(modifiedValue);
     props.onChange?.(modifiedEvent);
   };
   return <InputField {...props} onChange={handleChange} />;
