@@ -19,6 +19,7 @@
   "navbar_joinquiz": "JOIN QUIZ",
   "question_dialog_question": "Question",
   "question_dialog_question_option": "Option {{number}}",
+  "question_dialog_question_answer_required": "Select the correct answer",
   "question_dialog_cancel": "Cancel",
   "question_dialog_save": "Save",
   "quiz_form_create_new_quiz": "Create new quiz",
