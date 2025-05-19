@@ -93,8 +93,6 @@ export default function AddQuestionDialog({
   };
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
-
     const questionOptions: QuestionOption[] = data.options.map(
       (title, idx) => ({
         title,
@@ -116,7 +114,7 @@ export default function AddQuestionDialog({
 
       <Dialog open={dialogIsOpen} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogContent>
-          <form id="add-question-form" onSubmit={handleSubmit(onSubmit)}>
+          <Box component="div" id="add-question-form">
             <TextField
               {...register("question", {
                 required: t("quiz_form_title_required"),
@@ -174,13 +172,17 @@ export default function AddQuestionDialog({
                 <FormHelperText>{errors.correctAnswer.message}</FormHelperText>
               )}
             </FormControl>
-          </form>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant="contained">
             {t("question_dialog_cancel")}
           </Button>
-          <Button type="submit" form="add-question-form" variant="contained">
+          <Button
+            variant="contained"
+            type="button"
+            onClick={handleSubmit(onSubmit)}
+          >
             {t("question_dialog_save")}
           </Button>
         </DialogActions>
