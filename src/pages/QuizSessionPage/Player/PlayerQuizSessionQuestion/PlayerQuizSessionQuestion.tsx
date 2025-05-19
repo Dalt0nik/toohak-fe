@@ -1,5 +1,4 @@
 import { Box, Grid, Typography, CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
 import AnswerButton from "@components/quizSession/AnswerButton";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import { useTranslation } from "react-i18next";
@@ -8,26 +7,26 @@ import { WsQuestion } from "@models/Response/ws/player/WsQuestion";
 import CountdownTimer from "@components/CountdownTimer";
 import AnswersContainer from "@pages/QuizSessionPage/AnswersContainer";
 
+interface PlayerQuizSessionQuestionProps {
+  question: WsQuestion;
+  questionNumber: number;
+  selectedAnswer: string | null;
+  onAnswerSubmit: (selectedAnswerId: string) => void;
+}
+
 const PlayerQuizSessionQuestion = ({
   question,
   questionNumber,
-}: {
-  question: WsQuestion;
-  questionNumber: number;
-}) => {
+  selectedAnswer,
+  onAnswerSubmit,
+}: PlayerQuizSessionQuestionProps) => {
   const { t } = useTranslation();
-
-  const [selectedAnswer, setSelectedAnswer] = useState("");
-
-  useEffect(() => {
-    setSelectedAnswer("");
-  }, [question.id]);
 
   const { mutate: handleQuestionAnswerer } = useAnswerQuestion();
 
   const handleClick = (id: string) => {
     if (!selectedAnswer) {
-      setSelectedAnswer(id);
+      onAnswerSubmit(id);
       handleQuestionAnswerer(id);
     }
   };
@@ -56,7 +55,7 @@ const PlayerQuizSessionQuestion = ({
         questionImage={question.imageId != null ? question.imageId : ""}
       />
       <Grid>
-        {selectedAnswer === "" ? (
+        {!selectedAnswer ? (
           <AnswersContainer>
             {question.questionOptions.map((option, index) => (
               <AnswerButton

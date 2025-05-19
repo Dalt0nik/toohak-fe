@@ -30,6 +30,7 @@ const PlayerQuizSession = () => {
     null,
   );
   const [questionNumber, setQuestionNumber] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
   const [userScore, setUserScore] = useState(0);
   const [userPosition, setUserPosition] = useState(0);
@@ -51,6 +52,7 @@ const PlayerQuizSession = () => {
       setQuestionNumber((prev) => prev + 1);
 
       setStatus(QuizSessionStatus.ACTIVE);
+      setSelectedAnswer(null);
       setCorrectAnswer(null);
     },
     onRoundEnd: (evt: WsEventRoundEnd) => {
@@ -117,6 +119,10 @@ const PlayerQuizSession = () => {
     init(playerJwt!.quizSessionId);
   };
 
+  const handleAnswerSubmit = (selectedAnswerId: string) => {
+    setSelectedAnswer(selectedAnswerId);
+  };
+
   return (
     <Container>
       {status === QuizSessionStatus.PENDING && (
@@ -131,6 +137,8 @@ const PlayerQuizSession = () => {
         <PlayerQuizSessionQuestion
           question={currentQuestion!}
           questionNumber={questionNumber}
+          selectedAnswer={selectedAnswer}
+          onAnswerSubmit={handleAnswerSubmit}
         />
       )}
 
@@ -141,6 +149,7 @@ const PlayerQuizSession = () => {
           correctAnswer={correctAnswer}
           userScore={userScore}
           userPosition={userPosition}
+          selectedAnswer={selectedAnswer}
         />
       )}
       {status === QuizSessionStatus.INACTIVE && (

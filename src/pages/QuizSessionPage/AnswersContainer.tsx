@@ -8,7 +8,8 @@ const AnswersContainer = ({ children }: React.PropsWithChildren) => {
       sx={{
         display: "grid",
         gridTemplateColumns: "auto auto",
-        gap: theme.spacing(1),
+        gap: theme.spacing(3),
+        mt: theme.spacing(2),
       }}
     >
       {children}

@@ -12,19 +12,23 @@ enum PlayerQuizSessionAnsweredAnimationState {
   BANNER,
 }
 
+interface PlayerQuizSessionAnsweredProps {
+  question: WsQuestion;
+  questionNumber: number;
+  correctAnswer: string | null;
+  selectedAnswer: string | null;
+  userScore: number;
+  userPosition: number;
+}
+
 const PlayerQuizSessionAnswered = ({
   question,
   questionNumber,
   correctAnswer,
+  selectedAnswer,
   userScore,
   userPosition,
-}: {
-  question: WsQuestion;
-  questionNumber: number;
-  correctAnswer: string | null;
-  userScore: number;
-  userPosition: number;
-}) => {
+}: PlayerQuizSessionAnsweredProps) => {
   const { t } = useTranslation();
 
   const [animationState, setAnimationState] =
@@ -35,13 +39,9 @@ const PlayerQuizSessionAnswered = ({
   useEffect(() => {
     const t1 = setTimeout(() => {
       setAnimationState(PlayerQuizSessionAnsweredAnimationState.BANNER);
-    }, 1000);
-    const t2 = setTimeout(() => {
-      setAnimationState(PlayerQuizSessionAnsweredAnimationState.ANSWER);
-    }, 3500);
+    }, 2000);
     return () => {
       clearTimeout(t1);
-      clearTimeout(t2);
     };
   }, []);
 
@@ -64,7 +64,10 @@ const PlayerQuizSessionAnswered = ({
 
         <AnswersContainer>
           {question.questionOptions.map((option, index) => {
-            const isCorrect = option.id === correctAnswer;
+            const isCorrect =
+              option.id === selectedAnswer || option.id === correctAnswer
+                ? option.id === correctAnswer
+                : undefined;
 
             return (
               <AnswerButton
@@ -85,7 +88,11 @@ const PlayerQuizSessionAnswered = ({
       </Box>
 
       {animationState === PlayerQuizSessionAnsweredAnimationState.BANNER && (
-        <ScoreBackdrop score={userScore} position={userPosition} />
+        <ScoreBackdrop
+          score={userScore}
+          position={userPosition}
+          correct={correctAnswer === selectedAnswer}
+        />
       )}
     </>
   );

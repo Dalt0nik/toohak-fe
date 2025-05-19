@@ -167,7 +167,9 @@
     "errorSendingAnswer": "Answer could not be sent"
   },
   "Score": {
-    "score": "Your score is {{score}}",
-    "position": "Your position is {{position}}"
+    "score": "Your score:",
+    "position": "Your position:",
+    "correct": "You answered correctly!",
+    "incorrect": "Wrong answer :/"
   }
 }

@@ -140,6 +140,7 @@ const HostQuizSessionAnswered = ({
             </Box>
           </motion.div>
           <motion.div
+            style={{ marginInline: "auto", width: "fit-content" }}
             animate={{
               translateY: "150%",
               transition: { duration: 2, delay: 2, type: "spring" },
@@ -147,12 +148,14 @@ const HostQuizSessionAnswered = ({
           >
             <AnswersContainer>
               {question.questionOptions.map((option) => {
-                const isCorrect = option.id === correctQuestionOption;
+                const isCorrect =
+                  option.id === correctQuestionOption ? true : undefined;
                 return (
                   <AnswerButton
                     key={option.id}
                     ordering={option.ordering}
                     disabled
+                    hostView
                     correct={isCorrect}
                   >
                     {option.title}
