@@ -29,7 +29,7 @@
   "quiz_form_description": "Description",
   "quiz_form_description_maxchar": " max characters",
   "quiz_form_image_upload": "Upload Cover Image",
-  "quiz_form_image_dnd": "Drag and drop",
+  "quiz_form_image_dnd": "Drag and drop an image",
   "quiz_form_image_types": "PNG, JPG (max. 3MB)",
   "quiz_form_image_dnd_dragging": "Drop the image here...",
   "quiz_form_image_remove": "Remove",
@@ -37,7 +37,7 @@
   "quiz_form_button_saving": "Saving...",
   "quiz_form_button_save": "Save",
   "quiz_form_questions": "Questions",
-  "quiz_form_no_questions": "No questions added yet",
+  "quiz_form_no_questions": "No questions yet",
   "quiz_form_add_question": "+ ADD NEW QUESTION",
   "error_fetching_quizzes": "Could not retrieve quizzes",
   "QuestionModal": {
@@ -54,8 +54,8 @@
     "totalQuestions": "Total Questions: ",
     "startButton": "Start",
     "gameSettings": "Game settings",
-    "form": "Form for settings",
-    "noQuestions": "There is no questions in this quiz"
+    "form": "Settings Form",
+    "noQuestions": "There are no questions in this quiz"
   },
   "EditQuizPage": {
     "EditQuiz": "Edit Quiz",
@@ -72,8 +72,8 @@
     "ValidatorJoinCodeLength": "Join code must be exactly 5 characters",
     "EnterJoinCode": "Enter Join Code",
     "Join": "Join",
-    "noQuestions": "There is no questions in this quiz",
-    "noAnswers": "There is no answers for this question",
+    "noQuestions": "There are no questions in this quiz",
+    "noAnswers": "There are no answers for this question",
     "correctAnswerTooltip": "Correct answer",
     "incorrectAnswerTooltip": "Incorrect answer",
     "descriptionTitle": "Description",
@@ -82,7 +82,7 @@
     "Host": {
       "Start": "Start",
       "QuizTitle": "\"{{title}}\" quiz lobby",
-      "ScanQRCode": "Scan this QR to join the session",
+      "ScanQRCode": "Scan this QR code to join the session",
       "JoinCodeTitle": "Join code",
       "PlayerCount_one": "{{count}} player",
       "PlayerCount_other": "{{count}} players",
