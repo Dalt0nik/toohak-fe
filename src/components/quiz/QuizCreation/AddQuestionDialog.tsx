@@ -112,8 +112,6 @@ export default function AddQuestionDialog({
     handleClose();
   };
 
-  // If this dialog is closed without pressing save it should automatically delete the image
-  // Right now it just keeps it in the database forever
   const handleImageUpload = async (
     image: File,
     // TEMP
