@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogContent,
   FormControl,
+  FormHelperText,
   Radio,
   RadioGroup,
   TextField,
@@ -15,6 +16,7 @@ import {
   QuestionOption,
 } from "@models/Request/NewQuestionRequest.ts";
 import { useTranslation } from "react-i18next";
+import { Controller, useForm } from "react-hook-form";
 
 interface AddQuestionDialogProps {
   onSave: (question: Question) => void;
@@ -22,6 +24,12 @@ interface AddQuestionDialogProps {
   isOpen?: boolean;
   onClose?: () => void;
 }
+
+type FormValues = {
+  question: string;
+  options: string[];
+  correctAnswer: string;
+};
 
 export default function AddQuestionDialog({
   onSave,
@@ -34,128 +42,147 @@ export default function AddQuestionDialog({
 
   const { t } = useTranslation();
 
-  const [question, setQuestion] = useState("");
-  const [options, setOptions] = useState(["", "", "", ""]);
-  const [correctAnswer, setCorrectAnswer] = useState("0");
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      question: "",
+      options: ["", "", "", ""],
+      correctAnswer: "0",
+    },
+  });
 
   useEffect(() => {
-    if (initialData) {
-      setQuestion(initialData.title);
-      setOptions(initialData.questionOptions.map((opt) => opt.title));
-      const idx = initialData.questionOptions.findIndex((opt) => opt.isCorrect);
-      setCorrectAnswer(idx.toString());
-    } else {
-      setQuestion("");
-      setOptions(["", "", "", ""]);
-      setCorrectAnswer("0");
+    if (dialogIsOpen) {
+      if (initialData) {
+        const opts = initialData.questionOptions.map((o) => o.title) as [
+          string,
+          string,
+          string,
+          string,
+        ];
+        const correctIdx = initialData.questionOptions.findIndex(
+          (o) => o.isCorrect,
+        );
+        reset({
+          question: initialData.title,
+          options: opts,
+          correctAnswer: correctIdx.toString(),
+        });
+      } else {
+        reset({
+          question: "",
+          options: ["", "", "", ""],
+          correctAnswer: "0",
+        });
+      }
     }
-  }, [initialData, dialogIsOpen]);
+  }, [dialogIsOpen, initialData, reset]);
 
-  const handleClickOpen = () => {
-    if (isOpen === undefined) {
-      setInternalOpen(true);
-    }
+  const handleOpen = () => {
+    if (isOpen === undefined) setInternalOpen(true);
   };
-
   const handleClose = () => {
-    setQuestion("");
-    setOptions(["", "", "", ""]);
-    setCorrectAnswer("0");
-    if (onClose) {
-      onClose();
-    } else {
-      setInternalOpen(false);
-    }
+    reset();
+    if (onClose) onClose();
+    else setInternalOpen(false);
   };
 
-  const handleQuestionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuestion(event.target.value);
-  };
-
-  const handleOptionChange = (index: number, value: string) => {
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
-  };
-
-  const handleCorrectAnswerChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setCorrectAnswer(event.target.value);
-  };
-
-  const handleLocalSubmit = () => {
-    const questionOptions: QuestionOption[] = options.map((option, index) => ({
-      title: option,
-      ordering: index + 1,
-      isCorrect: index === parseInt(correctAnswer),
-    }));
-
-    const questionData: Question = {
-      title: question,
-      questionOptions: questionOptions,
-    };
-
-    onSave(questionData);
+  const onSubmit = (data: FormValues) => {
+    const questionOptions: QuestionOption[] = data.options.map(
+      (title, idx) => ({
+        title,
+        ordering: idx + 1,
+        isCorrect: idx === parseInt(data.correctAnswer, 10),
+      }),
+    );
+    onSave({ title: data.question, questionOptions });
     handleClose();
   };
 
   return (
     <React.Fragment>
       {isOpen === undefined && (
-        <Button variant="outlined" onClick={handleClickOpen}>
+        <Button variant="outlined" onClick={handleOpen}>
           {t("quiz_form_add_question")}
         </Button>
       )}
 
       <Dialog open={dialogIsOpen} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="question"
-            label={t("question")}
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={question}
-            onChange={handleQuestionChange}
-            required
-          />
-          <FormControl component="fieldset" sx={{ mt: 2 }} fullWidth>
-            <RadioGroup
-              aria-label="correct-answer"
-              name="correct-answer"
-              value={correctAnswer}
-              onChange={handleCorrectAnswerChange}
+          <Box component="div" id="add-question-form">
+            <TextField
+              {...register("question", {
+                required: t("quiz_form_title_required"),
+              })}
+              autoFocus
+              margin="dense"
+              label={t("question")}
+              fullWidth
+              error={!!errors.question}
+              helperText={errors.question?.message}
+            />
+
+            <FormControl
+              component="fieldset"
+              error={!!errors.options || !!errors.correctAnswer}
+              sx={{ mt: 2 }}
+              fullWidth
             >
-              {options.map((option, index) => (
-                <Box
-                  key={index}
-                  sx={{ display: "flex", alignItems: "center", mb: 1 }}
-                >
-                  <Radio value={index.toString()} />
-                  <TextField
-                    value={option}
-                    onChange={(e) => handleOptionChange(index, e.target.value)}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    label={t("question_dialog_question_option", {
-                      number: index + 1,
-                    })}
-                    required
-                  />
-                </Box>
-              ))}
-            </RadioGroup>
-          </FormControl>
+              <Controller
+                name="correctAnswer"
+                control={control}
+                rules={{
+                  required: t("quiz_form_correct_answer_required"),
+                }}
+                render={({ field }) => (
+                  <RadioGroup {...field}>
+                    {Array.from({ length: 4 }).map((_, idx) => (
+                      <Box
+                        key={idx}
+                        sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                      >
+                        <Radio value={idx.toString()} />
+
+                        <TextField
+                          {...register(`options.${idx}`, {
+                            required: t("question_dialog_question_option", {
+                              number: idx + 1,
+                            }),
+                          })}
+                          variant="outlined"
+                          size="small"
+                          label={t("question_dialog_question_option", {
+                            number: idx + 1,
+                          })}
+                          fullWidth
+                          error={!!errors.options?.[idx]}
+                          helperText={errors.options?.[idx]?.message}
+                        />
+                      </Box>
+                    ))}
+                  </RadioGroup>
+                )}
+              />
+              {errors.correctAnswer && (
+                <FormHelperText>{errors.correctAnswer.message}</FormHelperText>
+              )}
+            </FormControl>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant="contained">
             {t("question_dialog_cancel")}
           </Button>
-          <Button onClick={handleLocalSubmit} variant="contained">
+          <Button
+            variant="contained"
+            type="button"
+            onClick={handleSubmit(onSubmit)}
+          >
             {t("question_dialog_save")}
           </Button>
         </DialogActions>
