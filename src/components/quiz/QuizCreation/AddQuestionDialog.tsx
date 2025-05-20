@@ -16,6 +16,7 @@ import {
 } from "@models/Request/NewQuestionRequest.ts";
 import { useTranslation } from "react-i18next";
 import ImageUpload from "@components/common/ui/ImageUpload";
+import ImageCard from "@components/common/ui/ImageCard";
 import { NewQuestionImageResponse } from "@models/Response/NewQuestionImageResponse";
 import { useUploadQuestionImage } from "@hooks/useUploadQuestionImage";
 
@@ -43,7 +44,8 @@ export default function AddQuestionDialog({
   const [imageId, setImageId] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState("0");
-  // const [isNewImage, setIsNewImage] = useState(false); TEMP
+  //const [isNewImage, setIsNewImage] = useState(false);
+  //const [openConfirmation, setOpenConfirmation] = useState(false);
 
   useEffect(() => {
     if (initialData) {
@@ -51,6 +53,7 @@ export default function AddQuestionDialog({
       setOptions(initialData.questionOptions.map((opt) => opt.title));
       const idx = initialData.questionOptions.findIndex((opt) => opt.isCorrect);
       setCorrectAnswer(idx.toString());
+      setImageId(initialData.imageId ? initialData.imageId : "");
     } else {
       setQuestion("");
       setOptions(["", "", "", ""]);
@@ -68,6 +71,7 @@ export default function AddQuestionDialog({
     setQuestion("");
     setOptions(["", "", "", ""]);
     setCorrectAnswer("0");
+    setImageId("");
     if (onClose) {
       onClose();
     } else {
@@ -103,7 +107,7 @@ export default function AddQuestionDialog({
       imageId: imageId,
       questionOptions: questionOptions,
     };
-
+    setImageId("");
     onSave(questionData);
     handleClose();
   };
@@ -113,15 +117,25 @@ export default function AddQuestionDialog({
   const handleImageUpload = async (
     image: File,
     // TEMP
-    //onChange: (value: string | undefined) => void,
+    // onChange: (value: string | undefined) => void,
   ) => {
     const data: NewQuestionImageResponse =
       await uploadQuestionImageMutation.mutateAsync({
         image: image,
       });
     setImageId(data.imageId);
-    //setIsNewImage(true); TEMP
+    //setIsNewImage(true);
   };
+
+  /*
+  const handleImageDelete = () => {
+      if (!isNewImage) {
+            deleteQuestionImage(quizId!);
+          }
+          setImageId("");
+          setOpenConfirmation(false);
+      }
+  */
 
   return (
     <React.Fragment>
@@ -134,6 +148,7 @@ export default function AddQuestionDialog({
       <Dialog open={dialogIsOpen} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogContent>
           <TextField
+            sx={{ mb: 3 }}
             autoFocus
             margin="dense"
             id="question"
@@ -145,9 +160,19 @@ export default function AddQuestionDialog({
             onChange={handleQuestionChange}
             required
           />
-          <ImageUpload
-            onImageUpload={(image: File) => handleImageUpload(image)}
-          />
+          {imageId != "" ? (
+            <>
+              <ImageCard id={imageId} />
+            </>
+          ) : (
+            <>
+              {" "}
+              <ImageUpload
+                onImageUpload={(image: File) => handleImageUpload(image)}
+              />
+            </>
+          )}
+
           <FormControl component="fieldset" sx={{ mt: 2 }} fullWidth>
             <RadioGroup
               aria-label="correct-answer"
