@@ -110,6 +110,11 @@ const Navbar: React.FC = () => {
                     key={item.path}
                     component={RouterLink}
                     to={item.path}
+                    sx={{
+                      "&:hover": {
+                        color: "#fff",
+                      },
+                    }}
                   >
                     {item.label}
                   </Button>
