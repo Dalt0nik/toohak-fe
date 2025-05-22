@@ -32,6 +32,9 @@ export const FormDescriptionField: React.FC<FormDescriptionFieldProps> = ({
       render={({ field, fieldState: { error } }) => (
         <WhiteTextField
           {...field}
+          id="quiz-description"
+          name="quiz-description"
+          variant="filled"
           label={t("quiz_form_description")}
           multiline
           rows={4}

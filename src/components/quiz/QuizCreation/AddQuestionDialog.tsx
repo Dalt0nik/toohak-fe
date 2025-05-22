@@ -121,7 +121,7 @@ export default function AddQuestionDialog({
               })}
               autoFocus
               margin="dense"
-              label={t("question")}
+              label={`${t("QuestionModal.question")}*`}
               fullWidth
               error={!!errors.question}
               helperText={errors.question?.message}
