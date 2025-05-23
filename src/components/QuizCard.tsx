@@ -6,6 +6,7 @@ import {
   CardActionArea,
   CardMedia,
   CircularProgress,
+  useTheme,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { QuizCardResponse } from "@models/Response/quizCardResponse";
@@ -25,6 +26,7 @@ interface QuizCardProps {
 }
 
 export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
+  const theme = useTheme();
   const lastModified = new Date(quiz.updatedAt).toLocaleDateString();
 
   const {
@@ -105,21 +107,25 @@ export const QuizCard: React.FC<QuizCardProps> = ({ quiz }) => {
           <Typography
             variant="h5"
             gutterBottom
-            sx={{ textAlign: "left", fontWeight: "bold" }}
+            title={quiz.title}
+            sx={{
+              textAlign: "left",
+              fontWeight: "bold",
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+            }}
           >
             {quiz.title}
           </Typography>
 
           <Typography
             variant="body2"
+            title={quiz.description}
             sx={{
               height: 40,
               textAlign: "left",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
+              overflowWrap: "break-word",
+              ...theme.multiLineEllipsis(2),
             }}
           >
             {quiz.description}

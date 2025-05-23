@@ -10,7 +10,7 @@ const QuizDetailsSection: React.FC = () => {
   const { control } = useFormContext<NewQuizRequest>();
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <FormTitleField control={control} />
       <FormDescriptionField control={control} />
       <FormImageUploadField control={control} />

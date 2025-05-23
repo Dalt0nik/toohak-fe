@@ -20,6 +20,11 @@ const InputField = styled(TextField)(({ theme }) => {
       transform: "translate(14px, -3px) scale(0.90)",
       fontSize: "0.95rem",
     },
+    "& .MuiFilledInput-root": {
+      backgroundColor: theme.palette.common.white,
+      borderTopLeftRadius: "12px",
+      borderTopRightRadius: "12px",
+    },
     borderRadius: "12px",
     "& .MuiOutlinedInput-root": {
       borderRadius: "12px",
