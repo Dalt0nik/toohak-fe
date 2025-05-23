@@ -80,6 +80,8 @@
     "descriptionTitle": "Description",
     "questionsTitle": "Questions",
     "Question": "Question {{number}}",
+    "NicknameEmptyError": "Nickname cannot be empty",
+    "NicknameDuplicateError": "Nickname is already taken",
     "Host": {
       "Start": "Start",
       "QuizTitle": "\"{{title}}\" quiz lobby",
@@ -93,7 +95,8 @@
       "QuizEndTitle": "Results for \"{{title}}\" quiz",
       "Leave": "Leave",
       "DurationLabel": "Question duration (seconds)",
-      "DurationError": "Duration must be at least 10 seconds"
+      "DurationErrorLess": "Duration must be at least 10 seconds",
+      "DurationErrorLong": "Duration must be at most 120 seconds"
     },
     "Player": {
       "Placed": "You have placed",

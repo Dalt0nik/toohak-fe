@@ -41,7 +41,7 @@ const HostQuizSessionLobby = ({
     });
 
   const handleStartQuiz = () => {
-    if (duration < 10) return;
+    if (duration < 10 || duration > 120) return;
     startGameMutation();
   };
 
@@ -111,10 +111,15 @@ const HostQuizSessionLobby = ({
                 }}
                 inputProps={{
                   min: 10,
+                  max: 120,
                 }}
-                error={duration < 10}
+                error={duration < 10 || duration > 120}
                 helperText={
-                  duration < 10 ? t(`${TRANSLATIONS_ROOT}.DurationError`) : ""
+                  duration < 10
+                    ? t(`${TRANSLATIONS_ROOT}.DurationErrorLess`)
+                    : duration > 120
+                      ? t(`${TRANSLATIONS_ROOT}.DurationErrorLong`)
+                      : ""
                 }
               />
             </Box>
