@@ -40,7 +40,7 @@ const JoinDirectlyPage = () => {
       }
     },
     onError: (error) => {
-      if (error.message.includes("400"))
+      if (error.message.includes("409"))
         showError(t("QuizSession.NicknameDuplicateError"));
       console.error(error);
     },
