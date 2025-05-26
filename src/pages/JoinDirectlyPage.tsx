@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, InputAdornment } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { findQuizSession, joinQuizSession } from "@api/QuizSessionApi";
 import { PublicAppRoutes } from "@models/PublicRoutes";
@@ -116,7 +116,17 @@ const JoinDirectlyPage = () => {
         value={nickname}
         onChange={(e) => setNickname(e.target.value)}
         placeholder={t("QuizSession.NicknamePlaceholder")}
+        slotProps={{ htmlInput: { maxLength: 20 } }}
         variant="outlined"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Typography variant="body2" sx={{ color: "gray" }}>
+                {nickname.length}/20
+              </Typography>
+            </InputAdornment>
+          ),
+        }}
         sx={{ marginBottom: "20px", width: "300px" }}
       />
       <Button variant="contained" onClick={handleOnClick}>
