@@ -44,7 +44,6 @@ const QuestionModal = ({
     initialData?.title ?? "",
   );
   const [imageId, setImageId] = useState<string>(initialData?.imageId ?? "");
-  console.log(imageId);
 
   const handleQuestionChange = (title: string) => {
     setQuestionTitle(title);
@@ -74,7 +73,7 @@ const QuestionModal = ({
     const questionData: Question = {
       id: initialData?.id,
       title: questionTitle,
-      imageId: initialData?.imageId,
+      imageId: imageId,
       questionOptions: options,
     };
 
