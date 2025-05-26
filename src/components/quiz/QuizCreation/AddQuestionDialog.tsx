@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogContent,
   FormControl,
+  FormHelperText,
   Radio,
   RadioGroup,
   TextField,
@@ -15,6 +16,7 @@ import {
   QuestionOption,
 } from "@models/Request/NewQuestionRequest.ts";
 import { useTranslation } from "react-i18next";
+import { Controller, useForm } from "react-hook-form";
 import ImageUpload from "@components/common/ui/ImageUpload";
 import ImageCard from "@components/common/ui/ImageCard";
 import { NewQuestionImageResponse } from "@models/Response/NewQuestionImageResponse";
@@ -27,6 +29,13 @@ interface AddQuestionDialogProps {
   onClose?: () => void;
 }
 
+type FormValues = {
+  question: string;
+  imageId: string;
+  options: string[];
+  correctAnswer: string;
+};
+
 export default function AddQuestionDialog({
   onSave,
   initialData,
@@ -35,176 +44,175 @@ export default function AddQuestionDialog({
 }: AddQuestionDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const dialogIsOpen = isOpen ?? internalOpen;
-
+  const uploadQuestionImageMutation = useUploadQuestionImage();
   const { t } = useTranslation();
 
-  const uploadQuestionImageMutation = useUploadQuestionImage();
-
-  const [question, setQuestion] = useState("");
-  const [imageId, setImageId] = useState("");
-  const [options, setOptions] = useState(["", "", "", ""]);
-  const [correctAnswer, setCorrectAnswer] = useState("0");
-  //const [isNewImage, setIsNewImage] = useState(false);
-  //const [openConfirmation, setOpenConfirmation] = useState(false);
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      question: "",
+      imageId: "",
+      options: ["", "", "", ""],
+      correctAnswer: "0",
+    },
+  });
 
   useEffect(() => {
-    if (initialData) {
-      setQuestion(initialData.title);
-      setOptions(initialData.questionOptions.map((opt) => opt.title));
-      const idx = initialData.questionOptions.findIndex((opt) => opt.isCorrect);
-      setCorrectAnswer(idx.toString());
-      setImageId(initialData.imageId ? initialData.imageId : "");
-    } else {
-      setQuestion("");
-      setOptions(["", "", "", ""]);
-      setCorrectAnswer("0");
+    if (dialogIsOpen) {
+      if (initialData) {
+        const opts = initialData.questionOptions.map((o) => o.title) as [
+          string,
+          string,
+          string,
+          string,
+        ];
+        const correctIdx = initialData.questionOptions.findIndex(
+          (o) => o.isCorrect,
+        );
+        reset({
+          question: initialData.title,
+          imageId: initialData.imageId ? initialData.imageId : undefined,
+          options: opts,
+          correctAnswer: correctIdx.toString(),
+        });
+      } else {
+        reset({
+          question: "",
+          imageId: "",
+          options: ["", "", "", ""],
+          correctAnswer: "0",
+        });
+      }
     }
-  }, [initialData, dialogIsOpen]);
+  }, [dialogIsOpen, initialData, reset]);
 
-  const handleClickOpen = () => {
-    if (isOpen === undefined) {
-      setInternalOpen(true);
-    }
+  const handleOpen = () => {
+    if (isOpen === undefined) setInternalOpen(true);
   };
-
   const handleClose = () => {
-    setQuestion("");
-    setOptions(["", "", "", ""]);
-    setCorrectAnswer("0");
-    setImageId("");
-    if (onClose) {
-      onClose();
-    } else {
-      setInternalOpen(false);
-    }
+    reset();
+    if (onClose) onClose();
+    else setInternalOpen(false);
   };
 
-  const handleQuestionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuestion(event.target.value);
-  };
-
-  const handleOptionChange = (index: number, value: string) => {
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
-  };
-
-  const handleCorrectAnswerChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setCorrectAnswer(event.target.value);
-  };
-
-  const handleLocalSubmit = () => {
-    const questionOptions: QuestionOption[] = options.map((option, index) => ({
-      title: option,
-      ordering: index + 1,
-      isCorrect: index === parseInt(correctAnswer),
-    }));
-
-    const questionData: Question = {
-      title: question,
-      imageId: imageId,
-      questionOptions: questionOptions,
-    };
-    setImageId("");
-    onSave(questionData);
+  const onSubmit = (data: FormValues) => {
+    const questionOptions: QuestionOption[] = data.options.map(
+      (title, idx) => ({
+        title,
+        ordering: idx + 1,
+        isCorrect: idx === parseInt(data.correctAnswer, 10),
+      }),
+    );
+    onSave({ title: data.question, imageId: data.imageId, questionOptions });
     handleClose();
   };
 
-  const handleImageUpload = async (
-    image: File,
-    // TEMP
-    // onChange: (value: string | undefined) => void,
-  ) => {
+  const handleImageUpload = async (image: File) => {
     const data: NewQuestionImageResponse =
       await uploadQuestionImageMutation.mutateAsync({
         image: image,
       });
-    setImageId(data.imageId);
-    //setIsNewImage(true);
+    setValue("imageId", data.imageId);
   };
-
-  /*
-  const handleImageDelete = () => {
-      if (!isNewImage) {
-            deleteQuestionImage(quizId!);
-          }
-          setImageId("");
-          setOpenConfirmation(false);
-      }
-  */
 
   return (
     <React.Fragment>
       {isOpen === undefined && (
-        <Button variant="outlined" onClick={handleClickOpen}>
+        <Button variant="outlined" onClick={handleOpen}>
           {t("quiz_form_add_question")}
         </Button>
       )}
 
       <Dialog open={dialogIsOpen} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogContent>
-          <TextField
-            sx={{ mb: 3 }}
-            autoFocus
-            margin="dense"
-            id="question"
-            label={t("question_dialog_question")}
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={question}
-            onChange={handleQuestionChange}
-            required
-          />
-          {imageId != "" ? (
-            <>
-              <ImageCard id={imageId} />
-            </>
-          ) : (
-            <>
-              {" "}
-              <ImageUpload
-                onImageUpload={(image: File) => handleImageUpload(image)}
-              />
-            </>
-          )}
+          <Box component="div" id="add-question-form">
+            <TextField
+              {...register("question", {
+                required: t("quiz_form_title_required"),
+              })}
+              autoFocus
+              margin="dense"
+              label={`${t("QuestionModal.question")}*`}
+              fullWidth
+              error={!!errors.question}
+              helperText={errors.question?.message}
+            />
+            {watch("imageId") ? (
+              <>
+                <ImageCard id={watch("imageId")} />
+              </>
+            ) : (
+              <>
+                {" "}
+                <ImageUpload
+                  onImageUpload={(image: File) => handleImageUpload(image)}
+                />
+              </>
+            )}
 
-          <FormControl component="fieldset" sx={{ mt: 2 }} fullWidth>
-            <RadioGroup
-              aria-label="correct-answer"
-              name="correct-answer"
-              value={correctAnswer}
-              onChange={handleCorrectAnswerChange}
+            <FormControl
+              component="fieldset"
+              error={!!errors.options || !!errors.correctAnswer}
+              sx={{ mt: 2 }}
+              fullWidth
             >
-              {options.map((option, index) => (
-                <Box
-                  key={index}
-                  sx={{ display: "flex", alignItems: "center", mb: 1 }}
-                >
-                  <Radio value={index.toString()} />
-                  <TextField
-                    value={option}
-                    onChange={(e) => handleOptionChange(index, e.target.value)}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    label={t("question_dialog_question_option", {
-                      number: index + 1,
-                    })}
-                    required
-                  />
-                </Box>
-              ))}
-            </RadioGroup>
-          </FormControl>
+              <Controller
+                name="correctAnswer"
+                control={control}
+                rules={{
+                  required: t("quiz_form_correct_answer_required"),
+                }}
+                render={({ field }) => (
+                  <RadioGroup {...field}>
+                    {Array.from({ length: 4 }).map((_, idx) => (
+                      <Box
+                        key={idx}
+                        sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                      >
+                        <Radio value={idx.toString()} />
+
+                        <TextField
+                          {...register(`options.${idx}`, {
+                            required: t("question_dialog_question_option", {
+                              number: idx + 1,
+                            }),
+                          })}
+                          variant="outlined"
+                          size="small"
+                          label={t("question_dialog_question_option", {
+                            number: idx + 1,
+                          })}
+                          fullWidth
+                          error={!!errors.options?.[idx]}
+                          helperText={errors.options?.[idx]?.message}
+                        />
+                      </Box>
+                    ))}
+                  </RadioGroup>
+                )}
+              />
+              {errors.correctAnswer && (
+                <FormHelperText>{errors.correctAnswer.message}</FormHelperText>
+              )}
+            </FormControl>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant="contained">
             {t("question_dialog_cancel")}
           </Button>
-          <Button onClick={handleLocalSubmit} variant="contained">
+          <Button
+            variant="contained"
+            type="button"
+            onClick={handleSubmit(onSubmit)}
+          >
             {t("question_dialog_save")}
           </Button>
         </DialogActions>

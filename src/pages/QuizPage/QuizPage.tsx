@@ -40,8 +40,10 @@ const QuizPage = () => {
       >
         <Typography
           variant="h3"
+          title={quiz?.title}
           sx={{
             textAlign: "left",
+            overflowWrap: "break-word",
             ...theme.multiLineEllipsis(1),
           }}
         >
@@ -74,7 +76,13 @@ const QuizPage = () => {
             >
               <ImageCard alt="Quiz cover" id={quiz!.imageId} />
             </Box>
-            <Typography variant="h5" sx={{ textAlign: "left" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                textAlign: "left",
+                overflowWrap: "break-word",
+              }}
+            >
               {quiz?.description}
             </Typography>
             <Typography

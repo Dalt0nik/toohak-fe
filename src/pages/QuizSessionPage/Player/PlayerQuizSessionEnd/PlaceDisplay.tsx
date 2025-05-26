@@ -1,12 +1,10 @@
-import { Box, CSSProperties, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { TRANSLATION_ROOT } from "../PlayerQuizSession";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
-import { getMedalColor } from "@utils/gameHelpers";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import confetti from "canvas-confetti";
+import PlaceIcon from "@components/common/ui/PlaceIcon";
 
 interface PlaceDisplayProps {
   place: number;
@@ -29,11 +27,6 @@ const PlaceDisplay = ({ place }: PlaceDisplayProps) => {
       origin: { x: 0.5, y: -0.5 },
     });
   }, []);
-
-  const iconStyle: CSSProperties = {
-    fontSize: theme.typography.h2.fontSize,
-    color: getMedalColor(place - 1),
-  };
 
   return (
     <Box
@@ -65,11 +58,7 @@ const PlaceDisplay = ({ place }: PlaceDisplayProps) => {
           right: "0",
         }}
       >
-        {place === 1 ? (
-          <EmojiEventsIcon style={iconStyle} />
-        ) : (
-          <WorkspacePremiumIcon style={iconStyle} />
-        )}
+        <PlaceIcon place={place} />
       </motion.div>
       <Typography color="secondary" variant="h2" component={"span"}>
         {t(`${TRANSLATION_ROOT}.Place`, { count: place, ordinal: true })}

@@ -104,17 +104,12 @@ const QuestionModal = ({
     }
   }, [open, initialData]);
 
-  const handleImageUpload = async (
-    image: File,
-    // TEMP
-    // onChange: (value: string | undefined) => void,
-  ) => {
+  const handleImageUpload = async (image: File) => {
     const data: NewQuestionImageResponse =
       await uploadQuestionImageMutation.mutateAsync({
         image: image,
       });
     setImageId(data.imageId);
-    //setIsNewImage(true);
   };
 
   return (

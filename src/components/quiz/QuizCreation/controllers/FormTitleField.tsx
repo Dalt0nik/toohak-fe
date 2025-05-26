@@ -10,7 +10,7 @@ interface FormTitleFieldProps {
 
 export const FormTitleField: React.FC<FormTitleFieldProps> = ({ control }) => {
   const { t } = useTranslation();
-  const maxTitleLength = 200;
+  const maxTitleLength = 50;
   return (
     <Controller
       name="title"
@@ -25,9 +25,21 @@ export const FormTitleField: React.FC<FormTitleFieldProps> = ({ control }) => {
       render={({ field, fieldState: { error } }) => (
         <WhiteTextField
           {...field}
+          id="quiz-title"
+          name="quiz-title"
+          variant="filled"
           label={t("quiz_form_title")}
           error={!!error}
-          helperText={error ? error.message : ""}
+          slotProps={{
+            htmlInput: {
+              maxLength: maxTitleLength,
+            },
+          }}
+          helperText={
+            error
+              ? error.message
+              : `${field.value?.length || 0} / ${maxTitleLength}`
+          }
         />
       )}
     />

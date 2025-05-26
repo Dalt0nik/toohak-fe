@@ -9,6 +9,7 @@ import { JoinQuizSessionRequest } from "@models/Request/JoinQuizSessionRequest";
 import { JwtResponse } from "@models/Response/JwtResponse";
 import { Cookies } from "react-cookie";
 import { useTranslation } from "react-i18next";
+import { showToast } from "@components/common/ui/Toast";
 
 const JoinDirectlyPage = () => {
   const { joinId } = useParams<{ joinId: string }>();
@@ -16,6 +17,7 @@ const JoinDirectlyPage = () => {
   const [nickname, setNickname] = useState("");
   const cookies = new Cookies();
   const { t } = useTranslation();
+  const { showError } = showToast();
 
   const {
     data: session,
@@ -38,11 +40,18 @@ const JoinDirectlyPage = () => {
       }
     },
     onError: (error) => {
+      if (error.message.includes("409"))
+        showError(t("QuizSession.NicknameDuplicateError"));
       console.error(error);
     },
   });
 
   const handleOnClick = () => {
+    if (!nickname.trim()) {
+      showError(t("QuizSession.NicknameEmptyError"));
+      return;
+    }
+
     if (session?.quizSessionId != undefined) {
       const req: JoinQuizSessionRequest = {
         quizSessionId: session?.quizSessionId,

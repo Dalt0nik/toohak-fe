@@ -3,9 +3,13 @@
   "user_quiz_list_yourQuizzes": "Your Quizzes",
   "user_quiz_list_error": "Error loading your quizzes",
   "user_quiz_list_noQuizzes": "You have no quizzes",
-  "homepage_title": "Untitled Kahoot game",
-  "homepage_description": "Test if your audience were listening...",
+  "homepage_title": "Quiz games at Toohak!",
+  "homepage_description_host": "Test if your audience was listening...",
+  "homepage_description_player": "Think fast. Score high. Win big.",
   "homepage_joingame": "JOIN A GAME",
+  "homepage_rejoin": "REJOIN",
+  "homepage_rejoin_checking": "Checking...",
+  "homepage_error_rejoin": "Game is not available for rejoin",
   "navbar_create": "CREATE",
   "navbar_browse": "BROWSE",
   "navbar_yourquizzes": "YOUR QUIZZES",
@@ -15,6 +19,7 @@
   "navbar_joinquiz": "JOIN QUIZ",
   "question_dialog_question": "Question",
   "question_dialog_question_option": "Option {{number}}",
+  "question_dialog_question_answer_required": "Select the correct answer",
   "question_dialog_cancel": "Cancel",
   "question_dialog_save": "Save",
   "quiz_form_create_new_quiz": "Create new quiz",
@@ -25,7 +30,7 @@
   "quiz_form_description": "Description",
   "quiz_form_description_maxchar": " max characters",
   "quiz_form_image_upload": "Upload Cover Image",
-  "quiz_form_image_dnd": "Drag and drop",
+  "quiz_form_image_dnd": "Drag and drop an image",
   "quiz_form_image_types": "PNG, JPG (max. 3MB)",
   "quiz_form_image_dnd_dragging": "Drop the image here...",
   "quiz_form_image_remove": "Remove",
@@ -33,7 +38,7 @@
   "quiz_form_button_saving": "Saving...",
   "quiz_form_button_save": "Save",
   "quiz_form_questions": "Questions",
-  "quiz_form_no_questions": "No questions added yet",
+  "quiz_form_no_questions": "No questions yet",
   "quiz_form_add_question": "+ ADD NEW QUESTION",
   "error_fetching_quizzes": "Could not retrieve quizzes",
   "QuestionModal": {
@@ -50,8 +55,8 @@
     "totalQuestions": "Total Questions: ",
     "startButton": "Start",
     "gameSettings": "Game settings",
-    "form": "Form for settings",
-    "noQuestions": "There is no questions in this quiz"
+    "form": "Settings Form",
+    "noQuestions": "There are no questions in this quiz"
   },
   "EditQuizPage": {
     "EditQuiz": "Edit Quiz",
@@ -68,17 +73,19 @@
     "ValidatorJoinCodeLength": "Join code must be exactly 5 characters",
     "EnterJoinCode": "Enter Join Code",
     "Join": "Join",
-    "noQuestions": "There is no questions in this quiz",
-    "noAnswers": "There is no answers for this question",
+    "noQuestions": "There are no questions in this quiz",
+    "noAnswers": "There are no answers for this question",
     "correctAnswerTooltip": "Correct answer",
     "incorrectAnswerTooltip": "Incorrect answer",
     "descriptionTitle": "Description",
     "questionsTitle": "Questions",
     "Question": "Question {{number}}",
+    "NicknameEmptyError": "Nickname cannot be empty",
+    "NicknameDuplicateError": "Nickname is already taken",
     "Host": {
       "Start": "Start",
       "QuizTitle": "\"{{title}}\" quiz lobby",
-      "ScanQRCode": "Scan this QR to join the session",
+      "ScanQRCode": "Scan this QR code to join the session",
       "JoinCodeTitle": "Join code",
       "PlayerCount_one": "{{count}} player",
       "PlayerCount_other": "{{count}} players",
@@ -88,7 +95,8 @@
       "QuizEndTitle": "Results for \"{{title}}\" quiz",
       "Leave": "Leave",
       "DurationLabel": "Question duration (seconds)",
-      "DurationError": "Duration must be at least 10 seconds"
+      "DurationErrorLess": "Duration must be at least 10 seconds",
+      "DurationErrorLong": "Duration must be at most 120 seconds"
     },
     "Player": {
       "Placed": "You have placed",
@@ -163,7 +171,9 @@
     "errorSendingAnswer": "Answer could not be sent"
   },
   "Score": {
-    "score": "Your score is {{score}}",
-    "position": "Your position is {{position}}"
+    "score": "Your score:",
+    "position": "Your position:",
+    "correct": "You answered correctly!",
+    "incorrect": "Wrong answer :/"
   }
 }
