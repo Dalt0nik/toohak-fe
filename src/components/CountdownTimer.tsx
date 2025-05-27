@@ -49,7 +49,7 @@ const CountdownTimer = ({
   return (
     <Box
       sx={{
-        position: "relative",
+        position: "absolute",
         display: "flex",
         justifyContent: "flex-start",
         width: "100%",

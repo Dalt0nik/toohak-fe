@@ -1,4 +1,4 @@
-import { CardMedia, CircularProgress } from "@mui/material";
+import { Box, CardMedia, CircularProgress } from "@mui/material";
 import ImageNotSupportedOutlinedIcon from "@mui/icons-material/ImageNotSupportedOutlined";
 import { fetchImageById } from "@api/QuizApi";
 import { useQuery } from "@tanstack/react-query";
@@ -6,9 +6,16 @@ import { useQuery } from "@tanstack/react-query";
 interface ImageCardProps {
   id: string | null;
   alt?: string;
+  maxHeight?: string;
+  maxWidth?: string;
 }
 
-const ImageCard = ({ alt = "Cover image", id }: ImageCardProps) => {
+const ImageCard = ({
+  alt = "Cover image",
+  id,
+  maxHeight = "500px",
+  maxWidth = "80%",
+}: ImageCardProps) => {
   const {
     data: coverImage,
     isLoading: imageLoading,
@@ -23,7 +30,27 @@ const ImageCard = ({ alt = "Cover image", id }: ImageCardProps) => {
   if (imageLoading) return <CircularProgress />;
 
   return !imageError && coverImage ? (
-    <CardMedia component="img" image={coverImage} alt={alt} />
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <CardMedia
+        sx={{
+          height: "auto",
+          width: "auto",
+          maxHeight: maxHeight,
+          maxWidth: maxWidth,
+          objectFit: "contain",
+        }}
+        component="img"
+        image={coverImage}
+        alt={alt}
+      />
+    </Box>
   ) : (
     <ImageNotSupportedOutlinedIcon
       sx={{

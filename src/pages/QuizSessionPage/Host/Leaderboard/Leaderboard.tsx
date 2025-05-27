@@ -82,15 +82,22 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ oldPoints, newPoints }) => {
   }, [oldPoints, newPoints, sortedOldPoints, sortedNewPoints]);
 
   const getDisplayScore = useCallback(
-    (id: string) =>
-      displayState === AnimationStates.INITIAL
-        ? scoreChanges[id].oldScore
-        : scoreChanges[id].newScore,
+    (id: string) => {
+      if (scoreChanges[id])
+        return displayState === AnimationStates.INITIAL
+          ? scoreChanges[id].oldScore
+          : scoreChanges[id].newScore;
+      else return 0;
+    },
     [displayState, scoreChanges],
   );
 
   const hasScoreChanged = useCallback(
-    (id: string) => scoreChanges[id].oldScore !== scoreChanges[id].newScore,
+    (id: string) => {
+      if (scoreChanges[id])
+        return scoreChanges[id].oldScore !== scoreChanges[id].newScore;
+      else return false;
+    },
     [scoreChanges],
   );
 

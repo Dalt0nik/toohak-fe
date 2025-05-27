@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, InputAdornment } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { findQuizSession, joinQuizSession } from "@api/QuizSessionApi";
 import { PublicAppRoutes } from "@models/PublicRoutes";
@@ -9,6 +9,7 @@ import { JoinQuizSessionRequest } from "@models/Request/JoinQuizSessionRequest";
 import { JwtResponse } from "@models/Response/JwtResponse";
 import { Cookies } from "react-cookie";
 import { useTranslation } from "react-i18next";
+import { showToast } from "@components/common/ui/Toast";
 
 const JoinDirectlyPage = () => {
   const { joinId } = useParams<{ joinId: string }>();
@@ -16,6 +17,7 @@ const JoinDirectlyPage = () => {
   const [nickname, setNickname] = useState("");
   const cookies = new Cookies();
   const { t } = useTranslation();
+  const { showError } = showToast();
 
   const {
     data: session,
@@ -38,11 +40,18 @@ const JoinDirectlyPage = () => {
       }
     },
     onError: (error) => {
+      if (error.message.includes("409"))
+        showError(t("QuizSession.NicknameDuplicateError"));
       console.error(error);
     },
   });
 
   const handleOnClick = () => {
+    if (!nickname.trim()) {
+      showError(t("QuizSession.NicknameEmptyError"));
+      return;
+    }
+
     if (session?.quizSessionId != undefined) {
       const req: JoinQuizSessionRequest = {
         quizSessionId: session?.quizSessionId,
@@ -107,7 +116,17 @@ const JoinDirectlyPage = () => {
         value={nickname}
         onChange={(e) => setNickname(e.target.value)}
         placeholder={t("QuizSession.NicknamePlaceholder")}
+        slotProps={{ htmlInput: { maxLength: 20 } }}
         variant="outlined"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Typography variant="body2" sx={{ color: "gray" }}>
+                {nickname.length}/20
+              </Typography>
+            </InputAdornment>
+          ),
+        }}
         sx={{ marginBottom: "20px", width: "300px" }}
       />
       <Button variant="contained" onClick={handleOnClick}>

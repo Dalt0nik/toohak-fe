@@ -16,6 +16,10 @@ import { useTranslation } from "react-i18next";
 import { normalizeOptions } from "@utils/normalizeOptions";
 import { getDefaultOptions } from "@utils/getDefaultOptions";
 import { showToast } from "@components/common/ui/Toast";
+import ImageUpload from "@components/common/ui/ImageUpload";
+import ImageCard from "@components/common/ui/ImageCard";
+import { NewQuestionImageResponse } from "@models/Response/NewQuestionImageResponse";
+import { useUploadQuestionImage } from "@hooks/useUploadQuestionImage";
 
 type QuestionModalProps = {
   onSave: (question: Question) => void;
@@ -32,12 +36,14 @@ const QuestionModal = ({
 }: QuestionModalProps) => {
   const { t } = useTranslation();
   const { showError } = showToast();
+  const uploadQuestionImageMutation = useUploadQuestionImage();
   const [questionOptions, setQuestionOptions] = useState<QuestionOption[]>(
     normalizeOptions(initialData?.questionOptions),
   );
   const [questionTitle, setQuestionTitle] = useState<string>(
     initialData?.title ?? "",
   );
+  const [imageId, setImageId] = useState<string>(initialData?.imageId ?? "");
 
   const handleQuestionChange = (title: string) => {
     setQuestionTitle(title);
@@ -67,6 +73,7 @@ const QuestionModal = ({
     const questionData: Question = {
       id: initialData?.id,
       title: questionTitle,
+      imageId: imageId,
       questionOptions: options,
     };
 
@@ -84,16 +91,26 @@ const QuestionModal = ({
   useEffect(() => {
     const resetModalState = () => {
       const title = initialData?.title ?? "";
+      const image = initialData?.imageId ?? "";
       const options = initialData?.questionOptions
         ? normalizeOptions(initialData.questionOptions)
         : getDefaultOptions();
       setQuestionTitle(title);
       setQuestionOptions(options);
+      setImageId(image);
     };
     if (open) {
       resetModalState();
     }
   }, [open, initialData]);
+
+  const handleImageUpload = async (image: File) => {
+    const data: NewQuestionImageResponse =
+      await uploadQuestionImageMutation.mutateAsync({
+        image: image,
+      });
+    setImageId(data.imageId);
+  };
 
   return (
     <>
@@ -118,11 +135,23 @@ const QuestionModal = ({
             variant="outlined"
             fullWidth
             required
-            sx={{ mb: 2 }}
+            sx={{ mb: 3 }}
             value={questionTitle}
             onChange={(e) => handleQuestionChange(e.target.value)}
           />
-          <FormControl fullWidth>
+          {imageId != "" ? (
+            <>
+              <ImageCard id={imageId} />
+            </>
+          ) : (
+            <>
+              {" "}
+              <ImageUpload
+                onImageUpload={(image: File) => handleImageUpload(image)}
+              />
+            </>
+          )}
+          <FormControl sx={{ mt: 2 }} fullWidth>
             <RadioGroup>
               {questionOptions.map((option) => (
                 <Box

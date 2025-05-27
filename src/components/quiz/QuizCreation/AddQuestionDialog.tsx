@@ -17,6 +17,10 @@ import {
 } from "@models/Request/NewQuestionRequest.ts";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
+import ImageUpload from "@components/common/ui/ImageUpload";
+import ImageCard from "@components/common/ui/ImageCard";
+import { NewQuestionImageResponse } from "@models/Response/NewQuestionImageResponse";
+import { useUploadQuestionImage } from "@hooks/useUploadQuestionImage";
 
 interface AddQuestionDialogProps {
   onSave: (question: Question) => void;
@@ -27,6 +31,7 @@ interface AddQuestionDialogProps {
 
 type FormValues = {
   question: string;
+  imageId: string;
   options: string[];
   correctAnswer: string;
 };
@@ -39,7 +44,7 @@ export default function AddQuestionDialog({
 }: AddQuestionDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const dialogIsOpen = isOpen ?? internalOpen;
-
+  const uploadQuestionImageMutation = useUploadQuestionImage();
   const { t } = useTranslation();
 
   const {
@@ -47,10 +52,13 @@ export default function AddQuestionDialog({
     control,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
       question: "",
+      imageId: "",
       options: ["", "", "", ""],
       correctAnswer: "0",
     },
@@ -70,12 +78,14 @@ export default function AddQuestionDialog({
         );
         reset({
           question: initialData.title,
+          imageId: initialData.imageId ? initialData.imageId : undefined,
           options: opts,
           correctAnswer: correctIdx.toString(),
         });
       } else {
         reset({
           question: "",
+          imageId: "",
           options: ["", "", "", ""],
           correctAnswer: "0",
         });
@@ -100,8 +110,16 @@ export default function AddQuestionDialog({
         isCorrect: idx === parseInt(data.correctAnswer, 10),
       }),
     );
-    onSave({ title: data.question, questionOptions });
+    onSave({ title: data.question, imageId: data.imageId, questionOptions });
     handleClose();
+  };
+
+  const handleImageUpload = async (image: File) => {
+    const data: NewQuestionImageResponse =
+      await uploadQuestionImageMutation.mutateAsync({
+        image: image,
+      });
+    setValue("imageId", data.imageId);
   };
 
   return (
@@ -126,6 +144,18 @@ export default function AddQuestionDialog({
               error={!!errors.question}
               helperText={errors.question?.message}
             />
+            {watch("imageId") ? (
+              <>
+                <ImageCard id={watch("imageId")} />
+              </>
+            ) : (
+              <>
+                {" "}
+                <ImageUpload
+                  onImageUpload={(image: File) => handleImageUpload(image)}
+                />
+              </>
+            )}
 
             <FormControl
               component="fieldset"
