@@ -1,4 +1,11 @@
-import { Box, Grid, Typography, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  CircularProgress,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import AnswerButton from "@components/quizSession/AnswerButton";
 import QuestionDisplay from "@components/quizSession/QuestionDisplay";
 import { useTranslation } from "react-i18next";
@@ -22,6 +29,9 @@ const PlayerQuizSessionQuestion = ({
 }: PlayerQuizSessionQuestionProps) => {
   const { t } = useTranslation();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const { mutate: handleQuestionAnswerer } = useAnswerQuestion();
 
   const handleClick = (id: string) => {
@@ -40,14 +50,16 @@ const PlayerQuizSessionQuestion = ({
         alignItems: "center",
       }}
     >
-      <Box sx={{ width: "100%", mb: 2 }}>
-        {!selectedAnswer && (
-          <CountdownTimer
-            key={question.id}
-            duration={question.durationSeconds}
-          />
-        )}
-      </Box>
+      {!isMobile && (
+        <Box sx={{ width: "100%", mb: 2 }}>
+          {!selectedAnswer && (
+            <CountdownTimer
+              key={question.id}
+              duration={question.durationSeconds}
+            />
+          )}
+        </Box>
+      )}
 
       <QuestionDisplay
         questionTitle={question.title}
@@ -56,18 +68,29 @@ const PlayerQuizSessionQuestion = ({
       />
       <Grid>
         {!selectedAnswer ? (
-          <AnswersContainer>
-            {question.questionOptions.map((option, index) => (
-              <AnswerButton
-                onClick={() => handleClick(option.id)}
-                ordering={index + 1}
-                disabled={selectedAnswer === option.id}
-                key={option.id}
-              >
-                {option.title}
-              </AnswerButton>
-            ))}
-          </AnswersContainer>
+          <>
+            <AnswersContainer>
+              {question.questionOptions.map((option, index) => (
+                <AnswerButton
+                  onClick={() => handleClick(option.id)}
+                  ordering={index + 1}
+                  disabled={selectedAnswer === option.id}
+                  key={option.id}
+                >
+                  {option.title}
+                </AnswerButton>
+              ))}
+            </AnswersContainer>
+            {isMobile && (
+              <Box sx={{ width: "100%", mt: 1 }}>
+                <CountdownTimer
+                  size={75}
+                  key={question.id}
+                  duration={question.durationSeconds}
+                />
+              </Box>
+            )}
+          </>
         ) : (
           <>
             <Typography

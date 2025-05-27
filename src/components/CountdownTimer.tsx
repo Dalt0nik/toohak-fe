@@ -4,10 +4,15 @@ import { alpha } from "@mui/material/styles";
 
 type CountdownTimerProps = {
   duration: number;
+  size?: number;
   onComplete?: () => void;
 };
 
-const CountdownTimer = ({ duration, onComplete }: CountdownTimerProps) => {
+const CountdownTimer = ({
+  duration,
+  onComplete,
+  size = 100,
+}: CountdownTimerProps) => {
   const [timeLeft, setTimeLeft] = useState(duration);
   const endTimeRef = useRef<number>(Date.now() + duration * 1000);
 
@@ -44,7 +49,7 @@ const CountdownTimer = ({ duration, onComplete }: CountdownTimerProps) => {
   return (
     <Box
       sx={{
-        position: "absolute",
+        position: "fixed",
         display: "flex",
         justifyContent: "flex-start",
         width: "100%",
@@ -62,7 +67,7 @@ const CountdownTimer = ({ duration, onComplete }: CountdownTimerProps) => {
         <CircularProgress
           variant="determinate"
           value={100}
-          size={100}
+          size={size}
           thickness={5}
           sx={{
             color: fadedColor,
@@ -72,7 +77,7 @@ const CountdownTimer = ({ duration, onComplete }: CountdownTimerProps) => {
         <CircularProgress
           variant="determinate"
           value={progress}
-          size={100}
+          size={size}
           thickness={5}
           sx={{
             color: getProgressColor(),
