@@ -30,7 +30,11 @@ const MusicBar = () => {
   }, [audio]);
 
   return (
-    <Button size="small" onClick={handlePlayPause}>
+    <Button
+      sx={{ position: "absolute" }}
+      size="small"
+      onClick={handlePlayPause}
+    >
       {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
     </Button>
   );

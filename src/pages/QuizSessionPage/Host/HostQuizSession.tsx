@@ -75,9 +75,11 @@ const HostQuizSession = ({ joinId }: HostQuizSessionProps) => {
 
   return (
     <Stack spacing={2}>
-      <Box width="100%" display="flex" justifyContent="end">
-        <MusicBar />
-      </Box>
+      {status != QuizSessionStatus.INACTIVE && (
+        <Box width="100%" display="flex" justifyContent="end">
+          <MusicBar />
+        </Box>
+      )}
       {status === QuizSessionStatus.PENDING && (
         <HostQuizSessionLobby
           sessionData={session}

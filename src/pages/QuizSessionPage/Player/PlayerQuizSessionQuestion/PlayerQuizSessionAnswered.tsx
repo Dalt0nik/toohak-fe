@@ -59,7 +59,7 @@ const PlayerQuizSessionAnswered = ({
         <QuestionDisplay
           questionTitle={question.title}
           questionNumber={questionNumber}
-          questionImage={question.imageId != null ? question.imageId : ""}
+          questionImage={""}
         />
 
         <AnswersContainer>

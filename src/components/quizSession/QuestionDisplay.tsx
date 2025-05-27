@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 interface DisplayProps {
   questionTitle: string;
   questionNumber: number;
-  questionImage: string;
+  questionImage: string | null;
 }
 
 const QuestionDisplay = ({
@@ -40,7 +40,11 @@ const QuestionDisplay = ({
               {questionTitle}
             </Typography>
           </Paper>
-          {questionImage ? <ImageCard id={questionImage} /> : ""}
+          {questionImage ? (
+            <ImageCard id={questionImage} maxHeight="350px" />
+          ) : (
+            ""
+          )}
         </>
       ) : (
         <>

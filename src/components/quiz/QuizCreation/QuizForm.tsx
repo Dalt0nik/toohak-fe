@@ -35,6 +35,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({
     return questionResponses.map((q) => ({
       id: q.id,
       title: q.title,
+      imageId: q.imageId,
       questionOptions: q.questionOptions.map((opt) => ({
         title: opt.title,
         isCorrect: opt.isCorrect,
