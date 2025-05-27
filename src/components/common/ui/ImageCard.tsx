@@ -6,9 +6,16 @@ import { useQuery } from "@tanstack/react-query";
 interface ImageCardProps {
   id: string | null;
   alt?: string;
+  maxHeight?: string;
+  maxWidth?: string;
 }
 
-const ImageCard = ({ alt = "Cover image", id }: ImageCardProps) => {
+const ImageCard = ({
+  alt = "Cover image",
+  id,
+  maxHeight = "500px",
+  maxWidth = "80%",
+}: ImageCardProps) => {
   const {
     data: coverImage,
     isLoading: imageLoading,
@@ -35,8 +42,8 @@ const ImageCard = ({ alt = "Cover image", id }: ImageCardProps) => {
         sx={{
           height: "auto",
           width: "auto",
-          maxHeight: 500,
-          maxWidth: "100%",
+          maxHeight: maxHeight,
+          maxWidth: maxWidth,
           objectFit: "contain",
         }}
         component="img"

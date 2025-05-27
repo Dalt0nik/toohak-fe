@@ -74,7 +74,7 @@ const QuizPage = () => {
                 },
               }}
             >
-              <ImageCard alt="Quiz cover" id={quiz!.imageId} />
+              <ImageCard alt="Quiz cover" id={quiz!.imageId} maxWidth="100%" />
             </Box>
             <Typography
               variant="h5"

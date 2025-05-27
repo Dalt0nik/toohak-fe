@@ -40,7 +40,11 @@ const QuestionDisplay = ({
               {questionTitle}
             </Typography>
           </Paper>
-          {questionImage ? <ImageCard id={questionImage} /> : ""}
+          {questionImage ? (
+            <ImageCard id={questionImage} maxHeight="350px" />
+          ) : (
+            ""
+          )}
         </>
       ) : (
         <>
