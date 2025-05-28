@@ -38,6 +38,7 @@ const PlayerQuizSession = () => {
   const { init, isConnected, deactivateConnection } = usePlayerWebSocket({
     onHostDisconnected: () => {},
     onPlayerJoined: (evt: WsEventPlayerJoined) => {
+      if (status !== QuizSessionStatus.PENDING) return;
       setPlayers((prev) =>
         prev.includes(evt.player.nickname)
           ? prev
@@ -45,6 +46,7 @@ const PlayerQuizSession = () => {
       );
     },
     onPlayerDisconnected: (evt: WsEventPlayerDisconnected) => {
+      if (status !== QuizSessionStatus.PENDING) return;
       setPlayers((prev) => prev.filter((p) => p !== evt.player.nickname));
     },
     onNewQuestion: (evt: WsEventPlayerNewQuestion) => {

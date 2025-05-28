@@ -10,11 +10,7 @@ interface PlayerQuizSessionEndProps {
   score: number;
 }
 
-const PlayerQuizSessionEnd = ({
-  playerCount,
-  place,
-  score,
-}: PlayerQuizSessionEndProps) => {
+const PlayerQuizSessionEnd = ({ place, score }: PlayerQuizSessionEndProps) => {
   const { t } = useTranslation();
 
   return (
@@ -22,9 +18,6 @@ const PlayerQuizSessionEnd = ({
       <Stack spacing={2} alignItems={"center"} flex={1}>
         <Typography variant="h4">{t(`${TRANSLATION_ROOT}.Placed`)}</Typography>
         <PlaceDisplay place={place} />
-        <Typography variant="h4">
-          {t(`${TRANSLATION_ROOT}.OutOf`, { count: playerCount })}
-        </Typography>
       </Stack>
       <Stack spacing={2} alignItems={"center"}>
         <Typography variant="h4">

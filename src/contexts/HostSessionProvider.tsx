@@ -48,6 +48,7 @@ const hostSessionReducer = (
   switch (action.payload.event) {
     case AllEventTypes.PLAYER_JOINED: {
       const { player } = action.payload as WsEventPlayerJoined;
+      if (state.status !== QuizSessionStatus.PENDING) return state;
       const setInitialScores = (playerScores: WsPlayer[]) => {
         if (
           playerScores.some(

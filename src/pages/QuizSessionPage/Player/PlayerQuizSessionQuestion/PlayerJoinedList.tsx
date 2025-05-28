@@ -1,8 +1,6 @@
 import React from "react";
 import {
-  Button,
   Card,
-  CardActions,
   CardContent,
   List,
   ListItem,
@@ -17,12 +15,7 @@ interface PlayerJoinedListProps {
   onReconnect: () => void;
 }
 
-const PlayerJoinedList: React.FC<PlayerJoinedListProps> = ({
-  players,
-  isConnected,
-  onDisconnect,
-  onReconnect,
-}) => (
+const PlayerJoinedList: React.FC<PlayerJoinedListProps> = ({ players }) => (
   <Card
     elevation={3}
     sx={{ bgcolor: "primary.main", color: "primary.contrastText" }}
@@ -46,18 +39,6 @@ const PlayerJoinedList: React.FC<PlayerJoinedListProps> = ({
         )}
       </List>
     </CardContent>
-
-    <CardActions sx={{ justifyContent: "flex-end", p: 2 }}>
-      {isConnected ? (
-        <Button variant="outlined" color="error" onClick={onDisconnect}>
-          Disconnect
-        </Button>
-      ) : (
-        <Button variant="contained" color="primary" onClick={onReconnect}>
-          Reconnect
-        </Button>
-      )}
-    </CardActions>
   </Card>
 );
 
