@@ -65,12 +65,15 @@ const hostSessionReducer = (
       };
     }
     case AllEventTypes.PLAYER_DISCONNECTED: {
+      if (state.status !== QuizSessionStatus.PENDING) return state;
+
       const { player } = action.payload as WsEventPlayerDisconnected;
       const filterPlayerScores = (playerScores: WsPlayer[]) => {
         return playerScores.filter(
           (currentPlayer) => currentPlayer.userId !== player.userId,
         );
       };
+
       return {
         ...state,
         newScores: filterPlayerScores(state.newScores),
