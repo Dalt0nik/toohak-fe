@@ -1,6 +1,9 @@
-# Empty initial Front End Repository
+# About Toohak
+This is the frontend repo of kahoot-like quiz app, developed as a part of the 2025 Sourcery Academy for Fullstack. Development was completed in 10 weeks, in a team of 7 engineers.
 
-Build tool: [Vite](https://vite.dev/)
+[Backend can be found here](https://github.com/Dalt0nik/toohak-be)
+
+# How to run
 
 ## Prerequisites
 
